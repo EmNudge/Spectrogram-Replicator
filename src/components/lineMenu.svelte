@@ -2,14 +2,14 @@
   import { lines, activeLine } from '../stores/canvas';
   import { getNewLine } from '../canvas'
 
-  const getTemp = () => ' auto'.repeat(lines.size + 1) + ' 1fr';
+  $: getTemp = () => ' auto'.repeat($lines.size + 1) + ' 1fr';
 
   function addLine() {
     const newLine = getNewLine()
     const id = Symbol();
 
     activeLine.set(id);
-    lines.set(id, newLine);
+    lines.update(l => l.set(id, newLine));
   }
 </script>
 
@@ -46,7 +46,7 @@
 </style>
 
 <div class="container" style="grid-template-rows: {getTemp()}">
-  {#each lines as [,line]}
+  {#each [...$lines.entries()] as [,line]}
     <div class="line">
       <div class="color" style="--bg: {line.hue}" />
       <div>{line.name}</div>

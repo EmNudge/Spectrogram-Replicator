@@ -5,7 +5,7 @@ import { get } from 'svelte/store'
 export default function getNewLine() {
   return { 
     hue: getRandColor(), 
-    name: `Line ${get(lines).length + 1}`,
+    name: `Line ${get(lines).size + 1}`,
     keyframes: [], 
   }
 }

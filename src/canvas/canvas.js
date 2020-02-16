@@ -1,5 +1,5 @@
 import { drawKeyframes, getDist, KEYFRAME_SIZE, getNewLine } from './index';
-import { lines, activeLine } from '../stores/canvas';
+import { lines, activeLine, activeNode } from '../stores/canvas';
 import { get } from 'svelte/store';
 
 class Canvas {
@@ -12,7 +12,6 @@ class Canvas {
 		this.height = parseInt(height);
 
 		// initialized, regardless of params
-		this.selectedId = null;
 		this.draggedId = null;
 		this.mousePos = { x: 0, y: 0 };
 	}
@@ -26,7 +25,7 @@ class Canvas {
 				ctx: this.ctx,
 				hue,
 				keyframes,
-				selectedId: this.selectedId,
+				selectedId: get(activeNode),
 				mousePos: this.mousePos,
 				active: id == get(activeLine)
 			});
@@ -76,7 +75,8 @@ class Canvas {
 		for (const keyframe of keyframes) {
 			if (getDist(mousePos, keyframe) >= KEYFRAME_SIZE) continue;
 
-			this.selectedId = this.draggedId = keyframe.id;
+      this.draggedId = keyframe.id
+      activeNode.set(keyframe.id)
 			return;
 		}
 
@@ -90,28 +90,12 @@ class Canvas {
 		const sortedKeyframes = this.sortKeyframes([...this.getKeyframes(), keyframe]);
 		this.setKeyframes(sortedKeyframes);
 
-		this.draggedId = this.selectedId = keyframe.id;
+    this.draggedId = keyframe.id
+    activeNode.set(keyframe.id)
 	}
 
 	onRelease() {
 		this.draggedId = null;
-	}
-
-	// removes keyframe and reassigns selectedId if any id is selected
-	onDelete() {
-		if (this.selectedId === null) return;
-
-		const selectedIndex = this.getKeyframeIndex(this.selectedId);
-		this.keyframes = this.keyframes.filter((keyframe) => keyframe.id !== this.selectedId);
-
-		// if no more keyframes, set selectedId to null and return
-		if (!this.keyframes.length) {
-			this.selectedId = null;
-			return;
-		}
-		// change selected ID
-		const newIndex = this.keyframes.length > selectedIndex ? selectedIndex : selectedIndex - 1;
-		this.selectedId = this.keyframes[newIndex].id;
 	}
 
 	// sort keyframes by ascending x position
@@ -123,13 +107,6 @@ class Canvas {
 		for (const [index, keyframe] of this.keyframes.entries()) {
 			if (keyframe.id === id) return index;
 		}
-	}
-
-	hasSelected() {
-		return this.selectedId !== null;
-	}
-	deselect() {
-		this.selectedId = null;
 	}
 
 	getSurroundingKeyframes(xPos) {

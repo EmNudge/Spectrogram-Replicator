@@ -64,15 +64,12 @@ class Canvas {
 	onClick(mousePos) {
     const currLines = get(lines)
     const currActiveLine = get(activeLine)
-    const currLine = currLines.get(currActiveLine)
 
-    console.log({ currLine, currActiveLine, currLines })
 		if (!currActiveLine || !currLines.get(currActiveLine)) {
 			const newLine = getNewLine();
 			const id = Symbol();
 			activeLine.set(id);
 			lines.update((l) => l.set(id, newLine));
-			console.log({ newLine });
 		}
 
 		const keyframes = this.getKeyframes();

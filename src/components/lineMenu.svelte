@@ -1,6 +1,7 @@
 <script>
   import { lines, activeLine } from '../stores/canvas';
   import { getNewLine } from '../canvas'
+  import { canvasStore } from '../stores/canvas'
 
   $: getTemp = () => ' auto'.repeat($lines.size + 1) + ' 1fr';
 
@@ -10,6 +11,20 @@
 
     activeLine.set(id);
     lines.update(l => l.set(id, newLine));
+    $canvasStore.draw()
+  }
+
+  function closeLine(id) {
+    lines.update(l => {
+      l.delete(id)
+      return l
+    });
+    $canvasStore.draw()
+  }
+
+  function changeActive(id) {
+    activeLine.set(id)
+    $canvasStore.draw()
   }
 </script>
 
@@ -27,6 +42,10 @@
     grid-gap: 10px;
     box-shadow: var(--shdw);
     background: #eee;
+    opacity: .7;
+  }
+  .line.active {
+     opacity: 1;
   }
   .color {
     height: 20px;
@@ -35,6 +54,7 @@
   }
   .close {
     color: red;
+    cursor: pointer;
   }
   button {
     border: none;
@@ -46,11 +66,11 @@
 </style>
 
 <div class="container" style="grid-template-rows: {getTemp()}">
-  {#each [...$lines.entries()] as [,line]}
-    <div class="line">
+  {#each [...$lines.entries()] as [id, line]}
+    <div class="line" class:active={$activeLine === id} on:click={() => changeActive(id)}>
       <div class="color" style="--bg: {line.hue}" />
       <div>{line.name}</div>
-      <div class="close">x</div>
+      <div class="close" on:click={() => closeLine(id)}>x</div>
     </div>
   {/each}
   <button on:click={addLine}>+</button>

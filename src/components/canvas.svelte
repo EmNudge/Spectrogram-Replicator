@@ -1,30 +1,32 @@
 <script>
   import { onMount } from "svelte";
   import Canvas from "../canvas/canvas.js";
+  import { canvasStore } from '../stores/canvas'
 
   let canvasEl, canvasContainer;
-  let canvas;
 
   onMount(() => {
     const { width, height } = window.getComputedStyle(canvasContainer)
     canvasEl.width = parseInt(width)
     canvasEl.height = parseInt(height)
-    canvas = new Canvas(canvasEl);
-    canvas.draw();
+    const canvas = new Canvas(canvasEl);
+    canvasStore.set(canvas)
+    
+    $canvasStore.draw();
   });
 
   const getPos = e => ({ x: e.offsetX, y: e.offsetY });
 
   function handleClick(e) {
-    canvas.onClick(getPos(e));
-    canvas.draw();
+    $canvasStore.onClick(getPos(e));
+    $canvasStore.draw();
   }
   function handleHover(e) {
-    canvas.handleHover(getPos(e));
-    canvas.draw();
+    $canvasStore.handleHover(getPos(e));
+    $canvasStore.draw();
   }
   function handleMouseUp(e) {
-    canvas.onRelease();
+    $canvasStore.onRelease();
   }
 </script>
 

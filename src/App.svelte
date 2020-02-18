@@ -1,6 +1,7 @@
 <script>
 	import Canvas from './components/canvas.svelte'
 	import LineMenu from './components/lineMenu.svelte'
+	import AudioControls from './components/audioControls.svelte'
 </script>
 
 <style>
@@ -16,7 +17,11 @@
 		display: grid;
 		grid-template-columns: 1fr 250px;
 		grid-gap: 20px;
-		height: 400px;
+	}
+	.controls {
+		display: grid;
+		grid-template-columns: 1fr 250px;
+		grid-gap: 20px;
 	}
 </style>
 
@@ -27,5 +32,9 @@
 	<div class="workspace">
 		<Canvas />
 		<LineMenu />
+	</div>
+	<div class="controls">
+		<AudioControls />
+		<div class="dummy-element"></div>
 	</div>
 </main>

@@ -1,10 +1,31 @@
 <script>
+  import { getSchedule, playSchedule } from '../audio'
+  import { lines, canvasStore } from '../stores/canvas'
+
   // 3 seconds
   const TOTAL_TIME = 3000;
   
   let timePerc = 0;
   let reqId;
   let startTime;
+
+  function play() {
+    for (const [_id, line] of $lines) {
+      const { width, height } = $canvasStore;
+      const schedule = getSchedule({ 
+        keyframes: line,
+        width, height,
+        milliseconds: TOTAL_TIME,
+        minVal: 50,
+        maxVal: 1000,
+      });
+
+      playSchedule({
+        schedule,
+        
+      })
+    }
+  }
 
   function updateTime() {
     if (!reqId && startTime) {

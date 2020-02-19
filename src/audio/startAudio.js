@@ -1,14 +1,13 @@
+// this is the master audio maker. Must only be triggered on a user event.
 function startAudio() {
   const AudioContext = window.AudioContext || window.webkitAudioContext;
-  const audioCtx = new AudioContext();
+  const audioContext = new AudioContext();
 
-  const gainNode = audioCtx.createGain();
-  gainNode.connect(audioCtx.destination);
+  const mainGainNode = audioContext.createGain();
+  mainGainNode.connect(audioContext.destination);
+  mainGainNode.gain.value = 0.25;
 
-  const oscillator = audioCtx.createOscillator()
-  oscillator.connect(gainNode)
-
-  return { audioCtx, gainNode, oscillator }
+  return { audioContext, mainGainNode }
 }
 
 export default startAudio

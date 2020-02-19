@@ -1,5 +1,5 @@
 <script>
-  import { getSchedule, playSchedule } from '../audio'
+  import { getSchedule, startAudio, playSchedule } from '../audio'
   import { lines, canvasStore } from '../stores/canvas'
 
   // 3 seconds
@@ -10,21 +10,24 @@
   let startTime;
 
   function play() {
+    const { audioContext, mainGainNode } = startAudio();
+
     for (const [_id, line] of $lines) {
       const { width, height } = $canvasStore;
+      const { keyframes } = line;
+
       const schedule = getSchedule({ 
-        keyframes: line,
+        keyframes,
         width, height,
         milliseconds: TOTAL_TIME,
         minVal: 50,
-        maxVal: 1000,
+        maxVal: 2000,
       });
 
-      playSchedule({
-        schedule,
-        
-      })
+      playSchedule({ schedule, audioContext, mainGainNode })
     }
+
+    updateTime(new Date);
   }
 
   function updateTime() {
@@ -73,7 +76,7 @@
     <input type="range" min={0} max={100} step={0.1} bind:value={timePerc} />
   </div>
   <div class="controls">
-    <button on:click={() => updateTime(new Date)}>Play</button>
+    <button on:click={play}>Play</button>
     <button on:click={pauseTime}>Pause</button>
     <button on:click={cancelTime}>Cancel</button>
   </div>

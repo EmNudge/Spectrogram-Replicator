@@ -1,4 +1,4 @@
-import {remap} from "./index";
+import { remap } from "../utils";
 
 // takes keyframes and some options. Spits out (time,value) instead of (x,y)
 function getSchedule({

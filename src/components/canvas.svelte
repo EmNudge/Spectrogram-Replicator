@@ -65,7 +65,6 @@
       return l;
     })
     
-
     $canvasStore.draw();
   }
 </script>
@@ -78,12 +77,11 @@
   }
 </style>
 
-<svelte:window on:keydown={handleKeyDown} />
+<svelte:window on:keydown={handleKeyDown} on:mouseup={handleMouseUp} />
 
 <div bind:this={canvasContainer}>
   <canvas
     bind:this={canvasEl}
     on:mousedown={handleClick}
-    on:mouseup={handleMouseUp}
     on:mousemove={handleHover} />
 </div>

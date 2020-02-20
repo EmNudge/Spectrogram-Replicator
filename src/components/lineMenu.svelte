@@ -41,7 +41,7 @@
     grid-template-columns: auto 1fr auto;
     grid-gap: 10px;
     box-shadow: var(--shdw);
-    background: #eee;
+    background: var(--grey);
     opacity: .7;
   }
   .line.active {

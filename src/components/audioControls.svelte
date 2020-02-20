@@ -1,16 +1,24 @@
 <script>
-  import { getSchedule, startAudio, playSchedule } from '../audio'
+  import AudioPlayer from './audioPlayer.svelte'
+  import { getSchedule, playSchedule } from '../audio'
   import { lines, canvasStore } from '../stores/canvas'
+  import { audioContextStore, mainGainNodeStore } from '../stores/audio'
 
   // 3 seconds
   const TOTAL_TIME = 3000;
+
+  let audioContext;
   
   let timePerc = 0;
   let reqId;
   let startTime;
 
   function play() {
-    const { audioContext, mainGainNode } = startAudio();
+    const audioContext = $audioContextStore;
+    
+    if (audioContext.state == 'suspended') {
+      audioContext.resume();
+    }
 
     for (const [_id, line] of $lines) {
       const { width, height } = $canvasStore;
@@ -27,30 +35,25 @@
       playSchedule({ schedule, audioContext, mainGainNode })
     }
 
-    updateTime(new Date);
+    updateTime();
   }
 
-  function updateTime() {
-    if (!reqId && startTime) {
-      startTime = new Date() - timePerc * (TOTAL_TIME / 100);
-    } else if (!startTime) {
-      startTime = new Date;
-    }
-    
-    const elapsed = new Date() - startTime;
-    timePerc = elapsed / TOTAL_TIME * 100
+  function resume() {
+    const audioContext = $audioContextStore;
+    audioContext.resume();
+  }
 
-    if (timePerc > 100) {
-      reqId = null;
-      timePerc = 0;
-      return;
-    };
+  function updateTime() {    
+    const audioContext = $audioContextStore;
+    timePerc = audioContext.currentTime / (TOTAL_TIME / 1000)
 
     reqId = requestAnimationFrame(updateTime)
   }
 
   function cancelTime() {
     timePerc = 0;
+    const audioContext = $audioContextStore;
+    audioContext.suspend()
 
     if (!reqId) return;
     cancelAnimationFrame(reqId)
@@ -59,6 +62,8 @@
 
   function pauseTime() {
     if (!reqId) return;
+    const audioContext = $audioContextStore;
+    audioContext.suspend()
 
     cancelAnimationFrame(reqId)
     reqId = null;
@@ -66,15 +71,11 @@
 </script>
 
 <style>
-  input[type="range"] {
-    width: 100%;
-  }
+
 </style>
 
 <div>
-  <div class="playhead">
-    <input type="range" min={0} max={100} step={0.1} bind:value={timePerc} />
-  </div>
+  <AudioPlayer bind:time={timePerc} />
   <div class="controls">
     <button on:click={play}>Play</button>
     <button on:click={pauseTime}>Pause</button>

@@ -71,8 +71,8 @@
 
 <style>
   canvas {
-    box-shadow: inset 2px 2px 4px rgba(0, 0, 0, 0.25);
-    background: #fafafa;
+    box-shadow: inset 1px 1px 4px 0px #00000012;
+    background: #ededed59;
     min-height: 300px;
   }
 </style>

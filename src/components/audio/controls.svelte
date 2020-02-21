@@ -16,6 +16,11 @@
   let reqId;
   let startTime;
 
+  let length = 3;
+  $: {
+    tonePlayer.runTime = length * 1000;
+  }
+
   let isPlaying = false;
 
   function loadSchedules() {
@@ -78,8 +83,12 @@
 
   .controls {
     display: grid;
-    grid-template-columns: auto 1fr;
+    grid-template-columns: auto auto 1fr;
     grid-gap: 10px;
+  }
+  .input-label {
+    display: grid;
+    grid-gap: 5px;
   }
 </style>
 
@@ -89,5 +98,9 @@
   <div class="controls">
     <PlayButton on:click={togglePlay} bind:isPlaying={isPlaying} />
     <button on:click={toggleMute}>{isMuted ? 'unmute' : 'mute'}</button>
+    <div class="input-label">
+      <span>Length (seconds)</span>
+      <input type="number" bind:value={length} />
+    </div>
   </div>
 </div>

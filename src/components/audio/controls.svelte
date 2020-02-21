@@ -39,13 +39,12 @@
 
   function updateTime() {    
     timePerc = tonePlayer.percentage;
+
     if (timePerc > 1) {
       isPlaying = false;
       timePerc = 0;
       return;
     }
-
-    console.log({timePerc})
 
     reqId = requestAnimationFrame(updateTime)
   }

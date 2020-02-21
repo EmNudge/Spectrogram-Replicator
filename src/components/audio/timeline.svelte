@@ -1,7 +1,7 @@
 <script>
   export let percentage = 0;
 
-  import { clamp } from "../../utils";
+  import { clamp, remap } from "../../utils";
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
@@ -10,12 +10,17 @@
 
   let isDragging = false;
 
-  $: console.log({ percentage })
+  let xPos = 0;
 
-  function getPos() {
-    if (!rangeEl) return 0;
-    return (percentage * rangeEl.offsetWidth).toFixed(2);
+  $: {
+    if (!rangeEl) { 
+      xPos =  0;
+    } else {
+      const width = rangeEl.offsetWidth;
+      xPos = (percentage * width).toFixed(2) - 5;
+    }
   }
+
   function handleMouseDown(e) {
     isDragging = true;
 
@@ -79,7 +84,7 @@
 <svelte:window on:mousemove={handleHover} on:mouseup={handleMouseUp} />
 
 <div class="range" bind:this={rangeEl} on:mousedown={handleMouseDown}>
-  <div class="playhead" style="transform: translate({getPos()}px, 0px)">
+  <div class="playhead" style="transform: translate({xPos}px, 0px)">
     <span class="triangle" />
     <span class="base" />
   </div>

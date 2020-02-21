@@ -52,8 +52,8 @@ class TonePlayer {
   }
   
   playSchedule(schedule) {
-      if (!schedule.length) return;
-      
+      if (schedule.length <= 1) return;
+
       // setting up some values for easier reference
       const startTime = this.toTime(schedule[0].time);
       const endTime = this.toTime(schedule[schedule.length - 1].time);

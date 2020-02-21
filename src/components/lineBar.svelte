@@ -4,7 +4,7 @@
   export let hue;
   export let isActive;
 
-  import { lines, canvasStore } from "../stores/canvas";
+  import { lines, canvasStore, activeLine } from "../stores/canvas";
 
   let editing = false;
   let inputEl;

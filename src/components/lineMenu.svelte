@@ -1,32 +1,25 @@
 <script>
-  import { lines, activeLine, activeNode } from '../stores/canvas';
-  import { getNewLine } from '../canvas'
-  import { canvasStore } from '../stores/canvas'
+  import LineBar from './lineBar.svelte'
+  import { lines, activeLine, activeNode, canvasStore } from "../stores/canvas";
+  import { getNewLine } from "../canvas";
 
-  $: getTemp = () => ' auto'.repeat($lines.size + 1) + ' 1fr';
+  $: getTemp = () => " auto".repeat($lines.size + 1) + " 1fr";
 
   function addLine() {
-    const newLine = getNewLine()
+    const newLine = getNewLine();
     const id = Symbol();
 
     activeLine.set(id);
     activeNode.set(null);
     lines.update(l => l.set(id, newLine));
-    $canvasStore.draw()
-  }
-
-  function closeLine(id) {
-    lines.update(l => {
-      l.delete(id)
-      return l
-    });
-    $canvasStore.draw()
+    $canvasStore.draw();
   }
 
   function changeActive(id) {
-    activeLine.set(id)
-    $canvasStore.draw()
+    activeLine.set(id);
+    $canvasStore.draw();
   }
+
 </script>
 
 <style>
@@ -36,27 +29,6 @@
     grid-gap: 10px;
   }
 
-  .line {
-    padding: 10px;
-    display: grid;
-    grid-template-columns: auto 1fr auto;
-    grid-gap: 10px;
-    box-shadow: var(--shdw);
-    background: var(--grey);
-    opacity: .7;
-  }
-  .line.active {
-     opacity: 1;
-  }
-  .color {
-    height: 20px;
-    width: 20px;
-    background: hsl(var(--bg), 50%, 50%);
-  }
-  .close {
-    color: red;
-    cursor: pointer;
-  }
   button {
     border: none;
     padding: 5px 20px;
@@ -68,12 +40,13 @@
 
 <div class="container" style="grid-template-rows: {getTemp()}">
   {#each [...$lines.entries()] as [id, line]}
-    <div class="line" class:active={$activeLine === id} on:click={() => changeActive(id)}>
-      <div class="color" style="--bg: {line.hue}" />
-      <div>{line.name}</div>
-      <div class="close" on:click={() => closeLine(id)}>x</div>
-    </div>
+    <LineBar 
+      {id}
+      hue={line.hue} 
+      name={line.name} 
+      isActive={$activeLine === id} 
+      on:click={() => changeActive(id)} />
   {/each}
   <button on:click={addLine}>+</button>
-  <div class="empty"></div>
+  <div class="empty" />
 </div>

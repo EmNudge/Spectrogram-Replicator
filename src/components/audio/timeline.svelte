@@ -9,8 +9,13 @@
   let rangeEl;
 
   let isDragging = false;
-  let xPos = 0;
 
+  $: console.log({ percentage })
+
+  function getPos() {
+    if (!rangeEl) return 0;
+    return (percentage * rangeEl.offsetWidth).toFixed(2);
+  }
   function handleMouseDown(e) {
     isDragging = true;
 
@@ -74,7 +79,7 @@
 <svelte:window on:mousemove={handleHover} on:mouseup={handleMouseUp} />
 
 <div class="range" bind:this={rangeEl} on:mousedown={handleMouseDown}>
-  <div class="playhead" style="transform: translate({xPos}px, 0px)">
+  <div class="playhead" style="transform: translate({getPos()}px, 0px)">
     <span class="triangle" />
     <span class="base" />
   </div>

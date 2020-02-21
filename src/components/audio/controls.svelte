@@ -10,10 +10,7 @@
   // stores
   import { lines, canvasStore } from '../../stores/canvas'
 
-  // 3 seconds
-  const TOTAL_TIME = 3000;
-
-  let tonePlayer = new TonePlayer();
+  let tonePlayer = new TonePlayer(3000);
   
   let timePerc = 0;
   let reqId;
@@ -30,7 +27,6 @@
       const schedule = getSchedule({ 
         keyframes,
         width, height,
-        milliseconds: TOTAL_TIME,
         minVal: 50,
         maxVal: 2000,
       });
@@ -43,6 +39,13 @@
 
   function updateTime() {    
     timePerc = tonePlayer.percentage;
+    if (timePerc > 1) {
+      isPlaying = false;
+      timePerc = 0;
+      return;
+    }
+
+    console.log({timePerc})
 
     reqId = requestAnimationFrame(updateTime)
   }
@@ -51,10 +54,12 @@
   // that means we are now a step right before isPlaying changed, so we are currently !isPlaying
   function togglePlay() {
     if (isPlaying) {
-      tonePlayer.pause()
+      tonePlayer.pause();
+      cancelAnimationFrame(reqId);
     } else {
-      loadSchedules()
-      tonePlayer.start()
+      loadSchedules();
+      tonePlayer.start();
+      updateTime();
     }
   }
 

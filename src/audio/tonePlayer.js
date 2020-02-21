@@ -1,13 +1,14 @@
 const VOLUME = 0.25;
 
-// represented in ms
-// web audio uses seconds and floats
-const RUN_TIME = 3000;
-
 class TonePlayer {
-  constructor() {
-    this.schedules = []
-    this.start()
+  constructor(time = 3000) {
+    this.schedules = [];
+    
+    // represented in ms
+    // web audio uses seconds and floats
+    this.runTime = time;
+    
+    this.start();
   }
 
   start() {
@@ -36,20 +37,24 @@ class TonePlayer {
   }
 
   play() {
-    debugger;
     for (const schedule of this.schedules) {
       this.playSchedule(schedule);
     }
   }
 
   get percentage() {
-    return (this.audioContext.currentTime * 1000) / RUN_TIME;
+    return (this.audioContext.currentTime * 1000) / this.runTime;
+  }
+
+  // gets value from 0 to 1 and gets the second time
+  toTime(percentage) {
+    return percentage * this.runTime / 1000 + this.audioContext.currentTime;
   }
   
   playSchedule(schedule) {
       // setting up some values for easier reference
-      const startTime = schedule[0].time / 1000;
-      const endTime = schedule[schedule.length - 1].time / 1000;
+      const startTime = this.toTime(schedule[0].time);
+      const endTime = this.toTime(schedule[schedule.length - 1].time);
       const now = this.audioContext.currentTime;
     
     
@@ -61,11 +66,11 @@ class TonePlayer {
       gainNode.gain.setValueAtTime(0, now);
     
       // hold to 0 and then jump to .2
-      gainNode.gain.linearRampToValueAtTime(0, now + startTime);
-      gainNode.gain.linearRampToValueAtTime(0.2, now + startTime + .1);
+      gainNode.gain.linearRampToValueAtTime(0, startTime);
+      gainNode.gain.linearRampToValueAtTime(0.2, startTime + .1);
       // hold at .2 and then jump to 0
-      gainNode.gain.linearRampToValueAtTime(0.2, now + endTime);
-      gainNode.gain.linearRampToValueAtTime(0, now + endTime + .1);
+      gainNode.gain.linearRampToValueAtTime(0.2, endTime);
+      gainNode.gain.linearRampToValueAtTime(0, endTime + .1);
     
     
       // main oscilltor which produces the sound
@@ -77,7 +82,7 @@ class TonePlayer {
       // since the next automation will only start after the previous finishes
       for (const event of schedule) {
         const value = Math.floor(event.value);
-        const time = (event.time / 1000) + now;
+        const time = this.toTime(event.time);
     
         oscillatorNode.frequency.linearRampToValueAtTime(value, time);
       }    

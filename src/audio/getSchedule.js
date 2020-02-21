@@ -5,7 +5,6 @@ function getSchedule({
   keyframes,
   width,
   height,
-  milliseconds,
   minVal,
   maxVal
 }) {
@@ -14,7 +13,7 @@ function getSchedule({
     // invert it since y starts from top
     const yPerc = 1 - keyframe.y / height;
 
-    const time = xPerc * milliseconds;
+    const time = xPerc;
     const value = remap(yPerc, 0, 1, minVal, maxVal);
 
     return { time, value };

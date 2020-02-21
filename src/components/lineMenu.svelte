@@ -1,5 +1,5 @@
 <script>
-  import { lines, activeLine } from '../stores/canvas';
+  import { lines, activeLine, activeNode } from '../stores/canvas';
   import { getNewLine } from '../canvas'
   import { canvasStore } from '../stores/canvas'
 
@@ -10,6 +10,7 @@
     const id = Symbol();
 
     activeLine.set(id);
+    activeNode.set(null);
     lines.update(l => l.set(id, newLine));
     $canvasStore.draw()
   }

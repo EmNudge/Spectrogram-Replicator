@@ -8,7 +8,7 @@
   import TonePlayer from '../../audio/tonePlayer'
 
   // stores
-  import { lines, canvasStore } from '../../stores/canvas'
+  import { linesStore, canvasStore } from '../../stores/canvas'
 
   let tonePlayer = new TonePlayer(3000);
   
@@ -25,12 +25,15 @@
 
   function loadSchedules() {
     const schedules = []
-    for (const [_id, line] of $lines) {
-      const { width, height } = $canvasStore;
-      const { keyframes } = line;
+    for (const [_id, line] of $linesStore) {
+      let { width, height } = $canvasStore;
+      width = width.baseVal.value
+      height = height.baseVal.value
+
+      const { nodes } = line;
 
       const schedule = getSchedule({ 
-        keyframes,
+        nodes,
         width, height,
         minVal: 50,
         maxVal: 2000,

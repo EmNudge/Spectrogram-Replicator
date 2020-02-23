@@ -1,13 +1,13 @@
 import { writable } from 'svelte/store';
 
 // map of id-object pairs. Each object has a hue, keyframes arr, and name
-export const lines = writable(new Map());
+export const linesStore = writable(new Map());
 
 // is the current id/Symbol() of the active line
-export const activeLine = writable(null);
+export const activeLineStore = writable(null);
 
 // is the current active node of the active line
-export const activeNode = writable(null);
+export const activeNodeStore = writable(null);
 
-// represents `new Canvas` object in order to let other modules call `.draw()`
-export const canvasStore = writable({})
+// represents canvas svg to get coords and dimensions
+export const canvasStore = writable(null)

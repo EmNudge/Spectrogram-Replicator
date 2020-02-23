@@ -1,23 +1,21 @@
 <script>
   import LineBar from './lineBar.svelte'
-  import { lines, activeLine, activeNode, canvasStore } from "../stores/canvas";
-  import { getNewLine } from "../canvas";
+  import { linesStore, activeLineStore, activeNodeStore, canvasStore } from "../stores/canvas";
+  import { getNewLine } from "./canvas/utils";
 
-  $: getTemp = () => " auto".repeat($lines.size + 1) + " 1fr";
+  $: getTemp = () => " auto".repeat($linesStore.size + 1) + " 1fr";
 
   function addLine() {
     const newLine = getNewLine();
     const id = Symbol();
 
-    activeLine.set(id);
-    activeNode.set(null);
-    lines.update(l => l.set(id, newLine));
-    $canvasStore.draw();
+    activeLineStore.set(id);
+    activeNodeStore.set(null);
+    linesStore.update(l => l.set(id, newLine));
   }
 
   function changeActive(id) {
-    activeLine.set(id);
-    $canvasStore.draw();
+    activeLineStore.set(id);
   }
 
 </script>
@@ -39,12 +37,12 @@
 </style>
 
 <div class="container" style="grid-template-rows: {getTemp()}">
-  {#each [...$lines.entries()] as [id, line]}
+  {#each [...$linesStore.entries()] as [id, line]}
     <LineBar 
       {id}
       hue={line.hue} 
       name={line.name} 
-      isActive={$activeLine === id} 
+      isActive={$activeLineStore === id} 
       on:click={() => changeActive(id)} />
   {/each}
   <button on:click={addLine}>+</button>

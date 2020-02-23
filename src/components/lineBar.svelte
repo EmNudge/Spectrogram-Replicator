@@ -4,7 +4,7 @@
   export let hue;
   export let isActive;
 
-  import { lines, canvasStore, activeLine } from "../stores/canvas";
+  import { linesStore, canvasStore, activeLineStore } from "../stores/canvas";
 
   let editing = false;
   let inputEl;
@@ -20,7 +20,7 @@
   }
 
   function updateName() {
-    lines.update(l => {
+    linesStore.update(l => {
       const line = l.get(id);
       line.name = name;
       l.set(id, line);
@@ -37,17 +37,16 @@
 
   function destroyLine() {
     let prevId = null;
-    for (const [lineId, _line] of $lines) {
+    for (const [lineId, _line] of $linesStore) {
       if (lineId === id) break;
       prevId = lineId;
     }
 
-    lines.update(l => {
+    linesStore.update(l => {
       l.delete(id);
       return l;
     });
-    activeLine.set(prevId);
-    $canvasStore.draw();
+    activeLineStore.set(prevId);
   }
 </script>
 

@@ -1,5 +1,5 @@
 <script>
-	import Canvas from './components/canvas.svelte'
+	import Canvas from './components/canvas/SvgCanvas.svelte'
 	import LineMenu from './components/lineMenu.svelte'
 	import Controls from './components/audio/controls.svelte'
 </script>

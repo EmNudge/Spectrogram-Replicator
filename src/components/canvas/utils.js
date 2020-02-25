@@ -61,6 +61,29 @@ export function moveNode(e) {
 }
 
 
+export function deleteNode() {
+  linesStore.update(lines => {
+    const id = get(activeLineStore);
+    const activeNode = get(activeNodeStore);
+
+    const line = lines.get(id);
+    const index = getIndexForId(line.nodes, activeNode);
+
+    line.nodes.splice(index, 1);
+    // might not be necessary, but just in case
+    lines.set(id, line);
+
+    const currNode = line.nodes[index] || line.nodes[index - 1];
+    if (currNode) {
+      activeNodeStore.set(currNode.id);
+    } else {
+      activeNodeStore.set(null);
+    }
+
+    return lines;
+  })
+}
+
 // These are colors for canvas keyframes
 // Since the lines are just lighter versions of the keyframes, we need HSL
 // If we were using SVGs or just HTML instead of canvas, we could use CSS filter (Brightness)

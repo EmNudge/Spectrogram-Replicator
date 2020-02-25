@@ -5,7 +5,7 @@
   import Line from "./Line.svelte";
   import { createEventDispatcher } from "svelte";
   import { activeLineStore, linesStore, activeNodeStore, canvasStore } from "../../stores/canvas.js";
-  import { moveNode, addNode } from './utils.js'
+  import { moveNode, addNode, deleteNode } from './utils.js'
 
   const dispatch = createEventDispatcher();
 
@@ -39,6 +39,12 @@
 
     moveNode(e);
   }
+
+  function handleKeyDown(e) {
+    if (!['Delete', 'Backspace'].includes(e.key)) return;
+
+    deleteNode();
+  }
 </script>
 
 <style>
@@ -50,7 +56,7 @@
   }
 </style>
 
-<svelte:window on:mouseup={handleMouseUp} />
+<svelte:window on:mouseup={handleMouseUp} on:keydown={handleKeyDown} />
 
 <svg
   {width}

@@ -20,11 +20,21 @@
   function handleMouseDown(e) {
     isDragging = true;
 
-    // if we clicked on a node in the active line, don't notify
-    if (e.target.cx) {
-      const lineGroup = e.target.parentElement;
-      const isActive = lineGroup.classList.contains("active");
-      if (isActive) return;
+    // check if clicking on a node by position checking
+    if ($activeLineStore) {
+      // get mouse pos relative to svg pos
+      const { x: offsetX, y: offsetY } = canvasEl.getBoundingClientRect()
+      const mouse = { x: e.clientX - offsetX, y: e.clientY - offsetY };
+
+      const line = $linesStore.get($activeLineStore);
+  
+      for (const node of line.nodes) {
+        const xDist = Math.abs(node.x - mouse.x);
+        const yDist = Math.abs(node.y - mouse.y);
+        if (xDist > 5 || yDist > 5) continue;
+
+        return;
+      }
     }
 
     addNode(e);

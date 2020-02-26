@@ -45,6 +45,25 @@ export function addNode(e) {
   })
 }
 
+export function isNearNode({ x, y, dist = 5 }) {
+  const activeLine = get(activeLineStore);
+
+  // check if clicking on a node by position checking
+  if (activeLine) {
+    const lines = get(linesStore);
+    const line = lines.get(activeLine);
+
+    for (const node of line.nodes) {
+      const xDist = Math.abs(node.x - x);
+      const yDist = Math.abs(node.y - y);
+      if (xDist > dist || yDist > dist) continue;
+
+      return true;
+    }
+  }
+
+  return false;
+}
 
 export function moveNode(e) {
   linesStore.update(lines => {

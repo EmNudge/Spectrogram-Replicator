@@ -5,7 +5,8 @@
   import Line from "./Line.svelte";
   import { createEventDispatcher } from "svelte";
   import { activeLineStore, linesStore, activeNodeStore, canvasStore } from "../../stores/canvas.js";
-  import { moveNode, addNode, deleteNode } from './utils.js'
+  import { moveNode, addNode, deleteNode, isNearNode } from './utils.js'
+  import click from '../../actions/click'
 
   const dispatch = createEventDispatcher();
 
@@ -17,27 +18,25 @@
   const randStr = Math.random().toString(16).slice(2, 8);
   const activeId = `active-line-${randStr}`;
 
-  function handleMouseDown(e) {
+  function handleLeftClick(event) {
+    // when using custom events, we need to propogate stuff via event.detail
+    const e = event.detail;
+
     isDragging = true;
 
-    // check if clicking on a node by position checking
-    if ($activeLineStore) {
-      // get mouse pos relative to svg pos
-      const { x: offsetX, y: offsetY } = canvasEl.getBoundingClientRect()
-      const mouse = { x: e.clientX - offsetX, y: e.clientY - offsetY };
-
-      const line = $linesStore.get($activeLineStore);
-  
-      for (const node of line.nodes) {
-        const xDist = Math.abs(node.x - mouse.x);
-        const yDist = Math.abs(node.y - mouse.y);
-        if (xDist > 5 || yDist > 5) continue;
-
-        return;
-      }
-    }
+    // get mouse pos relative to svg pos
+    const { x: offsetX, y: offsetY } = canvasEl.getBoundingClientRect()
+    const mouse = { x: e.clientX - offsetX, y: e.clientY - offsetY };
+    if (isNearNode(mouse)) return;
 
     addNode(e);
+  }
+
+  function handleRightClick(event) {
+    // when using custom events, we need to propogate stuff via event.detail
+    const e = event.detail;
+
+    console.log('right click!')
   }
 
   function handleMouseUp() {
@@ -72,8 +71,14 @@
   {width}
   {height}
   bind:this={canvasEl}
-  on:mousedown={handleMouseDown}
-  on:mousemove={handleHover}>
+
+  on:contextmenu|preventDefault
+  use:click
+  on:leftclick={handleLeftClick}
+  on:rightclick={handleRightClick}
+
+  on:mousemove={handleHover}
+  >
 
   {#each [...$linesStore.entries()] as [id, { hue, nodes }], i}
     <Line {nodes} {hue} active={$activeLineStore === id} id={$activeLineStore === id ? activeId : ''} />

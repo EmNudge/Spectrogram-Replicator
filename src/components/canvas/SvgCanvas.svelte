@@ -3,12 +3,10 @@
   export let height;
 
   import Line from "./Line.svelte";
-  import { createEventDispatcher } from "svelte";
   import { activeLineStore, linesStore, activeNodeStore, canvasStore } from "../../stores/canvas.js";
-  import { moveNode, addNode, deleteNode, isNearNode } from './utils.js'
+  import { moveNode, addNode, deleteNode, isNearNode, getMouseCanvasPos, getNearNode } from './utils.js'
   import click from '../../actions/click'
-
-  const dispatch = createEventDispatcher();
+  import ValueChanger from './ValueChanger.svelte'
 
   let canvasEl;
   $: canvasStore.set(canvasEl);
@@ -18,25 +16,30 @@
   const randStr = Math.random().toString(16).slice(2, 8);
   const activeId = `active-line-${randStr}`;
 
+  let infoPos = { x: 0, y: 0 };
+  let showMenu = false;
+
   function handleLeftClick(event) {
     // when using custom events, we need to propogate stuff via event.detail
     const e = event.detail;
 
     isDragging = true;
 
-    // get mouse pos relative to svg pos
-    const { x: offsetX, y: offsetY } = canvasEl.getBoundingClientRect()
-    const mouse = { x: e.clientX - offsetX, y: e.clientY - offsetY };
+    const mouse = getMouseCanvasPos(e)
     if (isNearNode(mouse)) return;
 
     addNode(e);
   }
 
-  function handleRightClick(event) {
+  function handleRightClick(e) {
     // when using custom events, we need to propogate stuff via event.detail
-    const e = event.detail;
+    infoPos = { x: e.detail.clientX, y: e.detail.clientY };
 
-    console.log('right click!')
+    showMenu = true;
+  }
+
+  function closeMenu() {
+    showMenu = false;
   }
 
   function handleMouseUp() {
@@ -50,6 +53,8 @@
   }
 
   function handleKeyDown(e) {
+    if (showMenu) return;
+
     if (!['Delete', 'Backspace'].includes(e.key)) return;
 
     deleteNode();
@@ -81,9 +86,18 @@
   >
 
   {#each [...$linesStore.entries()] as [id, { hue, nodes }], i}
-    <Line {nodes} {hue} active={$activeLineStore === id} id={$activeLineStore === id ? activeId : ''} />
+    <Line 
+      {nodes} 
+      {hue} 
+      active={$activeLineStore === id} 
+      id={$activeLineStore === id ? activeId : ''} 
+    />
   {/each}
 
   <use id="use" xlink:href={`#${activeId}`} />
 
 </svg>
+
+{#if showMenu}
+  <ValueChanger pos={infoPos} on:close={closeMenu} />
+{/if}

@@ -45,7 +45,7 @@ export function addNode(e) {
   })
 }
 
-export function isNearNode({ x, y, dist = 5 }) {
+export function getNearNode({ x, y, dist = 5 }) {
   const activeLine = get(activeLineStore);
 
   // check if clicking on a node by position checking
@@ -58,11 +58,15 @@ export function isNearNode({ x, y, dist = 5 }) {
       const yDist = Math.abs(node.y - y);
       if (xDist > dist || yDist > dist) continue;
 
-      return true;
+      return node;
     }
   }
 
-  return false;
+  return null;
+}
+
+export function isNearNode({ x, y, dist = 5 }) {
+  return Boolean(getNearNode({ x, y, dist }));
 }
 
 export function moveNode(e) {
@@ -101,6 +105,51 @@ export function deleteNode() {
 
     return lines;
   })
+}
+
+export function getNodeInActiveLine(nodeId) {
+  const lines = get(linesStore);
+  const activeLine = get(activeLineStore);
+  const line = lines.get(activeLine);
+
+  for (let i = 0; i < line.nodes.length; i++) {
+    const { id } = line.nodes[i];
+    if (id !== nodeId) continue;
+
+    return line.nodes[i]
+  }
+  return null;
+}
+
+export function updateNodeInActiveLine(node) {
+  linesStore.update(lines => {
+    const activeLine = get(activeLineStore);
+    const line = lines.get(activeLine);
+
+    for (let i = 0; i < line.nodes.length; i++) {
+      const { id } = line.nodes[i];
+      if (id !== node.id) continue;
+
+      line.nodes[i] = node;
+      break;
+    }
+
+    line.nodes.sort((a, b) => a.x - b.x);
+
+    lines.set(activeLine, line);
+
+    return lines;
+  });
+}
+
+// get mouse pos relative to svg pos
+export function getMouseCanvasPos(e) {
+  const canvasEl = get(canvasStore);
+  const { x: offsetX, y: offsetY } = canvasEl.getBoundingClientRect()
+
+  const mouse = { x: e.clientX - offsetX, y: e.clientY - offsetY };
+
+  return mouse;
 }
 
 // These are colors for canvas keyframes

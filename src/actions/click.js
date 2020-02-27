@@ -24,7 +24,6 @@ export default function click(node) {
   }
 
   function handleKeyDown(e) {
-    console.log(e.key)
     if (e.key === 'Control') controlIsHeld = true;
   }
   function handleKeyUp(e) {

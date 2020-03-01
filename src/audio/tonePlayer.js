@@ -1,7 +1,12 @@
+import { remap } from '../utils'
+
 const VOLUME = 0.25;
 
+const MIN_FREQ = 0;
+const MAX_FREQ = 2000;
+
 class TonePlayer {
-  constructor(time = 3000) {
+  constructor(time = 3) {
     this.schedules = [];
     
     // represented in ms
@@ -43,20 +48,20 @@ class TonePlayer {
   }
 
   get percentage() {
-    return (this.audioContext.currentTime * 1000) / this.runTime;
+    return this.audioContext.currentTime / this.runTime;
   }
 
   // gets value from 0 to 1 and gets the second time
   toTime(percentage) {
-    return percentage * this.runTime / 1000 + this.audioContext.currentTime;
+    return percentage * this.runTime + this.audioContext.currentTime;
   }
   
   playSchedule(schedule) {
       if (schedule.length <= 1) return;
 
       // setting up some values for easier reference
-      const startTime = this.toTime(schedule[0].time);
-      const endTime = this.toTime(schedule[schedule.length - 1].time);
+      const startTime = this.toTime(schedule[0].timePerc);
+      const endTime = this.toTime(schedule[schedule.length - 1].timePerc);
       const now = this.audioContext.currentTime;
     
     
@@ -83,8 +88,8 @@ class TonePlayer {
       // we don't have to reference the previous time since, due to audio scheduling, 
       // since the next automation will only start after the previous finishes
       for (const event of schedule) {
-        const value = Math.floor(event.value);
-        const time = this.toTime(event.time);
+        const value = Math.floor(remap(event.value, 0, 1, MIN_FREQ, MAX_FREQ));
+        const time = this.toTime(event.timePerc);
     
         oscillatorNode.frequency.linearRampToValueAtTime(value, time);
       }    

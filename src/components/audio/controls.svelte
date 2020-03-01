@@ -1,51 +1,50 @@
 <script>
   // svelte components
-  import PlayButton from './playButton.svelte'
-  import Timeline from './timeline.svelte'
+  import PlayButton from "./playButton.svelte";
+  import Timeline from "./timeline.svelte";
 
   // audio API utils
-  import { getSchedule } from '../../audio'
-  import TonePlayer from '../../audio/tonePlayer'
+  import { getSchedule } from "../../audio";
+  import TonePlayer from "../../audio/tonePlayer";
 
   // stores
-  import { linesStore, canvasStore } from '../../stores/canvas'
+  import { linesStore, canvasStore } from "../../stores/canvas";
 
-  let tonePlayer = new TonePlayer(3000);
-  
+  let tonePlayer = new TonePlayer(3);
+
   let timePerc = 0;
   let reqId;
   let startTime;
 
   let length = 3;
   $: {
-    tonePlayer.runTime = length * 1000;
+    tonePlayer.runTime = length;
   }
 
   let isPlaying = false;
 
   function loadSchedules() {
-    const schedules = []
+    const schedules = [];
     for (const [_id, line] of $linesStore) {
       let { width, height } = $canvasStore;
-      width = width.baseVal.value
-      height = height.baseVal.value
+      width = width.baseVal.value;
+      height = height.baseVal.value;
 
       const { nodes } = line;
 
-      const schedule = getSchedule({ 
+      const schedule = getSchedule({
         nodes,
-        width, height,
-        minVal: 50,
-        maxVal: 2000,
+        width,
+        height
       });
 
-      schedules.push(schedule)
+      schedules.push(schedule);
     }
 
     tonePlayer.schedules = schedules;
   }
 
-  function updateTime() {    
+  function updateTime() {
     timePerc = tonePlayer.percentage;
 
     if (timePerc > 1) {
@@ -54,7 +53,7 @@
       return;
     }
 
-    reqId = requestAnimationFrame(updateTime)
+    reqId = requestAnimationFrame(updateTime);
   }
 
   // since we use bind, isPlaying has not yet changed, but it will change itself
@@ -65,14 +64,14 @@
       cancelAnimationFrame(reqId);
     } else {
       loadSchedules();
-      tonePlayer.start();
+      tonePlayer.start(timePerc);
       updateTime();
     }
   }
 
   let isMuted = false;
   function toggleMute() {
-    console.log('mute toggled')
+    console.log("mute toggled");
     isMuted = !isMuted;
   }
 </script>
@@ -97,9 +96,9 @@
 
 <div class="container">
   <Timeline bind:percentage={timePerc} />
-  
+
   <div class="controls">
-    <PlayButton on:click={togglePlay} bind:isPlaying={isPlaying} />
+    <PlayButton on:click={togglePlay} bind:isPlaying />
     <button on:click={toggleMute}>{isMuted ? 'unmute' : 'mute'}</button>
     <div class="input-label">
       <span>Length (seconds)</span>

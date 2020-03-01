@@ -9,11 +9,9 @@
   } from "../../stores/canvas.js";
   import { getNodeInActiveLine, updateNodeInActiveLine } from "./utils.js";
   import { get } from "svelte/store";
-  import { drag, clickOutside } from "../../actions";
-  import { clamp } from "../../utils";
-  import { createEventDispatcher } from "svelte";
 
-  const dispatch = createEventDispatcher()
+  import Window from "../Window.svelte";
+  import { clamp } from "../../utils";
 
   const nodeId = get(activeNodeStore);
   const node = getNodeInActiveLine(nodeId);
@@ -34,55 +32,38 @@
   function updatePos(e) {
     pos = e.detail.pos;
   }
-
-  function closeSelf() {
-    dispatch('close')
-  }
 </script>
 
 <style>
-  .container {
-    z-index: 5;
-
+  div {
     display: grid;
-    grid-template-rows: 1fr 2fr;
-    grid-gap: 15px;
+    grid-template-columns: auto 1fr;
+    grid-gap: 10px;
+    align-items: flex-end;
+  }
 
-    background: white;
-    box-shadow: 2px 2px 2px #00000026;
-
-    position: absolute;
-    padding: 20px;
+  label {
+    display: flex;
+    flex-direction: column;
   }
 </style>
 
-<div
-  style="left: {pos.x}px; top: {pos.y}px"
-  class="container"
-  
-  use:drag
-  on:drag={updatePos}
+<Window title="node editor" on:close {...pos}>
+  <div>
+    <label>
+      <span>x value</span>
+      <input type="number" bind:value={x} placeholder="new X value" />
+    </label>
 
-  use:clickOutside
-  on:clickoutside={closeSelf}>
-  <div>
-    <label>x value</label>
-    <input type="number" bind:value={x} placeholder="new X value" />
-    <input
-      type="range"
-      bind:value={x}
-      min={0}
-      max={width}
-      placeholder="new X value" />
+    <input type="range" bind:value={x} min={0} max={width} />
   </div>
+
   <div>
-    <label>y value</label>
-    <input type="number" bind:value={y} placeholder="new Y value" />
-    <input
-      type="range"
-      bind:value={y}
-      min={0}
-      max={height}
-      placeholder="new Y value" />
+    <label>
+      <span>y value</span>
+      <input type="number" bind:value={y} placeholder="new y value" />
+    </label>
+
+    <input type="range" bind:value={y} min={0} max={height} />
   </div>
-</div>
+</Window>

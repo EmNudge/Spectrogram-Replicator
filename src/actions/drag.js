@@ -1,8 +1,9 @@
-export default function drag(node) {
+export default function drag(node, startingPos) {
   let offset = { x: 0, y: 0 };
+  let pos = startingPos || { x: 0, y: 0 };
 
   function handleHover(e) {
-    const pos = { 
+    pos = { 
       x: e.clientX - offset.x,
       y: e.clientY - offset.y,
     };
@@ -17,11 +18,9 @@ export default function drag(node) {
 
   function handleMouseDown(e) {
     offset = {
-      x: e.clientX - node.offsetLeft,
-      y: e.clientY - node.offsetTop
+      x: e.clientX - pos.x,
+      y: e.clientY - pos.y
     };
-
-    if (e.target !== node) return;
 
     window.addEventListener('mousemove', handleHover);
   }

@@ -7,6 +7,7 @@
   import { moveNode, addNode, deleteNode, isNearNode, getMouseCanvasPos, getNearNode } from './utils.js'
   import click from '../../actions/click'
   import ValueChanger from './ValueChanger.svelte'
+  import { tick } from 'svelte';
 
   let canvasEl;
   $: canvasStore.set(canvasEl);
@@ -35,7 +36,16 @@
     // when using custom events, we need to propogate stuff via event.detail
     infoPos = { x: e.detail.clientX, y: e.detail.clientY };
 
-    showMenu = true;
+    console.log(e.detail.target)
+
+    // we need to rerender to keep drag working correctly
+    if (!showMenu) {
+      showMenu = true;
+    } else {
+      showMenu = false;
+      // we use tick so that svelte causes a rerender first
+      tick().then(() => showMenu = true)
+    }
   }
 
   function closeMenu() {

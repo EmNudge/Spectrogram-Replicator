@@ -4,7 +4,7 @@
   import Timeline from "./timeline.svelte";
 
   // audio API utils
-  import { getSchedule } from "../../audio";
+  import { getSchedule, transformSchedule } from "../../audio";
   import TonePlayer from "../../audio/tonePlayer";
 
   // stores
@@ -23,7 +23,7 @@
 
   let isPlaying = false;
 
-  function loadSchedules() {
+  function getSchedules() {
     const schedules = [];
     for (const [_id, line] of $linesStore) {
       let { width, height } = $canvasStore;
@@ -37,11 +37,10 @@
         width,
         height
       });
-
       schedules.push(schedule);
     }
 
-    tonePlayer.schedules = schedules;
+    return schedules;
   }
 
   function updateTime() {
@@ -63,8 +62,8 @@
       tonePlayer.pause();
       cancelAnimationFrame(reqId);
     } else {
-      loadSchedules();
-      tonePlayer.start(timePerc);
+      const schedules = getSchedules().map(schedule => transformSchedule({ schedule, timePerc }));
+      tonePlayer.play(schedules);
       updateTime();
     }
   }

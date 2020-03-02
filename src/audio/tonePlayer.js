@@ -6,25 +6,17 @@ const MIN_FREQ = 0;
 const MAX_FREQ = 2000;
 
 class TonePlayer {
-  constructor(time = 3) {
-    this.schedules = [];
-    
-    // represented in ms
-    // web audio uses seconds and floats
-    this.runTime = time;
-    
-    this.start();
+  constructor(time = 3) {    
+    this.runTime = time; // seconds. f64\
   }
 
-  start() {
+  setupAudioContext() {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new AudioContext();
 
     this.mainGainNode = this.audioContext.createGain();
     this.mainGainNode.gain.value = VOLUME;
     this.mainGainNode.connect(this.audioContext.destination);
-
-    this.play();
   }
 
   resume() {
@@ -41,8 +33,10 @@ class TonePlayer {
     this.mainGainNode.gain.value = VOLUME;
   }
 
-  play() {
-    for (const schedule of this.schedules) {
+  play(schedules) {
+    this.setupAudioContext();
+
+    for (const schedule of schedules) {
       this.playSchedule(schedule);
     }
   }
@@ -57,6 +51,7 @@ class TonePlayer {
   }
   
   playSchedule(schedule) {
+      debugger;
       if (schedule.length <= 1) return;
 
       // setting up some values for easier reference

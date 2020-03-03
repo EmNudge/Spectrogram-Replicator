@@ -2,6 +2,13 @@
 	import Canvas from './components/canvas/SvgCanvas.svelte'
 	import LineMenu from './components/lineMenu.svelte'
 	import Controls from './components/audio/controls.svelte'
+	import FilePicker from './components/FilePicker.svelte'
+
+	let bg = '';
+	function handleFile(e) {
+		const { url } = e.detail;
+		bg = url;
+	}
 </script>
 
 <style>
@@ -32,11 +39,14 @@
 <main>
 	<h1>Spectrogram Replicator</h1>
 	<div class="workspace">
-		<Canvas />
+		<Canvas {bg} />
 		<LineMenu />
 	</div>
 	<div class="controls">
 		<Controls />
 		<div class="dummy-element"></div>
 	</div>
+
+	
+	<FilePicker on:file={handleFile} />
 </main>

@@ -1,6 +1,7 @@
 <script>
-  export let width;
-  export let height;
+  // export let width;
+  // export let height;
+  export let bg;
 
   import Line from "./Line.svelte";
   import { activeLineStore, linesStore, activeNodeStore, canvasStore } from "../../stores/canvas.js";
@@ -73,40 +74,55 @@
 
 <style>
   svg {
-    background: #eee;
+    background: #eeea;
     width: 100%;
     height: 100%;
     min-height: 400px;
+  }
+
+  div {
+    position: relative;
+    overflow: hidden;
+  }
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
   }
 </style>
 
 <svelte:window on:mouseup={handleMouseUp} on:keydown={handleKeyDown} />
 
-<svg
-  {width}
-  {height}
-  bind:this={canvasEl}
+<div class="canvas">
+  {#if bg}
+    <img src={bg} alt="background" />
+  {/if}
 
-  on:contextmenu|preventDefault
-  use:click
-  on:leftclick={handleLeftClick}
-  on:rightclick={handleRightClick}
+  <svg
+    bind:this={canvasEl}
 
-  on:mousemove={handleHover}
-  >
+    on:contextmenu|preventDefault
+    use:click
+    on:leftclick={handleLeftClick}
+    on:rightclick={handleRightClick}
 
-  {#each [...$linesStore.entries()] as [id, { hue, nodes }], i}
-    <Line 
-      {nodes} 
-      {hue} 
-      active={$activeLineStore === id} 
-      id={$activeLineStore === id ? activeId : ''} 
-    />
-  {/each}
+    on:mousemove={handleHover}
+    >
 
-  <use id="use" xlink:href={`#${activeId}`} />
+    {#each [...$linesStore.entries()] as [id, { hue, nodes }], i}
+      <Line 
+        {nodes} 
+        {hue} 
+        active={$activeLineStore === id} 
+        id={$activeLineStore === id ? activeId : ''} 
+      />
+    {/each}
 
-</svg>
+    <use id="use" xlink:href={`#${activeId}`} />
+
+  </svg>
+</div>
 
 {#if showMenu}
   <ValueChanger pos={infoPos} on:close={closeMenu} />

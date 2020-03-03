@@ -51,7 +51,6 @@ class TonePlayer {
   }
   
   playSchedule(schedule) {
-      debugger;
       if (schedule.length <= 1) return;
 
       // setting up some values for easier reference

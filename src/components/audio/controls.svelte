@@ -26,17 +26,8 @@
   function getSchedules() {
     const schedules = [];
     for (const [_id, line] of $linesStore) {
-      let { width, height } = $canvasStore;
-      width = width.baseVal.value;
-      height = height.baseVal.value;
+      const schedule = getSchedule(line.nodes);
 
-      const { nodes } = line;
-
-      const schedule = getSchedule({
-        nodes,
-        width,
-        height
-      });
       schedules.push(schedule);
     }
 

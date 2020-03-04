@@ -84,7 +84,7 @@ class TonePlayer {
       for (const event of schedule) {
         const value = Math.floor(remap(event.value, 0, 1, MIN_FREQ, MAX_FREQ));
         const time = this.toTime(event.timePerc);
-    
+
         oscillatorNode.frequency.linearRampToValueAtTime(value, time);
       }    
   }

@@ -58,9 +58,15 @@ export function getNearNode({ x, y, dist = 5 }) {
     const lines = get(linesStore);
     const line = lines.get(activeLine);
 
+    const canvasEl = get(canvasStore);
+    const { width, height } = canvasEl.getBoundingClientRect();
+
     for (const node of line.nodes) {
-      const xDist = Math.abs(node.x - x);
-      const yDist = Math.abs(node.y - y);
+      const nx = node.x * width;
+      const ny = node.y * height;
+
+      const xDist = Math.abs(nx - x);
+      const yDist = Math.abs(ny - y);
       if (xDist > dist || yDist > dist) continue;
 
       return node;

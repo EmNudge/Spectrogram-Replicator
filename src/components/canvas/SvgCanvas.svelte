@@ -37,8 +37,6 @@
     // when using custom events, we need to propogate stuff via event.detail
     infoPos = { x: e.detail.clientX, y: e.detail.clientY };
 
-    console.log(e.detail.target)
-
     // we need to rerender to keep drag working correctly
     if (!showMenu) {
       showMenu = true;

@@ -1,9 +1,9 @@
 // takes keyframes and some options. Spits out (time,value) instead of (x,y)
-function getSchedule({ nodes, width, height }) {
+function getSchedule(nodes) {
 	return nodes.map((node) => {
-		const xPerc = node.x / width;
+		const xPerc = node.x;
 		// invert it since y starts from top
-		const yPerc = 1 - node.y / height;
+		const yPerc = 1 - node.y;
 
 		return { timePerc: xPerc, value: yPerc };
 	});

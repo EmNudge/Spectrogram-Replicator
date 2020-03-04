@@ -1,5 +1,10 @@
-import { activeLineStore, linesStore, activeNodeStore, canvasStore } from "../../stores/canvas";
-import { get } from 'svelte/store';
+import {
+  activeLineStore,
+  linesStore,
+  activeNodeStore,
+  canvasStore
+} from "../../stores/canvas";
+import { get } from "svelte/store";
 
 const getIndexForId = (nodes, id) => {
   for (let i = 0; i < nodes.length; i++) {
@@ -16,33 +21,31 @@ const getPos = e => {
   return { x, y };
 };
 
-
 function addLine() {
-  const id = Symbol()
-  activeLineStore.set(id)
-  
-  linesStore.update(lines => {
-    lines.set(id, getNewLine())
-    return lines;
-  })
-}
+  const id = Symbol();
+  activeLineStore.set(id);
 
+  linesStore.update(lines => {
+    lines.set(id, getNewLine());
+    return lines;
+  });
+}
 
 export function addNode(e) {
   linesStore.update(lines => {
-    if (!lines.size) addLine()
-  
+    if (!lines.size) addLine();
+
     const id = get(activeLineStore);
     const line = lines.get(id);
 
-    const nodeId = Symbol()
-    line.nodes.push({ ...getPos(e), id: nodeId })
-    line.nodes.sort((a, b) => a.x - b.x)
-    lines.set(id, line)
+    const nodeId = Symbol();
+    line.nodes.push({ ...getPos(e), id: nodeId });
+    line.nodes.sort((a, b) => a.x - b.x);
+    lines.set(id, line);
     activeNodeStore.set(nodeId);
-    
+
     return lines;
-  })
+  });
 }
 
 export function getNearNode({ x, y, dist = 5 }) {
@@ -72,7 +75,7 @@ export function isNearNode({ x, y, dist = 5 }) {
 export function moveNode(e) {
   linesStore.update(lines => {
     const id = get(activeLineStore);
-    const activeNode = get(activeNodeStore)
+    const activeNode = get(activeNodeStore);
 
     const line = lines.get(id);
     const index = getIndexForId(line.nodes, activeNode);
@@ -82,7 +85,6 @@ export function moveNode(e) {
     return lines;
   });
 }
-
 
 export function deleteNode() {
   linesStore.update(lines => {
@@ -104,7 +106,7 @@ export function deleteNode() {
     }
 
     return lines;
-  })
+  });
 }
 
 export function getNodeInActiveLine(nodeId) {
@@ -116,7 +118,7 @@ export function getNodeInActiveLine(nodeId) {
     const { id } = line.nodes[i];
     if (id !== nodeId) continue;
 
-    return line.nodes[i]
+    return line.nodes[i];
   }
   return null;
 }
@@ -145,7 +147,7 @@ export function updateNodeInActiveLine(node) {
 // get mouse pos relative to svg pos
 export function getMouseCanvasPos(e) {
   const canvasEl = get(canvasStore);
-  const { x: offsetX, y: offsetY } = canvasEl.getBoundingClientRect()
+  const { x: offsetX, y: offsetY } = canvasEl.getBoundingClientRect();
 
   const mouse = { x: e.clientX - offsetX, y: e.clientY - offsetY };
 
@@ -167,15 +169,15 @@ export const PURPLE = 250;
 export const PINK = 320;
 
 export const getRandColor = () => {
-  const colors = [RED, TEAL, BLUE, YELLOW, GREEN, PURPLE, PINK]
+  const colors = [RED, TEAL, BLUE, YELLOW, GREEN, PURPLE, PINK];
 
-  const randIndex = Math.floor(Math.random() * colors.length)
-  
-  return colors[randIndex]
-}
+  const randIndex = Math.floor(Math.random() * colors.length);
+
+  return colors[randIndex];
+};
 
 export const getNewLine = () => ({
   hue: getRandColor(),
   name: `Line ${get(linesStore).size + 1}`,
   nodes: []
-})
+});

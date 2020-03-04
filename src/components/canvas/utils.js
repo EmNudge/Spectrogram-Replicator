@@ -15,9 +15,11 @@ const getIndexForId = (nodes, id) => {
 
 const getPos = e => {
   const canvasEl = get(canvasStore);
-  const boundingRect = canvasEl.getBoundingClientRect();
-  const x = e.clientX - boundingRect.x;
-  const y = e.clientY - boundingRect.y;
+  const { width, height, x: cx, y: cy } = canvasEl.getBoundingClientRect();
+
+  const x = (e.clientX - cx) / width;
+  const y = (e.clientY - cy) / height;
+
   return { x, y };
 };
 

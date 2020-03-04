@@ -14,10 +14,10 @@
       const node = nodes[i];
       const nextNode = nodes[i + 1];
       lines.push({
-        x1: node.x,
-        y1: node.y,
-        x2: nextNode.x,
-        y2: nextNode.y
+        x1: `${node.x * 100}%`,
+        y1: `${node.y * 100}%`,
+        x2: `${nextNode.x * 100}%`,
+        y2: `${nextNode.y * 100}%`
       });
     }
     return lines;
@@ -47,8 +47,8 @@
   {/each}
   {#each nodes as { x, y, id }}
     <Node
-      {x}
-      {y}
+      x="{x * 100}%"
+      y="{y * 100}%"
       on:mousedown={() => onClick(id)}
       isActive={$activeNodeStore === id} />
   {/each}

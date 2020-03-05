@@ -9,6 +9,10 @@
 		const { url } = e.detail;
 		bg = url;
 	}
+
+	function handleDefaultImage() {
+		bg = '/images/spectrogram.jpg'
+	}
 </script>
 
 <style>
@@ -49,4 +53,5 @@
 
 	
 	<FilePicker on:file={handleFile} />
+	<button on:click={handleDefaultImage}>Use Default Image</button>
 </main>

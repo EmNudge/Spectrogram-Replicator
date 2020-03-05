@@ -25,6 +25,9 @@
     --shdw: 2px 2px 2px #00000026;
     display: grid;
     grid-gap: 10px;
+    max-height: 400px;
+    overflow-y: scroll;
+    padding: 10px;
   }
 
   button {

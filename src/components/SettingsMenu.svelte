@@ -1,5 +1,6 @@
 <script>
   import Window from './Window.svelte'
+  import { minFreqStore, maxFreqStore, audioLengthStore } from '../stores/audio';
 </script>
 
 <style>
@@ -20,15 +21,15 @@
   <div class="inputs">
     <label>
       <span>Length (seconds)</span>
-      <input type="text">
+      <input type="number" bind:value={$audioLengthStore}>
     </label>
     <label>
       <span>Min Frequency:</span>
-      <input type="number">
+      <input type="number" bind:value={$minFreqStore}>
     </label>
     <label>
       <span>Max Frequency:</span>
-      <input type="number">
+      <input type="number" bind:value={$maxFreqStore}>
     </label>
   </div>
 </Window>

@@ -1,13 +1,12 @@
 import { remap } from '../utils'
+import { get } from 'svelte/store';
+import { minFreqStore, maxFreqStore, audioLengthStore } from '../stores/audio';
 
 const VOLUME = 0.25;
 
-const MIN_FREQ = 0;
-const MAX_FREQ = 2000;
-
 class TonePlayer {
   constructor(time = 3) {    
-    this.runTime = time; // seconds. f64\
+    audioLengthStore.set(time); // seconds. f64\
   }
 
   setupAudioContext() {
@@ -42,16 +41,19 @@ class TonePlayer {
   }
 
   get percentage() {
-    return this.audioContext.currentTime / this.runTime;
+    return this.audioContext.currentTime / get(audioLengthStore);
   }
 
   // gets value from 0 to 1 and gets the second time
   toTime(percentage) {
-    return percentage * this.runTime + this.audioContext.currentTime;
+    return percentage * get(audioLengthStore) + this.audioContext.currentTime;
   }
   
   playSchedule(schedule) {
       if (schedule.length <= 1) return;
+
+      const minFreq = get(minFreqStore);
+      const maxFreq = get(maxFreqStore);
 
       // setting up some values for easier reference
       const startTime = this.toTime(schedule[0].timePerc);
@@ -82,7 +84,7 @@ class TonePlayer {
       // we don't have to reference the previous time since, due to audio scheduling, 
       // since the next automation will only start after the previous finishes
       for (const event of schedule) {
-        const value = Math.floor(remap(event.value, 0, 1, MIN_FREQ, MAX_FREQ));
+        const value = Math.floor(remap(event.value, 0, 1, minFreq, maxFreq));
         const time = this.toTime(event.timePerc);
 
         oscillatorNode.frequency.linearRampToValueAtTime(value, time);

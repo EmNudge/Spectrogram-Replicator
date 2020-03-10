@@ -64,7 +64,8 @@
 	<FilePicker on:file={handleFile} />
 	<button on:click={handleDefaultImage}>Use Default Image</button>
 
-	<button on:click={openSettings}>Settings</button>
+	<br />
+	<button on:click={openSettings}>Audio Settings</button>
 
 	{#if showSettings}
 		<SettingsMenu on:close={closeSettings} />

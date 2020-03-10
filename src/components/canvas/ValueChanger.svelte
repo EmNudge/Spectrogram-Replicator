@@ -18,13 +18,12 @@
   let x = node.x;
   let y = node.y;
 
-  const width = $canvasStore.width.baseVal.value;
-  const height = $canvasStore.height.baseVal.value;
+  function clampVal() {
+    x = clamp(x, 0, 1);
+    y = clamp(y, 0, 1);
+  }
 
   $: {
-    if (x > width) x = clamp(x, 0, width);
-    if (y > width) y = clamp(y, 0, width);
-
     const id = get(activeNodeStore);
     updateNodeInActiveLine({ x, y, id });
   }
@@ -52,18 +51,18 @@
   <div>
     <label>
       <span>x value</span>
-      <input type="number" bind:value={x} placeholder="new X value" />
+      <input type="number" bind:value={x} on:input={clampVal} placeholder="new X value" />
     </label>
 
-    <input type="range" bind:value={x} min={0} max={width} />
+    <input type="range" bind:value={x} step={.001} min={0} max={1} />
   </div>
 
   <div>
     <label>
       <span>y value</span>
-      <input type="number" bind:value={y} placeholder="new y value" />
+      <input type="number" bind:value={y} on:input={clampVal} placeholder="new y value" />
     </label>
 
-    <input type="range" bind:value={y} min={0} max={height} />
+    <input type="range" bind:value={y} step={.001} min={0} max={1} />
   </div>
 </Window>

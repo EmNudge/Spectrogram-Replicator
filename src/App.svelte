@@ -3,6 +3,7 @@
 	import LineMenu from './components/lineMenu.svelte'
 	import Controls from './components/audio/controls.svelte'
 	import FilePicker from './components/FilePicker.svelte'
+	import SettingsMenu from './components/SettingsMenu.svelte'
 
 	let bg = '';
 	function handleFile(e) {
@@ -12,6 +13,14 @@
 
 	function handleDefaultImage() {
 		bg = '/images/spectrogram.jpg'
+	}
+
+	let showSettings = false;
+	function openSettings() {
+		showSettings = true;
+	}
+	function closeSettings() {
+		showSettings = false;
 	}
 </script>
 
@@ -54,4 +63,10 @@
 	
 	<FilePicker on:file={handleFile} />
 	<button on:click={handleDefaultImage}>Use Default Image</button>
+
+	<button on:click={openSettings}>Settings</button>
+
+	{#if showSettings}
+		<SettingsMenu on:close={closeSettings} />
+	{/if}
 </main>

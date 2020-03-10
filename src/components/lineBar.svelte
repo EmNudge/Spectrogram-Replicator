@@ -4,10 +4,17 @@
   export let hue;
   export let isActive;
 
-  import { linesStore, canvasStore, activeLineStore } from "../stores/canvas";
+  import { linesStore, canvasStore, activeLineStore, allowDeleteStore } from "../stores/canvas";
+  import { onDestroy } from 'svelte'
 
   let editing = false;
   let inputEl;
+  let allowDelete;
+
+  onDestroy(() => {
+    if (!allowDelete) return;
+    allowDeleteStore.set(true);
+  })
 
   function toggleInput() {
     editing = true;
@@ -19,20 +26,28 @@
     }, 0)
   }
 
-  function updateName() {
+  function updateName(isBlurred) {
     linesStore.update(l => {
       const line = l.get(id);
       line.name = name;
       l.set(id, line);
       return l;
     });
+  }
 
+  function handleBlur() {
+    allowDeleteStore.set(true);
     editing = false;
+    updateName();
+  }
+
+  function handleFocus() {
+    allowDeleteStore.set(false);
   }
 
   function handleKeyDown(e) {
     if (e.key !== "Enter") return;
-    updateName();
+    editing = false;
   }
 
   function destroyLine() {
@@ -91,7 +106,8 @@
       type="text"
       bind:value={name}
       bind:this={inputEl}
-      on:blur={updateName}
+      on:blur={handleBlur}
+      on:focus={handleFocus}
       on:keydown={handleKeyDown} />
   {/if}
 

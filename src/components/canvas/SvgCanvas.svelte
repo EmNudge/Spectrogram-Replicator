@@ -4,7 +4,7 @@
   export let bg;
 
   import Line from "./Line.svelte";
-  import { activeLineStore, linesStore, activeNodeStore, canvasStore } from "../../stores/canvas.js";
+  import { activeLineStore, linesStore, activeNodeStore, canvasStore, allowDeleteStore } from "../../stores/canvas.js";
   import { moveNode, addNode, deleteNode, isNearNode, getMouseCanvasPos, getNearNode } from './utils.js'
   import click from '../../actions/click'
   import ValueChanger from './ValueChanger.svelte'
@@ -65,6 +65,8 @@
     if (showMenu) return;
 
     if (!['Delete', 'Backspace'].includes(e.key)) return;
+
+    if (!$allowDeleteStore) return;
 
     deleteNode();
   }

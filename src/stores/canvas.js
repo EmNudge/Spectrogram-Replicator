@@ -10,4 +10,8 @@ export const activeLineStore = writable(null);
 export const activeNodeStore = writable(null);
 
 // represents canvas svg to get coords and dimensions
-export const canvasStore = writable(null)
+export const canvasStore = writable(null);
+
+// whether to assocociate delete and backspace with the deletion of a node
+// if we're in an input, we want this disabled.
+export const allowDeleteStore = writable(true); 

@@ -5,7 +5,9 @@
   export let isActive;
 
   import { linesStore, canvasStore, activeLineStore, allowDeleteStore } from "../stores/canvas";
-  import { onDestroy } from 'svelte'
+  import { onDestroy } from 'svelte';
+
+  import Line from './svg/Line.svelte';
 
   let editing = false;
   let inputEl;
@@ -67,26 +69,28 @@
 
 <style>
   .line {
-    padding: 10px;
+    padding: 5px;
     display: grid;
     grid-template-columns: auto 1fr auto;
     grid-gap: 10px;
-    box-shadow: var(--shdw);
-    background: var(--grey);
+    align-items: center;
+
     opacity: 0.7;
     outline: none;
   }
   .line.active {
     opacity: 1;
   }
-  .color {
-    height: 20px;
-    width: 20px;
-    background: hsl(var(--bg), 50%, 50%);
+  .line.editing {
+    grid-template-columns: auto 1fr;
   }
   .close {
     color: red;
     cursor: pointer;
+    opacity: 0;
+  }
+  .line:hover .close {
+    opacity: 1;
   }
 
   input {
@@ -96,8 +100,8 @@
   }
 </style>
 
-<div class="line" class:active={isActive} on:click>
-  <div class="color" style="--bg: {hue}" />
+<div class="line" class:active={isActive} on:click class:editing>
+  <Line color="hsl({hue}, 50%, 50%)" />
 
   {#if !editing}
     <div on:dblclick={toggleInput}>{name}</div>
@@ -111,5 +115,7 @@
       on:keydown={handleKeyDown} />
   {/if}
 
-  <div class="close" on:click={destroyLine}>x</div>
+  {#if !editing}
+    <div class="close" on:click={destroyLine}>x</div>
+  {/if}
 </div>

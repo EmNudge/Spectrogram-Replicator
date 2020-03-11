@@ -1,7 +1,8 @@
 import {
   activeLineStore,
-  linesStore,
+  activeSegmentStore,
   activeNodeStore,
+  linesStore,
   canvasStore
 } from "../../stores/canvas";
 import { get } from "svelte/store";
@@ -37,13 +38,17 @@ export function addNode(e) {
   linesStore.update(lines => {
     if (!lines.size) addLine();
 
-    const id = get(activeLineStore);
-    const line = lines.get(id);
+    const lineId = get(activeLineStore);
+    const line = lines.get(lineId);
+
+    const segmentId = get(activeSegmentStore);
+    const segment = line.segments.get(segmentId);
 
     const nodeId = Symbol();
-    line.nodes.push({ ...getPos(e), id: nodeId });
-    line.nodes.sort((a, b) => a.x - b.x);
-    lines.set(id, line);
+    segment.nodes.push({ ...getPos(e), id: nodeId });
+    segment.nodes.sort((a, b) => a.x - b.x);
+
+    line.segments.set(segmentId, segment);
     activeNodeStore.set(nodeId);
 
     return lines;
@@ -58,10 +63,13 @@ export function getNearNode({ x, y, dist = 5 }) {
     const lines = get(linesStore);
     const line = lines.get(activeLine);
 
+    const activeSegmentId = get(activeSegmentStore);
+    const segment = line.segments.get(activeSegmentId);
+
     const canvasEl = get(canvasStore);
     const { width, height } = canvasEl.getBoundingClientRect();
 
-    for (const node of line.nodes) {
+    for (const node of segment.nodes) {
       const nx = node.x * width;
       const ny = node.y * height;
 
@@ -82,14 +90,19 @@ export function isNearNode({ x, y, dist = 5 }) {
 
 export function moveNode(e) {
   linesStore.update(lines => {
-    const id = get(activeLineStore);
-    const activeNode = get(activeNodeStore);
+    const lineId = get(activeLineStore);
+    const line = lines.get(lineId);
 
-    const line = lines.get(id);
-    const index = getIndexForId(line.nodes, activeNode);
-    line.nodes[index] = { ...getPos(e), id: activeNode };
-    line.nodes.sort((a, b) => a.x - b.x);
-    lines.set(id, line);
+    const activeSegmentId = get(activeSegmentStore);
+    const segment = line.segments.get(activeSegmentId);
+
+    const activeNodeId = get(activeNodeStore);
+
+    const index = getIndexForId(segment.nodes, activeNodeId);
+    segment.nodes[index] = { ...getPos(e), id: activeNodeId };
+    segment.nodes.sort((a, b) => a.x - b.x);
+    line.segments.set(activeSegmentId, segment);
+
     return lines;
   });
 }
@@ -100,13 +113,15 @@ export function deleteNode() {
     const activeNode = get(activeNodeStore);
 
     const line = lines.get(id);
-    const index = getIndexForId(line.nodes, activeNode);
+    const activeSegmentId = get(activeSegmentStore);
+    const segment = line.segments.get(activeSegmentId)
+    const index = getIndexForId(segment.nodes, activeNode);
 
-    line.nodes.splice(index, 1);
+    segment.nodes.splice(index, 1);
     // might not be necessary, but just in case
-    lines.set(id, line);
+    line.segments.set(activeSegmentId, segment);
 
-    const currNode = line.nodes[index] || line.nodes[index - 1];
+    const currNode = segment.nodes[index] || segment.nodes[index - 1];
     if (currNode) {
       activeNodeStore.set(currNode.id);
     } else {
@@ -184,8 +199,22 @@ export const getRandColor = () => {
   return colors[randIndex];
 };
 
-export const getNewLine = () => ({
-  hue: getRandColor(),
-  name: `Line ${get(linesStore).size + 1}`,
-  nodes: []
-});
+export const getNewLine = () => {
+  const newSegmentId = Symbol();
+  activeSegmentStore.set(newSegmentId);
+
+  const segments = new Map();
+  segments.set(
+    newSegmentId, 
+    { 
+      name: 'Segment 1', 
+      nodes: [] 
+    }
+  );
+
+  return  {
+    hue: getRandColor(),
+    name: `Line ${get(linesStore).size + 1}`,
+    segments,
+  }
+};

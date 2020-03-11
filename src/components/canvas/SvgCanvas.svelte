@@ -24,12 +24,17 @@
   function handleLeftClick(event) {
     // when using custom events, we need to propogate stuff via event.detail
     const e = event.detail;
-
+    
     isDragging = true;
+    
+    if (!$linesStore.size) {
+      addNode(e)
+      return;
+    }
 
     const mouse = getMouseCanvasPos(e)
     if (isNearNode(mouse)) return;
-
+    
     addNode(e);
   }
 
@@ -112,9 +117,9 @@
     on:mousemove={handleHover}
     >
 
-    {#each [...$linesStore.entries()] as [id, { hue, nodes }], i}
+    {#each [...$linesStore.entries()] as [id, { hue, segments }], i}
       <Line 
-        {nodes} 
+        {segments} 
         {hue} 
         active={$activeLineStore === id} 
         id={$activeLineStore === id ? activeId : ''} 

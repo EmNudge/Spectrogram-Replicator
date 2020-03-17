@@ -7,7 +7,8 @@
     activeNodeStore,
     canvasStore
   } from "../../stores/canvas.js";
-  import { getActiveNode, updateNodeInActiveLine } from "./utils.ts";
+  import { updateNodeInActiveLine } from "./utils.ts";
+  import { getActiveNode } from '../../canvas/getActive'
   import { get } from "svelte/store";
 
   import Window from "../Window.svelte";

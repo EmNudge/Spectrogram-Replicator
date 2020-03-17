@@ -68,11 +68,7 @@ class TonePlayer {
       const minFreq = get(minFreqStore);
       const maxFreq = get(maxFreqStore);
 
-      // setting up some values for easier reference
-      const startTime = this.toTime(schedule[0].timePerc);
-      const endTime = this.toTime(schedule[schedule.length - 1].timePerc);
       const now = this.audioContext.currentTime;
-    
     
       // need to make another gain node in order to "start" and "stop" without closing
       const gainNode = this.audioContext.createGain();
@@ -81,13 +77,21 @@ class TonePlayer {
       // makes it hold at 0 until start
       gainNode.gain.setValueAtTime(0, now);
     
-      // hold to 0 and then jump to .2
-      gainNode.gain.linearRampToValueAtTime(0, startTime);
-      gainNode.gain.linearRampToValueAtTime(0.2, startTime + .1);
-      // hold at .2 and then jump to 0
-      gainNode.gain.linearRampToValueAtTime(0.2, endTime);
-      gainNode.gain.linearRampToValueAtTime(0, endTime + .1);
-    
+      for (const [index, event] of schedule.entries()) {
+        const { volume, timePerc } = event;
+        const time = this.toTime(timePerc);
+
+        if (volume !== 0) continue
+        
+        const prevEvent = schedule[index - 1];
+        if (prevEvent && prevEvent.volume > 0) {
+          gainNode.gain.linearRampToValueAtTime(0.2, time - .01);
+          gainNode.gain.linearRampToValueAtTime(0, time);
+        } else {
+          gainNode.gain.linearRampToValueAtTime(0, time - .01);
+          gainNode.gain.linearRampToValueAtTime(0.2, time);
+        }
+      }    
     
       // main oscilltor which produces the sound
       const oscillatorNode = this.audioContext.createOscillator();

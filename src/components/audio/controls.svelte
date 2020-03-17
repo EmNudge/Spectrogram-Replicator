@@ -21,7 +21,7 @@
   function getSchedules() {
     const schedules = [];
     for (const [_id, line] of $linesStore) {
-      const schedule = getSchedule(line.nodes);
+      const schedule = getSchedule(line);
 
       schedules.push(schedule);
     }
@@ -48,7 +48,7 @@
       tonePlayer.pause();
       cancelAnimationFrame(reqId);
     } else {
-      const schedules = getSchedules().map(schedule => transformSchedule({ schedule, timePerc }));
+      const schedules = getSchedules().map(schedule => transformSchedule(schedule, timePerc));
       tonePlayer.play(schedules);
       updateTime();
     }

@@ -4,8 +4,10 @@
   export let bg;
 
   import Line from "./Line.svelte";
-  import { activeLineStore, linesStore, activeNodeStore, canvasStore, allowDeleteStore } from "../../stores/canvas.js";
-  import { moveNode, addNode, deleteNode, isNearNode, getMouseCanvasPos, getNearNode } from './utils.ts'
+  import { activeLineStore, linesStore, activeSegmentStore, activeNodeStore, canvasStore, allowDeleteStore } from "../../stores/canvas.js";
+  import { moveNode, addNode, isNearNode, getMouseCanvasPos, getNearNode } from './utils'
+  import { deleteNode } from '../../canvas/deleteNode'
+  import { lineBoundsCheck } from '../../canvas/boundsCheck'
   import click from '../../actions/click'
   import ValueChanger from './ValueChanger.svelte'
   import { tick } from 'svelte';
@@ -21,9 +23,25 @@
   let infoPos = { x: 0, y: 0 };
   let showMenu = false;
 
+  function isColliding(e) {
+    const lines = $linesStore;
+    if (!lines) return false;
+
+    const line = lines.get($activeLineStore);
+    if (!line) return false;
+
+    const segment = line.segments.get($activeSegmentStore);
+    if (!segment) return false;
+
+    const segColliding = lineBoundsCheck(line, segment, getMouseCanvasPos(e));
+    return segColliding;
+  }
+
   function handleLeftClick(event) {
     // when using custom events, we need to propogate stuff via event.detail
     const e = event.detail;
+    
+    if (isColliding(e)) return;
     
     isDragging = true;
     

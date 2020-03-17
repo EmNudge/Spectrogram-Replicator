@@ -1,13 +1,18 @@
 import { rangeInRange, pointInRange, Range } from '../utils/collisions';
-import { Line, Segment, Node, Dim } from '../canvas';
+import { Line, Segment, Dim } from '../canvas';
+
+interface Pos {
+  x: number,
+  y: number,
+}
 
 // the dimensions of the current segment have not yet updated when this is called
 // we only need the x dimensions as a range anyway, so just give us that
-function getDimRange(dimensions: Dim, node: Node): Range | null {
+function getDimRange(dimensions: Dim, pos: Pos): Range | null {
 	const { x, width } = dimensions;
 
-	const min = Math.min(x, node.x);
-	const max = Math.max(x + width, node.x);
+	const min = Math.min(x, pos.x);
+	const max = Math.max(x + width, pos.x);
 
 	return { min, max };
 }
@@ -18,7 +23,7 @@ function getDimRange(dimensions: Dim, node: Node): Range | null {
 // if both have dimensions - rangeInRange collision
 
 // returns whether or not a node is encrouching upon the bounds of another segment
-export function lineBoundsCheck(line: Line, segment: Segment, node: Node): boolean {
+export function lineBoundsCheck(line: Line, segment: Segment, pos: Pos): boolean {
 	for (const [_id, currSegment] of line.segments) {
 		// skip if it's the active segment
 		if (currSegment === segment) continue;
@@ -32,7 +37,7 @@ export function lineBoundsCheck(line: Line, segment: Segment, node: Node): boole
 			const currNode = currSegment.nodes[0];
 			const pointColliding = pointInRange({
 				point: currNode.x,
-				range: getDimRange(segment.dimensions, node) as Range
+				range: getDimRange(segment.dimensions, pos) as Range
 			});
 
 			if (pointColliding) return true;
@@ -47,7 +52,7 @@ export function lineBoundsCheck(line: Line, segment: Segment, node: Node): boole
 				max: x + width
 			};
 			const isColliding = pointInRange({
-				point: node.x,
+				point: pos.x,
 				range
 			});
 
@@ -61,7 +66,7 @@ export function lineBoundsCheck(line: Line, segment: Segment, node: Node): boole
 			min: x,
 			max: x + width
 		};
-		const range2 = getDimRange(segment.dimensions, node) as Range;
+		const range2 = getDimRange(segment.dimensions, pos) as Range;
 
 		const isColliding = rangeInRange({ range1, range2 });
 

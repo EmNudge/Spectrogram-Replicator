@@ -9,7 +9,9 @@ import {
 import {
   Node, Line, Segment, Dim
 } from "../../canvas";
-import { lineBoundsCheck } from './../../canvas/boundsCheck';
+import { lineBoundsCheck } from '../../canvas/boundsCheck';
+import { getRandColor } from '../../canvas/colors';
+import { getSegmentDimensions } from '../../canvas/getSegmentDimensions'
 import { get } from "svelte/store";
 
 const getPos = (e: MouseEvent) => {
@@ -40,7 +42,15 @@ export function addNode(e: MouseEvent) {
     const { line, segment, segmentId } = getActiveSegment(lines);
 
     const nodeId = Symbol();
-    segment.nodes.push({ ...getPos(e), id: nodeId });
+    const newNode = { ...getPos(e), id: nodeId }
+    
+    const isColliding = lineBoundsCheck(line, segment, newNode);
+    if (isColliding) {
+      activeNodeStore.set(null);
+      return lines;
+    };
+
+    segment.nodes.push(newNode);
     segment.nodes.sort((a, b) => a.x - b.x);
 
     if (segment.nodes.length > 1) {
@@ -121,46 +131,6 @@ export function moveNode(e: MouseEvent) {
   });
 }
 
-// gets smallest and largest x & y values to produce a box around a segment
-// i.e. a dimension object
-function getSegmentDimensions(segment: Segment): Dim {
-  if (segment.nodes.length < 2) {
-    throw new Error('Cannot get dimensions on segment size less than 2');
-  }
-
-  // we make the smallest values the largest in order to quickly get overwritten
-  // since nodes' x & y can only be from 0-1, we don't need to use Infinity, but whatever
-  let smallestX = Infinity;
-  let smallestY = Infinity;
-  let largestX = -Infinity;
-  let largestY = -Infinity;
-
-  for (const node of segment.nodes) {
-    // we separately check each dimension and not both at once since a segment's dimensions
-    // can be made of many nodes. One can have a smaller x and another a smaller y. Or it can have both.
-    if (node.x < smallestX) {
-      smallestX = node.x;
-    }
-    if (node.x > largestX) {
-      largestX = node.x;
-    }
-
-    if (node.y < smallestY) {
-      smallestY = node.y;
-    }
-    if (node.y > largestY) {
-      largestY = node.y;
-    }
-  }
-
-  return {
-    x: smallestX, 
-    y: smallestY,
-    width: largestX - smallestX, 
-    height: largestY - smallestY,
-  }
-}
-
 function getActiveSegment(lines: Map<Symbol, Line>) {
   const activeLineId = get(activeLineStore);
   const line = lines.get(activeLineId);
@@ -211,25 +181,6 @@ export function getActiveNode(lines: Map<Symbol, Line>) {
   }
 }
 
-export function deleteNode() {
-  linesStore.update(lines => {
-    const { line, segment, segmentId, nodeIndex } = getActiveNode(lines)
-
-    segment.nodes.splice(nodeIndex, 1);
-    // might not be necessary, but just in case
-    line.segments.set(segmentId, segment);
-
-    const currNode = segment.nodes[nodeIndex] || segment.nodes[nodeIndex - 1];
-    if (currNode) {
-      activeNodeStore.set(currNode.id);
-    } else {
-      activeNodeStore.set(null);
-    }
-
-    return lines;
-  });
-}
-
 export function getNodeInActiveLine(nodeId: Symbol) {
   const lines = get(linesStore);
   const activeLine = get(activeLineStore);
@@ -276,28 +227,6 @@ export function getMouseCanvasPos(e: MouseEvent) {
 
   return mouse;
 }
-
-// These are colors for canvas keyframes
-// Since the lines are just lighter versions of the keyframes, we need HSL
-// These are therefore the hue of HSL, the S & L should be 50%
-
-// Since we now switched to SVGs, we could probably use `brightness` via CSS filters, but this is more flexible
-
-export const BLUE = 200;
-export const TEAL = 170;
-export const RED = 0;
-export const YELLOW = 60;
-export const GREEN = 80;
-export const PURPLE = 250;
-export const PINK = 320;
-
-export const getRandColor = () => {
-  const colors = [RED, TEAL, BLUE, YELLOW, GREEN, PURPLE, PINK];
-
-  const randIndex = Math.floor(Math.random() * colors.length);
-
-  return colors[randIndex];
-};
 
 export function getNewLine(pos: { x: number, y: number }): Line {
   const newSegmentId = Symbol();

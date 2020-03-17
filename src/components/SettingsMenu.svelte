@@ -24,7 +24,7 @@
     // checking to see if we changed it locally
     if (!allowDelete) return;
 
-    allowDelete.set(true);
+    allowDeleteStore.set(true);
   });
 </script>
 

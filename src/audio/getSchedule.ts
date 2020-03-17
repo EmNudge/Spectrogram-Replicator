@@ -15,6 +15,9 @@ function getSchedule(line: Line): Schedule {
 	for (const [_id, segment] of line.segments) {
 		const wave: Point[] = [];
 
+		// at least 2 nodes must exist for a tone to play
+		if (segment.nodes.length < 2) continue;
+		
 		for (const node of segment.nodes) {
 			const xPerc = node.x;
 			// invert it since y starts from top

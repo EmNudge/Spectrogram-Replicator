@@ -5,7 +5,7 @@
 
   import Line from "./Line.svelte";
   import { activeLineStore, linesStore, activeSegmentStore, activeNodeStore, canvasStore, allowDeleteStore } from "../../stores/canvas.js";
-  import { moveNode, addNode, getMouseCanvasPos } from './utils'
+  import { moveNode, addNode, getPos } from './utils'
   import { isNearNode, deleteNode, getActiveSegment } from '../../canvas/exports';
   import { lineBoundsCheck } from '../../canvas/boundsCheck'
   import click from '../../actions/click'
@@ -26,8 +26,8 @@
   function isColliding(e) {
     try {
       const { line, segment } = getActiveSegment($linesStore);
-  
-      const segColliding = lineBoundsCheck(line, segment, getMouseCanvasPos(e));
+
+      const segColliding = lineBoundsCheck(line, segment, getPos(e));
       return segColliding;
     } catch(e) {
       return false;
@@ -39,6 +39,7 @@
     const e = event.detail;
     
     if (isColliding(e)) return;
+
     isDragging = true;
     
     if (!$linesStore.size) {
@@ -46,7 +47,7 @@
       return;
     }
 
-    const mouse = getMouseCanvasPos(e)
+    const mouse = getPos(e)
     if (isNearNode(mouse)) return;
     
     addNode(e);

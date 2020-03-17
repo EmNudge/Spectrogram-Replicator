@@ -14,7 +14,7 @@ import { getActiveNode, getActiveSegment } from '../../canvas/getActive'
 import { get } from "svelte/store";
 import { getNewLine } from '../../canvas/exports';
 
-const getPos = (e: MouseEvent) => {
+export function getPos(e: MouseEvent) {
   const canvasEl = get(canvasStore);
   const { width, height, x: cx, y: cy } = canvasEl.getBoundingClientRect();
 
@@ -125,14 +125,4 @@ export function updateNodeInActiveLine(node: Node) {
 
     return lines;
   });
-}
-
-// get mouse pos relative to svg pos
-export function getMouseCanvasPos(e: MouseEvent) {
-  const canvasEl = get(canvasStore);
-  const { x: offsetX, y: offsetY } = canvasEl.getBoundingClientRect();
-
-  const mouse = { x: e.clientX - offsetX, y: e.clientY - offsetY };
-
-  return mouse;
 }

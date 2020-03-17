@@ -8,15 +8,9 @@ import {
 // separately importing types
 import {
   Node, Line, Segment, Dim
-} from "../../stores/canvas";
+} from "../../canvas";
+import { lineBoundsCheck } from './../../canvas/boundsCheck';
 import { get } from "svelte/store";
-
-const getIndexForId = (nodes: Node[], id: Symbol) => {
-  for (let i = 0; i < nodes.length; i++) {
-    if (nodes[i].id === id) return i;
-  }
-  return -1;
-};
 
 const getPos = (e: MouseEvent) => {
   const canvasEl = get(canvasStore);
@@ -108,7 +102,10 @@ export function moveNode(e: MouseEvent) {
     const newNode: Node = { ...getPos(e), id: nodeId };
 
     const isColliding = lineBoundsCheck(line, segment, newNode);
-    if (isColliding) return lines;
+    if (isColliding) {
+      const { x } = segment.nodes[nodeIndex]
+      newNode.x = x;
+    }
 
     segment.nodes[nodeIndex] = newNode;
     segment.nodes.sort((a, b) => a.x - b.x);
@@ -122,26 +119,6 @@ export function moveNode(e: MouseEvent) {
 
     return lines;
   });
-}
-
-// returns whether or not a node is encrouching upon the bounds of another segment
-function lineBoundsCheck(line: Line, segment: Segment, node: Node): boolean {
-  for (const [_id, currSegment] of line.segments) {
-    // skip if it's the active segment
-    if (currSegment === segment) continue;
-    
-    // if the segment has only one node, just skip.
-    // might want to change this later
-    if (!currSegment.dimensions) continue;
-
-    const { x, width } = currSegment.dimensions;
-    if (node.x > x + width || node.x < x) continue;
-
-    // if our node is within the segment's dimensions
-    return true;
-  }
-
-  return false;
 }
 
 // gets smallest and largest x & y values to produce a box around a segment

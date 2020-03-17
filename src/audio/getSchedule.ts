@@ -1,4 +1,4 @@
-import { Segment } from '../stores/canvas';
+import { Segment } from '../canvas';
 
 export interface Point {
 	timePerc: number,

@@ -7,14 +7,13 @@
     activeNodeStore,
     canvasStore
   } from "../../stores/canvas.js";
-  import { getNodeInActiveLine, updateNodeInActiveLine } from "./utils.js";
+  import { getActiveNode, updateNodeInActiveLine } from "./utils.ts";
   import { get } from "svelte/store";
 
   import Window from "../Window.svelte";
   import { clamp } from "../../utils";
 
-  const nodeId = get(activeNodeStore);
-  const node = getNodeInActiveLine(nodeId);
+  const { node } = getActiveNode($linesStore)
   let x = node.x;
   let y = node.y;
 

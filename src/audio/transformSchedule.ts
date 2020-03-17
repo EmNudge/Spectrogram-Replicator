@@ -1,8 +1,9 @@
 import { remap } from '../utils';
+import { Schedule } from './getSchedule'
 
 // takes a schedule and a percentage.
 // Returns a schedule sliced to that percentage
-function transformSchedule({ schedule, timePerc }) {
+function transformSchedule(schedule: Schedule, timePerc: number) {
 	let choppingIndex = 0;
 
 	for (const [index, node] of schedule.entries()) {

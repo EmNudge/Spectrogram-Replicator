@@ -5,7 +5,7 @@
 
   import Line from "./Line.svelte";
   import { activeLineStore, linesStore, activeNodeStore, canvasStore, allowDeleteStore } from "../../stores/canvas.js";
-  import { moveNode, addNode, deleteNode, isNearNode, getMouseCanvasPos, getNearNode } from './utils.js'
+  import { moveNode, addNode, deleteNode, isNearNode, getMouseCanvasPos, getNearNode } from './utils.ts'
   import click from '../../actions/click'
   import ValueChanger from './ValueChanger.svelte'
   import { tick } from 'svelte';

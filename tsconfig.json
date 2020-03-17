@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "target": "ESNEXT",
+    "module": "ESNEXT",
+    "strict": true,
+    "moduleResolution": "node",
+    "types": ["svelte"],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
+  }
+}

@@ -1,17 +1,20 @@
 import { remap } from '../utils'
 import { get } from 'svelte/store';
 import { minFreqStore, maxFreqStore, audioLengthStore } from '../stores/audio';
+import { Schedule } from './getSchedule';
 
 const VOLUME = 0.25;
 
 class TonePlayer {
+  audioContext: AudioContext | null = null;
+  mainGainNode: GainNode | null = null;
+
   constructor(time = 3) {    
     audioLengthStore.set(time); // seconds. f64\
   }
 
   setupAudioContext() {
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
-    this.audioContext = new AudioContext();
+    this.audioContext = new window.AudioContext();
 
     this.mainGainNode = this.audioContext.createGain();
     this.mainGainNode.gain.value = VOLUME;
@@ -19,20 +22,24 @@ class TonePlayer {
   }
 
   resume() {
+    if (!this.audioContext) return;
     this.audioContext.resume()
   }
   pause() {
+    if (!this.audioContext) return;
     this.audioContext.suspend();
   }
 
   mute() {
+    if (!this.mainGainNode) return;
     this.mainGainNode.gain.value = 0;
   }
   unmute() {
+    if (!this.mainGainNode) return;
     this.mainGainNode.gain.value = VOLUME;
   }
 
-  play(schedules) {
+  play(schedules: Schedule[]) {
     this.setupAudioContext();
 
     for (const schedule of schedules) {
@@ -41,15 +48,21 @@ class TonePlayer {
   }
 
   get percentage() {
+    if (!this.audioContext) return;
+
     return this.audioContext.currentTime / get(audioLengthStore);
   }
 
   // gets value from 0 to 1 and gets the second time
-  toTime(percentage) {
+  toTime(percentage: number) {
+    if (!this.audioContext) return 0;
+
     return percentage * get(audioLengthStore) + this.audioContext.currentTime;
   }
   
-  playSchedule(schedule) {
+  playSchedule(schedule: Schedule) {
+      if (!this.audioContext || !this.mainGainNode) return;
+
       if (schedule.length <= 1) return;
 
       const minFreq = get(minFreqStore);

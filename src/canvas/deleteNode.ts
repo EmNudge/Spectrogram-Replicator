@@ -1,8 +1,8 @@
 import { activeNodeStore, linesStore } from '../stores/canvas';
 import { getActiveNode } from './getActive';
-import { getSegmentDimensions } from './getSegmentDimensions'
+import getSegmentDimensions from './getSegmentDimensions'
 
-export function deleteNode() {
+function deleteNode() {
 	linesStore.update((lines) => {
 		const { segment, nodeIndex } = getActiveNode(lines);
 
@@ -24,3 +24,5 @@ export function deleteNode() {
 		return lines;
 	});
 }
+
+export default deleteNode;

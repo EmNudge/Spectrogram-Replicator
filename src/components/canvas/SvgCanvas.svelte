@@ -5,8 +5,8 @@
 
   import Line from "./Line.svelte";
   import { activeLineStore, linesStore, activeSegmentStore, activeNodeStore, canvasStore, allowDeleteStore } from "../../stores/canvas.js";
-  import { moveNode, addNode, isNearNode, getMouseCanvasPos, getNearNode } from './utils'
-  import { deleteNode } from '../../canvas/deleteNode'
+  import { moveNode, addNode, getMouseCanvasPos } from './utils'
+  import { isNearNode, deleteNode, getActiveSegment } from '../../canvas/exports';
   import { lineBoundsCheck } from '../../canvas/boundsCheck'
   import click from '../../actions/click'
   import ValueChanger from './ValueChanger.svelte'
@@ -24,17 +24,14 @@
   let showMenu = false;
 
   function isColliding(e) {
-    const lines = $linesStore;
-    if (!lines) return false;
-
-    const line = lines.get($activeLineStore);
-    if (!line) return false;
-
-    const segment = line.segments.get($activeSegmentStore);
-    if (!segment) return false;
-
-    const segColliding = lineBoundsCheck(line, segment, getMouseCanvasPos(e));
-    return segColliding;
+    try {
+      const { line, segment } = getActiveSegment($linesStore);
+  
+      const segColliding = lineBoundsCheck(line, segment, getMouseCanvasPos(e));
+      return segColliding;
+    } catch(e) {
+      return false;
+    }
   }
 
   function handleLeftClick(event) {
@@ -42,7 +39,6 @@
     const e = event.detail;
     
     if (isColliding(e)) return;
-    
     isDragging = true;
     
     if (!$linesStore.size) {

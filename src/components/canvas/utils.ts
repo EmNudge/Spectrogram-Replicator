@@ -1,19 +1,18 @@
 import {
   activeLineStore,
-  activeSegmentStore,
   activeNodeStore,
   linesStore,
   canvasStore
 } from "../../stores/canvas";
 // separately importing types
 import {
-  Node, Line, Segment, Dim
+  Node, Line, Segment
 } from "../../canvas";
 import { lineBoundsCheck } from '../../canvas/boundsCheck';
-import { getRandColor } from '../../canvas/colors';
-import { getSegmentDimensions } from '../../canvas/getSegmentDimensions'
+import { getSegmentDimensions } from '../../canvas/exports'
 import { getActiveNode, getActiveSegment } from '../../canvas/getActive'
 import { get } from "svelte/store";
+import { getNewLine } from '../../canvas/exports';
 
 const getPos = (e: MouseEvent) => {
   const canvasEl = get(canvasStore);
@@ -63,47 +62,6 @@ export function addNode(e: MouseEvent) {
 
     return lines;
   });
-}
-
-interface NearNode {
-  x: number,
-  y: number,
-  dist?: number,
-}
-export function getNearNode(nearNode: NearNode) {
-  const { x, y } = nearNode;
-  const dist = nearNode.dist || 5;
-
-  const activeLine = get(activeLineStore);
-
-  // check if clicking on a node by position checking
-  if (activeLine) {
-    const lines = get(linesStore);
-    const line = lines.get(activeLine);
-
-    const activeSegmentId = get(activeSegmentStore);
-    const segment = line.segments.get(activeSegmentId);
-
-    const canvasEl = get(canvasStore);
-    const { width, height } = canvasEl.getBoundingClientRect();
-
-    for (const node of segment.nodes) {
-      const nx = node.x * width;
-      const ny = node.y * height;
-
-      const xDist = Math.abs(nx - x);
-      const yDist = Math.abs(ny - y);
-      if (xDist > dist || yDist > dist) continue;
-
-      return node;
-    }
-  }
-
-  return null;
-}
-
-export function isNearNode(nearNode: NearNode) {
-  return Boolean(getNearNode(nearNode));
 }
 
 export function moveNode(e: MouseEvent) {
@@ -178,28 +136,3 @@ export function getMouseCanvasPos(e: MouseEvent) {
 
   return mouse;
 }
-
-export function getNewLine(pos: { x: number, y: number }): Line {
-  const newSegmentId = Symbol();
-  activeSegmentStore.set(newSegmentId);
-
-  const segments: Map<Symbol, Segment> = new Map();
-
-  const activeNodeId = Symbol();
-  const node = { ...pos, id: activeNodeId };
-  activeNodeStore.set(activeNodeId);
-
-  segments.set(
-    newSegmentId, 
-    { 
-      name: 'Segment 1', 
-      nodes: [node] 
-    }
-  );
-
-  return  {
-    hue: getRandColor(),
-    name: `Line ${get(linesStore).size + 1}`,
-    segments,
-  }
-};

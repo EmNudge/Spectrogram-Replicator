@@ -4,6 +4,7 @@
 	import Controls from './components/audio/controls.svelte'
 	import FilePicker from './components/FilePicker.svelte'
 	import SettingsMenu from './components/SettingsMenu.svelte'
+	import { debugModeStore } from './stores/canvas'
 
 	let bg = '';
 	function handleFile(e) {
@@ -21,6 +22,10 @@
 	}
 	function closeSettings() {
 		showSettings = false;
+	}
+
+	function toggleDebug() {
+		debugModeStore.update(debugMode => !debugMode);
 	}
 </script>
 
@@ -66,6 +71,9 @@
 
 	<br />
 	<button on:click={openSettings}>Audio Settings</button>
+
+	<br />
+	<button on:click={toggleDebug}>Toggle Debug Mode</button>
 
 	{#if showSettings}
 		<SettingsMenu on:close={closeSettings} />

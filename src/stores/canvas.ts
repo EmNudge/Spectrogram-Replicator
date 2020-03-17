@@ -18,3 +18,5 @@ export const canvasStore = writable(null as SVGElement | null);
 // whether to assocociate delete and backspace with the deletion of a node
 // if we're in an input, we want this disabled.
 export const allowDeleteStore = writable(true); 
+
+export const debugModeStore = writable(false);

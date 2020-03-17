@@ -4,8 +4,7 @@
   export let hue = 0;
   export let id = '';
 
-  const debug = true;
-
+  import { debugModeStore } from '../../stores/canvas'
   import Segment from "./Segment.svelte";
 </script>
 
@@ -18,7 +17,7 @@
 <g style="--line-hue: {hue}" class:active {id}>
   {#each [...segments.entries()] as [id, { nodes, dimensions }]}
     <Segment segmentId={id} {nodes} />
-    {#if debug && dimensions}
+    {#if $debugModeStore && dimensions}
       <rect 
         style="fill: none; stroke: #000a"
         width="{100 * dimensions.width}%"

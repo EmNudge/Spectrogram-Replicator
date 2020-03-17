@@ -1,93 +1,16 @@
-*Looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)*
+# Spectrogram Replicator
 
----
+This is a spectrogram replicator. It is an educational linguistics tool to teach about spectrograms and how they work.
 
-# svelte app
+A spectrogram is a different way to represent audio than a standard waveform. Frequencies shape the image, while volume colors it. By tracing over spectrograms of human speech, one can replicate the sound using sine waves.
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
+To get more information on this specific project, check out the slides used to present this tool over at https://svelte-nyc-web-audio.netlify.com
 
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
+## Technologies
+This project uses Svelte and Typescript. Svelte was instrumental in the ease of use the reactivity has been, while TypeScript makes refactoring much easier in general.
 
-```bash
-npx degit sveltejs/template svelte-app
-cd svelte-app
-```
-
-*Note that you will need to have [Node.js](https://nodejs.org) installed.*
-
-
-## Get started
-
-Install the dependencies...
-
-```bash
-cd svelte-app
-npm install
-```
-
-...then start [Rollup](https://rollupjs.org):
-
-```bash
-npm run dev
-```
-
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
-
-By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
-
-
-## Building and running in production mode
-
-To create an optimised version of the app:
-
-```bash
-npm run build
-```
-
-You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
-
-
-## Single-page app mode
-
-By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
-
-If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for *any* path. You can make it so by editing the `"start"` command in package.json:
-
-```js
-"start": "sirv public --single"
-```
-
-
-## Deploying to the web
-
-### With [now](https://zeit.co/now)
-
-Install `now` if you haven't already:
-
-```bash
-npm install -g now
-```
-
-Then, from within your project folder:
-
-```bash
-cd public
-now deploy --name my-project
-```
-
-As an alternative, use the [Now desktop client](https://zeit.co/download) and simply drag the unzipped project folder to the taskbar icon.
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public my-project.surge.sh
-```
+## Usage
+The tool is available live on https://spectrogram-replicator.netlify.com/, but you can work on it locally via the following:
+1. clone the repo via `git clone git@github.com:EmNudge/Spectrogram-Replicator.git`
+2. `cd` into the directory and run `npm i`
+3. run `npm run dev` and open `http://localhost:5000/`

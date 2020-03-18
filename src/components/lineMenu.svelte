@@ -6,15 +6,17 @@
   import NewLineIcon from './svg/NewLine.svelte';
   import NewSegmentIcon from './svg/NewSegment.svelte';
 
-  $: getTemp = () => " auto".repeat($linesStore.size + 1) + " 1fr";
-
   function addLine() {
-    const newLine = getNewLine();
-    const id = Symbol();
+    linesStore.update(lines => {
+      const newLine = getNewLine();
+      const id = Symbol();
 
-    activeLineStore.set(id);
-    activeNodeStore.set(null);
-    linesStore.update(l => l.set(id, newLine));
+      lines.set(id, newLine)
+      activeLineStore.set(id);
+      activeNodeStore.set(null);
+
+      return lines;
+    });
   }
 
   function addSegment() {
@@ -38,7 +40,7 @@
     // getting first segment ID in given line
     const line = $linesStore.get(id);
     let segmentId = null;
-    for (const [segId, segment] of line.segments.entries()) {
+    for (const [segId, segment] of line.segments) {
       segmentId = segId;
       break;
     }

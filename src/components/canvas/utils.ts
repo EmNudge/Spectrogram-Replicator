@@ -92,10 +92,9 @@ export function moveNode(e: MouseEvent) {
 
 export function updateNodeInActiveLine(node: Node) {
   linesStore.update(lines => {
-    const { segment, lineId, line } = getActiveSegment(lines);
+    const { segment } = getActiveSegment(lines);
 
-    for (let i = 0; i < segment.nodes.length; i++) {
-      const { id } = segment.nodes[i];
+    for (const [i, { id }] of segment.nodes.entries()) {
       if (id !== node.id) continue;
 
       segment.nodes[i] = node;
@@ -105,9 +104,6 @@ export function updateNodeInActiveLine(node: Node) {
     segment.nodes.sort((a, b) => a.x - b.x);
 
     segment.dimensions = getSegmentDimensions(segment);
-
-    // this is probably extraneous
-    lines.set(lineId, line);
 
     return lines;
   });

@@ -31,7 +31,6 @@
     const style = window.getComputedStyle(windowEl);
     height = Math.round(parseFloat(style.height));
     width = Math.round(parseFloat(style.width));
-    console.log({ height, width });
   });
 </script>
 

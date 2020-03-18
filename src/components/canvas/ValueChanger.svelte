@@ -24,7 +24,7 @@
   }
 
   $: {
-    const id = get(activeNodeStore);
+    const id = $activeNodeStore;
     updateNodeInActiveLine({ x, y, id });
   }
 

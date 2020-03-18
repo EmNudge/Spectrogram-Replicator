@@ -2,7 +2,6 @@
   export let active = false;
   export let segments = [];
   export let hue = 0;
-  export let id = '';
 
   import { debugModeStore } from '../../stores/canvas'
   import Segment from "./Segment.svelte";
@@ -14,9 +13,9 @@
   }
 </style>
 
-<g style="--line-hue: {hue}" class:active {id}>
+<g style="--line-hue: {hue}" class:active>
   {#each [...segments.entries()] as [id, { nodes, dimensions }]}
-    <Segment segmentId={id} {nodes} />
+    <Segment {nodes} />
     {#if $debugModeStore && dimensions}
       <rect 
         style="fill: none; stroke: #000a"

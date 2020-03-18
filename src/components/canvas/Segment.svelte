@@ -1,6 +1,5 @@
 <script>
   export let nodes = [];
-  export let segmentId = null;
 
   import Node from "./Node.svelte";
   import { activeNodeStore } from "../../stores/canvas.js";

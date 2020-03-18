@@ -1,20 +1,14 @@
 import { rangeInRange, pointInRange, Range } from '../utils/collisions';
 import { Line, Segment, Dim } from '../canvas';
+import getSegmentDimensions from './getSegmentDimensions';
 
 interface Pos {
   x: number,
   y: number,
 }
 
-// the dimensions of the current segment have not yet updated when this is called
-// we only need the x dimensions as a range anyway, so just give us that
-function getDimRange(dimensions: Dim, pos: Pos): Range | null {
-	const { x, width } = dimensions;
-
-	const min = Math.min(x, pos.x);
-	const max = Math.max(x + width, pos.x);
-
-	return { min, max };
+function isEqual(pos1: Pos, pos2: Pos) {
+	return pos1.x === pos2.x && pos1.y === pos2.y;
 }
 
 // one of the difficulties is knowing which bounds checker to use.
@@ -24,6 +18,15 @@ function getDimRange(dimensions: Dim, pos: Pos): Range | null {
 
 // returns whether or not a node is encrouching upon the bounds of another segment
 export function lineBoundsCheck(line: Line, segment: Segment, pos: Pos): boolean {
+	let range: Range | null = null;
+	// if we have one node, then the new node lets us make dimensions
+	if (segment.nodes.length >= 1 && !isEqual(segment.nodes[0], pos)) {
+		const newSegment = { ...segment };
+		newSegment.nodes = [ ...newSegment.nodes, { ...pos, id: Symbol() } ];
+		const { x, width } = getSegmentDimensions(newSegment);
+		range = { min: x, max: x + width};
+	}
+
 	for (const [_id, currSegment] of line.segments) {
 		// skip if it's the active segment
 		if (currSegment === segment) continue;
@@ -31,13 +34,13 @@ export function lineBoundsCheck(line: Line, segment: Segment, pos: Pos): boolean
 		// if the segment has only one node, just skip.
 		// might want to change this later
 		if (!currSegment.dimensions) {
-			// if we're both single node segments, there can't be a collision
-			if (!segment.dimensions) continue;
+			// if neither have ranges (single nodes) there can't be a collision
+			if (!range) continue;
 
 			const currNode = currSegment.nodes[0];
 			const pointColliding = pointInRange({
 				point: currNode.x,
-				range: getDimRange(segment.dimensions, pos) as Range
+				range: range
 			});
 
 			if (pointColliding) return true;
@@ -45,7 +48,7 @@ export function lineBoundsCheck(line: Line, segment: Segment, pos: Pos): boolean
 		}
 
 		// we know the current segment must have dimensions. We do a point-in-range collision
-		if (!segment.dimensions) {
+		if (!range) {
 			const { x, width } = currSegment.dimensions;
 			const range = {
 				min: x,
@@ -66,7 +69,7 @@ export function lineBoundsCheck(line: Line, segment: Segment, pos: Pos): boolean
 			min: x,
 			max: x + width
 		};
-		const range2 = getDimRange(segment.dimensions, pos) as Range;
+		const range2 = range as Range;
 
 		const isColliding = rangeInRange({ range1, range2 });
 

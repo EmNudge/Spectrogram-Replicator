@@ -23,6 +23,23 @@
   let infoPos = { x: 0, y: 0 };
   let showMenu = false;
 
+  let activeLine = null;
+  $: lines = (() => {
+    const activeLineId = $activeLineStore;
+    const nonActiveLines = [];
+    
+    for (const [id, line] of [...$linesStore.entries()]) {
+      if (id === activeLineId) {
+        activeLine = line;
+        continue;
+      }
+
+      nonActiveLines.push(line);
+    }
+
+    return nonActiveLines;
+  })();
+
   function isColliding(e) {
     try {
       const { line, segment } = getActiveSegment($linesStore);
@@ -132,17 +149,18 @@
     on:mousemove={handleHover}
     >
 
-    {#each [...$linesStore.entries()] as [id, { hue, segments }], i}
-      <Line 
-        {segments} 
-        {hue} 
-        active={$activeLineStore === id} 
-        id={$activeLineStore === id ? activeId : ''} 
-      />
+    {#each lines as [id, { hue, segments }], i}
+      <Line {segments} {hue} />
     {/each}
 
-    <use id="use" xlink:href={`#${activeId}`} />
-
+    {#if activeLine}
+      <Line 
+        active={true}
+        segments={activeLine.segments} 
+        hue={activeLine.hue} 
+      />
+    {/if}
+    
   </svg>
 </div>
 

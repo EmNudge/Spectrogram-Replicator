@@ -17,9 +17,6 @@
 
   let isDragging = false;
 
-  const randStr = Math.random().toString(16).slice(2, 8);
-  const activeId = `active-line-${randStr}`;
-
   let infoPos = { x: 0, y: 0 };
   let showMenu = false;
 

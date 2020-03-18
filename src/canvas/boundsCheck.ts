@@ -28,6 +28,8 @@ export function lineBoundsCheck(line: Line, segment: Segment, pos: Pos): boolean
 	}
 
 	for (const [_id, currSegment] of line.segments) {
+		if (!currSegment.nodes.length) continue;
+		
 		// skip if it's the active segment
 		if (currSegment === segment) continue;
 

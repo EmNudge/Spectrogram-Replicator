@@ -1,27 +1,33 @@
-import { activeSegmentStore, activeLineStore, linesStore, canvasStore } from './../stores/canvas';
+import { activeLineStore, linesStore, canvasStore } from './../stores/canvas';
 import { get } from 'svelte/store';
+import { getActiveSegment } from './getActive';
 
-interface NearNode {
-  x: number,
-  y: number,
-  dist?: number,
+interface PosParams {
+  e: MouseEvent,
+  boundingRect: DOMRect,
 }
-export function getNearNode(nearNode: NearNode) {
-  const { x, y } = nearNode;
-  const dist = nearNode.dist || 5;
+const getPos = (params: PosParams) => {
+  const { x: cx, y: cy } = params.boundingRect;
+
+  const x = params.e.clientX - cx;
+  const y = params.e.clientY - cy;
+
+  return { x, y };
+}
+
+export function isNearNode(e: MouseEvent, dist: number = 5) {
+  const canvasEl = get(canvasStore) as SVGElement;
+  const boundingRect = canvasEl.getBoundingClientRect();
+  const { width, height } = boundingRect;
+  const { x, y } = getPos({ boundingRect, e });
 
   const activeLine = get(activeLineStore);
 
   // check if clicking on a node by position checking
   if (activeLine) {
     const lines = get(linesStore);
-    const line = lines.get(activeLine);
+    const { segment } = getActiveSegment(lines);
 
-    const activeSegmentId = get(activeSegmentStore);
-    const segment = line.segments.get(activeSegmentId);
-
-    const canvasEl = get(canvasStore);
-    const { width, height } = canvasEl.getBoundingClientRect();
 
     for (const node of segment.nodes) {
       const nx = node.x * width;
@@ -31,13 +37,9 @@ export function getNearNode(nearNode: NearNode) {
       const yDist = Math.abs(ny - y);
       if (xDist > dist || yDist > dist) continue;
 
-      return node;
+      return true;
     }
   }
 
-  return null;
-}
-
-export function isNearNode(nearNode: NearNode) {
-  return Boolean(getNearNode(nearNode));
+  return false;
 }

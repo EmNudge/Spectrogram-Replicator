@@ -90,20 +90,6 @@ export function moveNode(e: MouseEvent) {
   });
 }
 
-export function getNodeInActiveLine(nodeId: Symbol) {
-  const lines = get(linesStore);
-  const activeLine = get(activeLineStore);
-  const line = lines.get(activeLine);
-
-  for (let i = 0; i < line.nodes.length; i++) {
-    const { id } = line.nodes[i];
-    if (id !== nodeId) continue;
-
-    return line.nodes[i];
-  }
-  return null;
-}
-
 export function updateNodeInActiveLine(node: Node) {
   linesStore.update(lines => {
     const { segment, lineId, line } = getActiveSegment(lines);

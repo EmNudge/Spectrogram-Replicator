@@ -64,8 +64,8 @@
       return;
     }
 
-    const mouse = getPos(e)
-    if (isNearNode(mouse)) return;
+    const hoveringOnNode = isNearNode(e);
+    if (hoveringOnNode) return;
     
     addNode(e);
   }

@@ -11,9 +11,10 @@
       const newLine = getNewLine();
       const id = Symbol();
 
-      lines.set(id, newLine)
       activeLineStore.set(id);
       activeNodeStore.set(null);
+      
+      lines.set(id, newLine);
 
       return lines;
     });

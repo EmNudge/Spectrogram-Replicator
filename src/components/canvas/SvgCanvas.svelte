@@ -33,7 +33,7 @@
 
       nonActiveLines.push(line);
     }
-
+    
     return nonActiveLines;
   })();
 
@@ -146,7 +146,7 @@
     on:mousemove={handleHover}
     >
 
-    {#each lines as [id, { hue, segments }], i}
+    {#each lines as { hue, segments }}
       <Line {segments} {hue} />
     {/each}
 

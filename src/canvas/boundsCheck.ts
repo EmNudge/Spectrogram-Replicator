@@ -1,15 +1,6 @@
 import { rangeInRange, pointInRange, Range } from '../utils/collisions';
-import { Line, Segment, Dim } from '../canvas';
+import { Line, Segment, Node, Dim } from '../canvas';
 import getSegmentDimensions from './getSegmentDimensions';
-
-interface Pos {
-  x: number,
-  y: number,
-}
-
-function isEqual(pos1: Pos, pos2: Pos) {
-	return pos1.x === pos2.x && pos1.y === pos2.y;
-}
 
 // one of the difficulties is knowing which bounds checker to use.
 // if neither have dimensions, they are both points - no collision
@@ -17,12 +8,12 @@ function isEqual(pos1: Pos, pos2: Pos) {
 // if both have dimensions - rangeInRange collision
 
 // returns whether or not a node is encrouching upon the bounds of another segment
-export function lineBoundsCheck(line: Line, segment: Segment, pos: Pos): boolean {
+export function lineBoundsCheck(line: Line, segment: Segment, node: Node): boolean {
 	let range: Range | null = null;
 	// if we have one node, then the new node lets us make dimensions
-	if (segment.nodes.length >= 1 && !isEqual(segment.nodes[0], pos)) {
+	if (segment.nodes.length > 1 || (segment.nodes.length === 1 && segment.nodes[0].id !== node.id)) {
 		const newSegment = { ...segment };
-		newSegment.nodes = [ ...newSegment.nodes, { ...pos, id: Symbol() } ];
+		newSegment.nodes = [ ...newSegment.nodes, node ];
 		const { x, width } = getSegmentDimensions(newSegment);
 		range = { min: x, max: x + width};
 	}
@@ -57,7 +48,7 @@ export function lineBoundsCheck(line: Line, segment: Segment, pos: Pos): boolean
 				max: x + width
 			};
 			const isColliding = pointInRange({
-				point: pos.x,
+				point: node.x,
 				range
 			});
 

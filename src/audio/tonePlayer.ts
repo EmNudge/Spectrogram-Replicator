@@ -5,6 +5,14 @@ import { Schedule } from './getSchedule';
 
 const VOLUME = 0.25;
 
+// to both allow webkit and satsify TS, we need to extend the window object to support
+// the "vendor prefixed" AudioContext in webkit. Wish this wasn't needed.
+declare global {
+  interface Window { 
+    webkitAudioContext?: AudioContext; 
+  }
+}
+
 class TonePlayer {
   audioContext: AudioContext | null = null;
   mainGainNode: GainNode | null = null;
@@ -14,7 +22,8 @@ class TonePlayer {
   }
 
   setupAudioContext() {
-    this.audioContext = new window.AudioContext();
+    const AudioContex = window.AudioContext || window.webkitAudioContext;
+    this.audioContext = new AudioContex();
 
     this.mainGainNode = this.audioContext.createGain();
     this.mainGainNode.gain.value = VOLUME;

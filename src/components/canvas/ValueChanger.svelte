@@ -7,8 +7,7 @@
     activeNodeStore,
     canvasStore
   } from "../../stores/canvas.js";
-  import { updateNodeInActiveLine } from "./utils.ts";
-  import { getActiveNode } from '../../canvas/getActive'
+  import { getActiveNode, getSegmentDimensions } from '../../canvas/exports'
   import { get } from "svelte/store";
 
   import Window from "../Window.svelte";
@@ -23,9 +22,20 @@
     y = clamp(y, 0, 1);
   }
 
+  // the previous code was simpler, but it annoyingly also ran on changes to the active node
+  // when that happened, the new node would get the old position. This way, it only changes when x and y change
   $: {
-    const id = $activeNodeStore;
-    updateNodeInActiveLine({ x, y, id });
+    linesStore.update(lines => {
+      const { segment, node } = getActiveNode(lines);
+      node.x = x;
+      node.y = y;
+
+      segment.nodes.sort((a, b) => a.x - b.x);
+
+      segment.dimensions = getSegmentDimensions(segment);
+
+      return lines;
+    });
   }
 
   function updatePos(e) {

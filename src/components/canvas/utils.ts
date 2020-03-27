@@ -89,22 +89,3 @@ export function moveNode(e: MouseEvent) {
     return lines;
   });
 }
-
-export function updateNodeInActiveLine(node: Node) {
-  linesStore.update(lines => {
-    const { segment } = getActiveSegment(lines);
-
-    for (const [i, { id }] of segment.nodes.entries()) {
-      if (id !== node.id) continue;
-
-      segment.nodes[i] = node;
-      break;
-    }
-
-    segment.nodes.sort((a, b) => a.x - b.x);
-
-    segment.dimensions = getSegmentDimensions(segment);
-
-    return lines;
-  });
-}

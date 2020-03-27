@@ -57,7 +57,7 @@
       const activeLineId = $activeLineStore;
       const line = lines.get(activeLineId);
 
-      if (line.segments.size > 1) {
+      if (line.segments.size) {
         let prevSegId = null;
         for (const [segId, _segment] of line.segments) {
           // use the segment just before if this isn't the first 

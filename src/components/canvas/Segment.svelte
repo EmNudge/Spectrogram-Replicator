@@ -1,8 +1,9 @@
 <script>
   export let nodes = [];
+  export let segmentId = null;
 
   import Node from "./Node.svelte";
-  import { activeNodeStore } from "../../stores/canvas.js";
+  import { activeNodeStore, linesStore, activeLineStore } from "../../stores/canvas.js";
 
   $: lines = getLines(nodes);
   function getLines() {
@@ -20,7 +21,19 @@
     return lines;
   }
 
+
   function onClick(nodeId) {
+    const line = $linesStore.get($activeLineStore);
+
+    let segmentInLine = false;
+    for (const [id, _segment] of line.segments) {
+      if (id !== segmentId) continue;
+      
+      segmentInLine = true;
+      break;
+    }
+
+    if (!segmentInLine) return;
     activeNodeStore.set(nodeId);
   }
 </script>

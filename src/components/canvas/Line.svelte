@@ -1,6 +1,6 @@
 <script>
   export let active = false;
-  export let segments = [];
+  export let segments = new Map();
   export let hue = 0;
 
   import { debugModeStore } from '../../stores/canvas'
@@ -14,8 +14,8 @@
 </style>
 
 <g style="--line-hue: {hue}" class:active>
-  {#each [...segments.entries()] as [id, { nodes, dimensions }]}
-    <Segment {nodes} />
+  {#each [...segments] as [id, { nodes, dimensions }]}
+    <Segment {nodes} segmentId={id} />
     {#if $debugModeStore && dimensions}
       <rect 
         style="fill: none; stroke: #000a"

@@ -30,5 +30,5 @@
 
 <label>
   Pick File
-  <input type="file" on:input={handleFile} />
+  <input type="file" on:change={handleFile} />
 </label>

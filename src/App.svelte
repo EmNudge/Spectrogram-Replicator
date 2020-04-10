@@ -4,8 +4,8 @@
 	import Controls from './components/audio/controls.svelte'
 	import FilePicker from './components/FilePicker.svelte'
 	import SettingsMenu from './components/SettingsMenu.svelte'
+	import OutputButton from './components/OutputButton.svelte';
 	import { debugModeStore } from './stores/canvas'
-	import getOutput from './audio/getOutput';
 
 	let bg = '';
 	function handleFile(e) {
@@ -29,10 +29,6 @@
 		debugModeStore.update(debugMode => !debugMode);
 	}
 
-	function handleGetOutput() {
-		const text = getOutput();
-		navigator.clipboard.writeText(JSON.stringify(text))
-	}
 </script>
 
 <style>
@@ -79,7 +75,7 @@
 	<button on:click={openSettings}>Audio Settings</button>
 
 	<br />
-	<button on:click={handleGetOutput}>Copy Output To Clipboard</button>
+	<OutputButton />
 
 	<br />
 	<button on:click={toggleDebug}>Toggle Debug Mode</button>

@@ -1,13 +1,19 @@
 import { Line } from '../canvas';
 
+export enum PointTypes {
+	START_POINT,
+	END_POINT,
+}
 export interface Point {
 	timePerc: number,
 	value: number,
 	volume: number,
+	type?: PointTypes,
 }
 export type Schedule = Point[];
 
-function getSchedule(line: Line): Schedule {
+// decay refers to how long the attack and release is for each segment 
+function getSchedule(line: Line, maxVol: number = .2, decay: number = .01): Schedule {
 	const schedule: Schedule = [];
 	
 	const waves: Point[][] = [];
@@ -26,7 +32,7 @@ function getSchedule(line: Line): Schedule {
 			const point: Point = {
 				timePerc: xPerc, 
 				value: yPerc,
-				volume: 1,
+				volume: maxVol,
 			}
 			wave.push(point);
 		}
@@ -35,18 +41,24 @@ function getSchedule(line: Line): Schedule {
 	}
 
 	for (const wave of waves) {
+		const startPoint = wave[0];
 		schedule.push({
-			...wave[0],
+			...startPoint,
+			timePerc: startPoint.timePerc - decay,
 			volume: 0,
+			type: PointTypes.START_POINT
 		});
-
+		
 		for (const point of wave) {
 			schedule.push(point);
 		}
-
+		
+		const endPoint = wave[wave.length - 1];
 		schedule.push({
-			...wave[wave.length - 1],
+			...endPoint,
+			timePerc: endPoint.timePerc + decay,
 			volume: 0,
+			type: PointTypes.END_POINT
 		});
 	}
 

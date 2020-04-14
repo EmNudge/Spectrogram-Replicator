@@ -48,7 +48,9 @@
       tonePlayer.pause();
       cancelAnimationFrame(reqId);
     } else {
-      const schedules = getSchedules().map(schedule => transformSchedule(schedule, timePerc));
+      const schedules = getSchedules();
+      const slicedSchedules = schedules.map(schedule => transformSchedule(schedule, timePerc));
+      console.log({ schedules, slicedSchedules })
       tonePlayer.play(schedules);
       updateTime();
     }

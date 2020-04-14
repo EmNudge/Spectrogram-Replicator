@@ -1,7 +1,7 @@
 import { remap } from '../utils'
 import { get } from 'svelte/store';
 import { minFreqStore, maxFreqStore, audioLengthStore } from '../stores/audio';
-import { Schedule } from './getSchedule';
+import { Schedule, PointTypes } from './getSchedule';
 
 const VOLUME = 0.25;
 
@@ -86,20 +86,12 @@ class TonePlayer {
       // makes it hold at 0 until start
       gainNode.gain.setValueAtTime(0, now);
     
-      for (const [index, event] of schedule.entries()) {
+      // can be combined with the oscillator for speed, but separating to make things simpler
+      for (const event of schedule) {
         const { volume, timePerc } = event;
         const time = this.toTime(timePerc);
-
-        if (volume !== 0) continue
         
-        const prevEvent = schedule[index - 1];
-        if (prevEvent && prevEvent.volume > 0) {
-          gainNode.gain.linearRampToValueAtTime(0.2, time - .01);
-          gainNode.gain.linearRampToValueAtTime(0, time);
-        } else {
-          gainNode.gain.linearRampToValueAtTime(0, time - .01);
-          gainNode.gain.linearRampToValueAtTime(0.2, time);
-        }
+        gainNode.gain.linearRampToValueAtTime(volume, time);
       }    
     
       // main oscilltor which produces the sound

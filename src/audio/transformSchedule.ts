@@ -4,7 +4,7 @@ import { Schedule } from './getSchedule'
 // takes a schedule and a percentage.
 // Returns a schedule sliced to that percentage
 function transformSchedule(schedule: Schedule, timePerc: number) {
-	let choppingIndex = 0;
+	let choppingIndex;
 
 	for (const [index, node] of schedule.entries()) {
 		if (timePerc > node.timePerc) continue;
@@ -14,6 +14,8 @@ function transformSchedule(schedule: Schedule, timePerc: number) {
 
 	// if we're before nodes start, don't change anything
 	if (choppingIndex === 0) return schedule;
+	// if we're after everything there is nothing to play.
+	if (!choppingIndex) return [];
 
 	// surrounding nodes to calculate new starting node
 	const nodeBefore = schedule[choppingIndex - 1];
@@ -24,12 +26,12 @@ function transformSchedule(schedule: Schedule, timePerc: number) {
     timePerc, 
     nodeBefore.timePerc, 
     nodeAfter.timePerc, 
-    nodeBefore.value, 
-    nodeAfter.value
+    Math.min(nodeBefore.value, nodeAfter.value), // we have no easier way of knowing which is the smaller value
+    Math.max(nodeBefore.value, nodeAfter.value)  // so just take min and max
   );
 
   // node at current time which should be on the line
-  const startingNode = { timePerc, value };
+  const startingNode = { timePerc, value, volume: 1 };
 
   return [startingNode, ...schedule.slice(choppingIndex)]
 }

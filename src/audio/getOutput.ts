@@ -12,7 +12,7 @@ function getOutput() {
   
   const lines = get(linesStore) as Map<Symbol, Line>;
 
-  const schedules = [...lines.values()].map(getSchedule);
+  const schedules = [...lines.values()].map(line => getSchedule(line));
 
   return schedules.map((schedule) =>
     schedule.map(({ timePerc, value, volume }) => [

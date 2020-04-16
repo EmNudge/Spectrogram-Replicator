@@ -28,7 +28,7 @@
   let time, frequency;
   function setTimeAndFreq() {
     time = (x * $audioLengthStore).toFixed(3);
-    frequency = remap(y, 0, 1, $minFreqStore, $maxFreqStore);
+    frequency = remap(1 - y, 0, 1, $minFreqStore, $maxFreqStore);
   }
   setTimeAndFreq();
 
@@ -42,7 +42,7 @@
         setTimeAndFreq();
       } else {
         node.x = time / $audioLengthStore;
-        node.y = remap(frequency, $minFreqStore, $maxFreqStore, 0, 1);
+        node.y = 1 - remap(frequency, $minFreqStore, $maxFreqStore, 0, 1);
         x = node.x;
         y = node.y;
       }

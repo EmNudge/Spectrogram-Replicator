@@ -24,6 +24,8 @@
 <style>
 	main {
 		user-select: none;
+		min-width: 900px;
+		margin: 0 auto;
 	}
   h1 {
     font-weight: 400;

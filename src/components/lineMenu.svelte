@@ -67,8 +67,10 @@
   .container {
     max-height: 400px;
     overflow-y: scroll;
-    padding: 10px;
     height: 100%;
+  }
+  .buttons span {
+    cursor: pointer;
   }
 </style>
 
@@ -94,7 +96,11 @@
   </div>
 
   <div class="buttons">
-    <NewLineIcon on:click={addLine} />
-    <NewSegmentIcon on:click={addSegment} />
+    <span>
+      <NewLineIcon on:click={addLine} />
+    </span>
+    <span>
+      <NewSegmentIcon on:click={addSegment} />
+    </span>
   </div>
 </div>

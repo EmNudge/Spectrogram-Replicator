@@ -10,7 +10,8 @@
   import { lineBoundsCheck } from '../../canvas/boundsCheck'
   import click from '../../actions/click'
   import ValueChanger from './ValueChanger.svelte'
-  import { tick } from 'svelte';
+  import { tick, onMount } from 'svelte';
+  import { dashCanvas } from '../../utils'
 
   let canvasEl;
   $: canvasStore.set(canvasEl);
@@ -19,6 +20,15 @@
 
   let infoPos = { x: 0, y: 0 };
   let showMenu = false;
+
+  let canvasBG;
+  let showCanvasBG = true;
+  onMount(() => {
+    const { width, height } = canvasEl.getBoundingClientRect();
+    canvasBG.width = width;
+    canvasBG.height = height;
+    dashCanvas(canvasBG, 4, 9);
+  })
 
   let activeLine = null;
   $: lines = (() => {
@@ -126,6 +136,15 @@
     width: 100%;
     height: 100%;
   }
+
+  canvas {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    left: 0;
+    width: 100%;
+    z-index: -1;
+  }
 </style>
 
 <svelte:window on:mouseup={handleMouseUp} on:keydown={handleKeyDown} />
@@ -133,6 +152,10 @@
 <div class="canvas">
   {#if bg}
     <img src={bg} alt="background" />
+  {/if}
+
+  {#if showCanvasBG}
+    <canvas bind:this={canvasBG}></canvas>
   {/if}
 
   <svg

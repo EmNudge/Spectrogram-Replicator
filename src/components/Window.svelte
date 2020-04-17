@@ -67,6 +67,7 @@
   }
   header div {
     padding: 3px 10px;
+    user-select: none;
   }
   header .close {
     background: red;

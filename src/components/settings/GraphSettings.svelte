@@ -1,5 +1,5 @@
 <script>
-  import { debugModeStore } from '../../stores/canvas'
+  import { debugModeStore, showGridBG } from '../../stores/canvas'
 </script>
 
 <style>
@@ -17,4 +17,11 @@
 <label>
   <input type="checkbox" bind:checked={$debugModeStore} />
   <span>Debug Mode</span>
+</label>
+
+<br />
+
+<label>
+  <input type="checkbox" bind:checked={$showGridBG} />
+  <span>Show Grid Background</span>
 </label>

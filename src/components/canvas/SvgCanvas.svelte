@@ -4,7 +4,7 @@
   export let bg;
 
   import Line from "./Line.svelte";
-  import { activeLineStore, linesStore, activeSegmentStore, activeNodeStore, canvasStore, allowDeleteStore } from "../../stores/canvas.js";
+  import { activeLineStore, linesStore, activeSegmentStore, activeNodeStore, canvasStore, allowDeleteStore, showGridBG } from "../../stores/canvas.js";
   import { moveNode, addNode, getPos } from './utils'
   import { isNearNode, deleteNode, getActiveSegment } from '../../canvas/exports';
   import { lineBoundsCheck } from '../../canvas/boundsCheck'
@@ -22,7 +22,6 @@
   let showMenu = false;
 
   let canvasBG;
-  let showCanvasBG = true;
   onMount(() => {
     const { width, height } = canvasEl.getBoundingClientRect();
     canvasBG.width = width;
@@ -154,9 +153,10 @@
     <img src={bg} alt="background" />
   {/if}
 
-  {#if showCanvasBG}
-    <canvas bind:this={canvasBG}></canvas>
-  {/if}
+  <canvas 
+    style="opacity: {$showGridBG ? 1 : 0}" 
+    bind:this={canvasBG} 
+  />
 
   <svg
     bind:this={canvasEl}

@@ -20,3 +20,5 @@ export const canvasStore = writable(null as SVGElement | null);
 export const allowDeleteStore = writable(true); 
 
 export const debugModeStore = writable(false);
+
+export const showGridBG = writable(true);

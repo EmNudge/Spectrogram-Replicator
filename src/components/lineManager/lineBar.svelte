@@ -4,10 +4,10 @@
   export let hue;
   export let isActive;
 
-  import { linesStore, canvasStore, activeLineStore, allowDeleteStore } from "../stores/canvas";
+  import { linesStore, canvasStore, activeLineStore, allowDeleteStore } from "../../stores/canvas";
   import { onDestroy } from 'svelte';
 
-  import Line from './svg/Line.svelte';
+  import Line from '../svg/Line.svelte';
 
   let editing = false;
   let inputEl;

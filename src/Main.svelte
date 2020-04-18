@@ -1,6 +1,6 @@
 <script>
 	import Canvas from './components/canvas/SvgCanvas.svelte'
-	import LineMenu from './components/lineMenu.svelte'
+	import LineManager from './components/lineManager/Manager.svelte'
 	import Controls from './components/audio/controls.svelte'
 	import FilePicker from './components/FilePicker.svelte'
 
@@ -44,7 +44,7 @@
 			<Canvas {bg} />
 			<Controls />
 		</div>
-		<LineMenu />
+		<LineManager />
 	</div>
 
 	<br/>

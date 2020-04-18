@@ -55,33 +55,9 @@
       updateTime();
     }
   }
-
-  let isMuted = false;
-  function toggleMute() {
-    console.log("mute toggled");
-    isMuted = !isMuted;
-  }
 </script>
 
-<style>
-  .container {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    grid-gap: 10px;
-  }
+<PlayButton on:click={togglePlay} bind:isPlaying />
 
-  .controls {
-    display: grid;
-    grid-template-columns: auto auto 1fr;
-    grid-gap: 10px;
-  }
-</style>
+<Timeline bind:percentage={timePerc} />
 
-<div class="container">
-  <Timeline bind:percentage={timePerc} />
-
-  <div class="controls">
-    <PlayButton on:click={togglePlay} bind:isPlaying />
-    <button on:click={toggleMute}>{isMuted ? 'unmute' : 'mute'}</button>
-  </div>
-</div>

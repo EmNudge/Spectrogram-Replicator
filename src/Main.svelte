@@ -25,30 +25,30 @@
     font-weight: 400;
     color: #0006;
   }
-	.workspace {
+	.main-area {
 		display: grid;
-		grid-template-columns: 1fr 250px;
+		grid-template-columns: auto 1fr;
 		grid-gap: 20px;
 	}
-	.controls {
+	.workspace {
 		display: grid;
-		grid-template-columns: 1fr 250px;
-		grid-gap: 20px;
+		grid-template-columns: 60px minmax(250px, 500px);
+		grid-gap: 5px;
 	}
 </style>
 
 <main>
 	<h1>Spectrogram Replicator</h1>
-	<div class="workspace">
-		<Canvas {bg} />
+	<div class="main-area">
+		<div class="workspace">
+			<Canvas {bg} />
+			<Controls />
+		</div>
 		<LineMenu />
 	</div>
-	<div class="controls">
-		<Controls />
-		<div class="dummy-element"></div>
-	</div>
 
-	
+	<br/>
+	<label>Coose Background Image:</label>
 	<FilePicker on:file={handleFile} />
 	<button on:click={handleDefaultImage}>Use Default Image</button>
 </main>

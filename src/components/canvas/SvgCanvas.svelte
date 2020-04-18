@@ -12,6 +12,7 @@
   import ValueChanger from './ValueChanger.svelte'
   import { tick, onMount } from 'svelte';
   import { dashCanvas } from '../../utils'
+  import Freqs from './Freqs.svelte'
 
   let canvasEl;
   $: canvasStore.set(canvasEl);
@@ -26,7 +27,7 @@
     const { width, height } = canvasEl.getBoundingClientRect();
     canvasBG.width = width;
     canvasBG.height = height;
-    dashCanvas(canvasBG, 4, 9);
+    dashCanvas(canvasBG, 3, 8);
   })
 
   let activeLine = null;
@@ -147,6 +148,8 @@
 </style>
 
 <svelte:window on:mouseup={handleMouseUp} on:keydown={handleKeyDown} />
+
+<Freqs />
 
 <div class="canvas">
   {#if bg}

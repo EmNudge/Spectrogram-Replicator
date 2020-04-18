@@ -9,8 +9,6 @@
 <style>
   .container {
     cursor: pointer;
-    height: 30px;
-    width: 30px;
 
     display: flex;
     justify-content: center;

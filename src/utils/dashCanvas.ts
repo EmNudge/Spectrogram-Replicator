@@ -8,7 +8,7 @@ interface Pos {
 export default function dashCanvas(canvas: HTMLCanvasElement, xSections: number, ySections: number, opacity: number = .5) {
   const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
   const width = canvas.width;
-  const height = canvas.width;
+  const height = canvas.height;
   
   function addLine(from: Pos, to: Pos, dashes = [10, 10]) {
     ctx.beginPath();
@@ -28,9 +28,11 @@ export default function dashCanvas(canvas: HTMLCanvasElement, xSections: number,
   const ySectionHeight = height / ySections;
   for (let i = 1; i < ySections; i++) {
     const y = ySectionHeight * i;
+    
     addLine({ x: 0, y }, { x: width, y });
     // making every other one darker
     if (i % 2 == 1) continue;
+    addLine({ x: 0, y }, { x: width, y });
     addLine({ x: 0, y }, { x: width, y });
   }
 }

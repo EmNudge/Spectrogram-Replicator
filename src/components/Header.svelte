@@ -3,7 +3,8 @@
   import Upload from "./svg/Upload.svelte";
   import Settings from "./svg/Settings.svelte";
 
-  import SettingsMenu from './SettingsMenu.svelte'
+  import SettingsMenu from './settings/Menu.svelte'
+
 
   import { download } from '../utils';
   import { getOutput } from '../audio';
@@ -50,7 +51,7 @@
   <span on:click={handleDownload}>
     <Download />
   </span>
-  <span on:click={() => showSettings = true}>
+  <span on:click={() => showSettings = !showSettings}>
     <Settings />
   </span>
 </header>

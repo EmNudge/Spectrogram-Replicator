@@ -3,7 +3,6 @@
 	import LineMenu from './components/lineMenu.svelte'
 	import Controls from './components/audio/controls.svelte'
 	import FilePicker from './components/FilePicker.svelte'
-	import { debugModeStore } from './stores/canvas'
 
 	let bg = '';
 	function handleFile(e) {
@@ -14,11 +13,6 @@
 	function handleDefaultImage() {
 		bg = '/images/spectrogram.jpg'
 	}
-
-	function toggleDebug() {
-		debugModeStore.update(debugMode => !debugMode);
-	}
-
 </script>
 
 <style>
@@ -57,7 +51,4 @@
 	
 	<FilePicker on:file={handleFile} />
 	<button on:click={handleDefaultImage}>Use Default Image</button>
-
-	<br />
-	<button on:click={toggleDebug}>Toggle Debug Mode</button>
 </main>

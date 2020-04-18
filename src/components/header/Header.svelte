@@ -1,20 +1,13 @@
 <script>
-  import Download from "./svg/Download.svelte";
-  import Upload from "./svg/Upload.svelte";
-  import Settings from "./svg/Settings.svelte";
+  import Download from "../svg/Download.svelte";
+  import Upload from "../svg/Upload.svelte";
+  import Settings from "../svg/Settings.svelte";
 
   import SettingsMenu from './settings/Menu.svelte'
-
-
-  import { download } from '../utils';
-  import { getOutput } from '../audio';
-
-  function handleDownload() {
-    const output = JSON.stringify(getOutput());
-    download('Spectrogram.json', output);
-  }
+  import DownloadMenu from './download/Menu.svelte' 
 
   let showSettings = false;
+  let showDownload = false;
 </script>
 
 <style>
@@ -43,12 +36,15 @@
 {#if showSettings}
   <SettingsMenu on:close={() => showSettings = false} />
 {/if}
+{#if showDownload}
+  <DownloadMenu on:close={() => showDownload = false} />
+{/if}
 
 <header>
   <span>
     <Upload />
   </span>
-  <span on:click={handleDownload}>
+  <span on:click={() => showDownload = !showDownload}>
     <Download />
   </span>
   <span on:click={() => showSettings = !showSettings}>

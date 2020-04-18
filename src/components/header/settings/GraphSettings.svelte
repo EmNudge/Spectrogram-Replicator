@@ -1,5 +1,5 @@
 <script>
-  import { debugModeStore, showGridBG } from '../../stores/canvas'
+  import { debugModeStore, showGridBG } from '../../../stores/canvas'
 </script>
 
 <style>

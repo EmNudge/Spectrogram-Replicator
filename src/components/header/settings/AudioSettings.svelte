@@ -3,8 +3,8 @@
     minFreqStore,
     maxFreqStore,
     audioLengthStore
-  } from "../../stores/audio";
-  import { allowDeleteStore } from "../../stores/canvas";
+  } from "../../../stores/audio";
+  import { allowDeleteStore } from "../../../stores/canvas";
   import { onDestroy } from "svelte";
 
   // keep track of local disallows so we don't make it allowed for someone else

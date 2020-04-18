@@ -1,6 +1,6 @@
 <script>
 	import Main from './Main.svelte'
-	import Header from './components/Header.svelte'
+	import Header from './components/header/Header.svelte'
 </script>
 
 <style>
@@ -11,7 +11,6 @@
 		grid-template-columns: auto 1fr;
 		grid-gap: 40px;
 	}
-
 </style>
 
 <Header />

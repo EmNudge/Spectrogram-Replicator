@@ -1,6 +1,9 @@
-export default function drag(node, startingPos) {
+export default function drag(node, pos = { x: 0, y: 0}) {
   let offset = { x: 0, y: 0 };
-  let pos = startingPos || { x: 0, y: 0 };
+  if (!pos.x || !pos.y) {
+    pos.x = 0;
+    pos.y = 0;
+  }
 
   function handleHover(e) {
     pos = { 

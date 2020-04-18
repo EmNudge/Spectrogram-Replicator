@@ -6,8 +6,9 @@
 
   const dispatch = createEventDispatcher();
 
-  export let x = 0;
-  export let y = 0;
+  export let x = null;
+  export let y = null;
+  const pos = { x, y };
 
   function handleDrag(e) {
     const { x: xPos, y: yPos } = e.detail.pos;
@@ -25,12 +26,23 @@
     dispatch("close");
   }
 
+  function isInitialized() {
+    return !(x == null || y == null);
+  }
+
   let windowEl;
   let height, width;
   onMount(() => {
     const style = window.getComputedStyle(windowEl);
     height = Math.round(parseFloat(style.height));
     width = Math.round(parseFloat(style.width));
+
+    if (!isInitialized()) {
+      x = window.innerWidth/2 - width/2;
+      y = window.innerHeight/2 - height/2;
+      pos.x = x;
+      pos.y = y;
+    }
   });
 </script>
 
@@ -112,7 +124,7 @@
   on:contextmenu|preventDefault
   bind:this={windowEl}>
 
-  <header use:drag={{ x, y }} on:drag={handleDrag}>
+  <header use:drag={pos} on:drag={handleDrag}>
     <div>{title}</div>
     <span class="close" on:click={closeWindow}>X</span>
   </header>

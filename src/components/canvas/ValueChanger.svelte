@@ -69,10 +69,11 @@
 </script>
 
 <style>
-  div {
+  .container {
     display: grid;
     grid-template-columns: auto 1fr;
-    grid-gap: 10px;
+    grid-column-gap: 20px;
+    grid-row-gap: 10px;
     align-items: flex-end;
   }
 
@@ -80,11 +81,21 @@
     display: flex;
     flex-direction: column;
   }
+
+  .input {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-gap: 10px;
+    align-items: baseline;
+  }
+  input[type=range] {
+    margin-bottom: 20px;
+  }
 </style>
 
 <Window title="node editor" on:close {...pos}>
-  {#if percentageMode}
-    <div>
+  <div class="container">
+    {#if percentageMode}
       <label>
         <span>x value</span>
         <input
@@ -94,9 +105,7 @@
       </label>
 
       <input type="range" bind:value={x} step={0.001} min={0} max={1} />
-    </div>
 
-    <div>
       <label>
         <span>y value</span>
         <input
@@ -106,12 +115,17 @@
       </label>
 
       <input type="range" bind:value={y} step={0.001} min={0} max={1} />
-    </div>
-  {:else}
-    <div>
+    {:else}
       <label>
         <span>Time (seconds)</span>
-        <input type="number" use:transformInput={clampTime} bind:value={time} on:blur={truncateTime} />
+        <div class="input">
+          <input 
+            type="number" 
+            use:transformInput={clampTime} 
+            bind:value={time} 
+            on:blur={truncateTime} />
+          <span>/ {$audioLengthStore} sec.</span>
+        </div>
       </label>
 
       <input
@@ -120,16 +134,17 @@
         step={0.001}
         min={0}
         max={$audioLengthStore} />
-    </div>
 
-    <div>
       <label>
         <span>Frequency (Hz)</span>
-        <input
-          type="number"
-          use:transformInput={clampHz}
-          bind:value={frequency} />
-      </label>
+        <div class="input">
+          <input
+            type="number"
+            use:transformInput={clampHz}
+            bind:value={frequency} />
+            <span>/ {$maxFreqStore} Hz</span>
+        </div>
+      </label>  
 
       <input
         type="range"
@@ -137,7 +152,7 @@
         step={0.001}
         min={$minFreqStore}
         max={$maxFreqStore} />
-    </div>
-  {/if}
+    {/if}
+  </div>
   <button on:click={changeFormat}>Change Format</button>
 </Window>

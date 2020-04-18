@@ -3,6 +3,7 @@
 	import LineManager from './components/lineManager/Manager.svelte'
 	import Controls from './components/audio/controls.svelte'
 	import FilePicker from './components/FilePicker.svelte'
+	import { titleStore } from './stores/project'
 
 	let bg = '';
 	function handleFile(e) {
@@ -38,7 +39,7 @@
 </style>
 
 <main>
-	<h1>Spectrogram Replicator</h1>
+	<h1>{$titleStore}</h1>
 	<div class="main-area">
 		<div class="workspace">
 			<Canvas {bg} />

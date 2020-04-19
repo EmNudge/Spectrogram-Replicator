@@ -11,15 +11,14 @@ export default function getProject() {
 
   // Map<>.entries() returns an iterator of [key, value] pairs. Not an array.
   // we can do [...Map<>.entries()], but [...Map<>] does the same thing
-  const linesMap = get(linesStore);
-  const lines = [...linesMap];
-  
+  const lines = [...get(linesStore)];
+
   // yay for direct mutation! Easiest way of doing this.
   // line.segments is a Map<Symbol, Segment>, so this is necessary too
   for (const item of lines) {
     // replacing Symbol() with empty object
     item[0] = {};
-    item[1] = [...item[1].segments];
+    item[1].segments = [...item[1].segments];
 
     for (const segment of item[1].segments) {
       segment[0] = {};

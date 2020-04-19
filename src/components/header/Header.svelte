@@ -3,11 +3,13 @@
   import Upload from "../svg/Upload.svelte";
   import Settings from "../svg/Settings.svelte";
 
-  import SettingsMenu from './settings/Menu.svelte'
-  import DownloadMenu from './download/Menu.svelte' 
+  import SettingsMenu from './settings/Menu.svelte';
+  import DownloadMenu from './download/Menu.svelte' ;
+  import UploadMenu from './upload/Menu.svelte';
 
   let showSettings = false;
   let showDownload = false;
+  let showUpload = false;
 </script>
 
 <style>
@@ -39,9 +41,12 @@
 {#if showDownload}
   <DownloadMenu on:close={() => showDownload = false} />
 {/if}
+{#if showUpload}
+  <UploadMenu on:close={() => showUpload = false} />
+{/if}
 
 <header>
-  <span>
+  <span on:click={() => showUpload = !showUpload}>
     <Upload />
   </span>
   <span on:click={() => showDownload = !showDownload}>

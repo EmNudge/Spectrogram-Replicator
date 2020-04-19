@@ -4,6 +4,8 @@ import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import typescript from '@wessberg/rollup-plugin-ts';
+import alias from '@rollup/plugin-alias';
+import path from "path";
 
 const svelteOptions = require("./svelte.config");
 
@@ -29,7 +31,7 @@ export default {
 			}
 		}),
 
-		// If you have external dependencies installed from
+		// If you have externaldependencies installed from
 		// npm, you'll most likely need these plugins. In
 		// some cases you'll need additional configuration -
 		// consult the documentation for details:
@@ -41,6 +43,12 @@ export default {
 		}),
 		commonjs(),
 		typescript(),
+
+		alias({
+      entries: [
+        { find: '@', replacement: path.resolve(__dirname, "src") },
+      ]
+    }),
 		
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated

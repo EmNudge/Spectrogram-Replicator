@@ -1,5 +1,5 @@
 <script>
-  import { titleStore, authorStore } from '../../../stores/project'
+  import { titleStore, authorStore } from '@/stores/project'
 </script>
 
 <style>

@@ -1,7 +1,7 @@
 <script>
-  import { getOutput } from '../../../audio';
-  import { download } from '../../../utils';
-  import { titleStore } from '../../../stores/project'
+  import { getOutput } from '@/audio';
+  import { download } from '@/utils';
+  import { titleStore } from '@/stores/project'
 
   function handleDownload() {
     const title = $titleStore.replace(' ', '-');

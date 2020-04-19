@@ -1,6 +1,6 @@
 <script>
-  import { getProject, download } from '../../../utils';
-  import { titleStore } from '../../../stores/project'
+  import { getProject, download } from '@/utils';
+  import { titleStore } from '@/stores/project'
 
   function handleDownload() {
     const title = $titleStore.replace(' ', '-');

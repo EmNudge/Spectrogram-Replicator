@@ -1,8 +1,8 @@
 <script>
   import LineBar from './lineBar.svelte'
   import SegmentBar from './SegmentBar.svelte'
-  import { linesStore, activeLineStore, activeSegmentStore, activeNodeStore, canvasStore } from "../../stores/canvas";
-  import { getNewLine } from "../../canvas/exports";
+  import { linesStore, activeLineStore, activeSegmentStore, activeNodeStore, canvasStore } from "@/stores/canvas";
+  import { getNewLine } from "@/canvas/exports";
   import NewLineIcon from '../svg/NewLine.svelte';
   import NewSegmentIcon from '../svg/NewSegment.svelte';
 

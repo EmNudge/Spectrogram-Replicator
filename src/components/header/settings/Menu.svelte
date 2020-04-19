@@ -1,6 +1,6 @@
 <script>
-  import Window from '../../Window.svelte';
-  import Binder from '../../Binder.svelte';
+  import Window from '@/components/Window.svelte';
+  import Binder from '@/components/Binder.svelte';
 
   import AudioSettings from './AudioSettings.svelte'
   import GraphSettings from './GraphSettings.svelte'

@@ -1,6 +1,6 @@
 <script>
-  import Window from '../../Window.svelte';
-  import Binder from '../../Binder.svelte';
+  import Window from '@/components/Window.svelte';
+  import Binder from '@/components/Binder.svelte';
 
   import GenericOutput from './GenericOutput.svelte'
   import ProjectOutput from './ProjectOutput.svelte'

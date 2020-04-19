@@ -1,23 +1,8 @@
 <script>
   import { titleStore, authorStore } from 'stores/project'
+  import TextInput from "@/components/util/TextInput.svelte";
 </script>
 
-<style>
-  label {
-    display: grid;
-    grid-template-rows: auto 1fr;
-    grid-gap: 5px;
-  }
-</style>
-
-<label>
-  <span>Title</span>
-  <input type="text" bind:value={$titleStore} />
-</label>
-
+<TextInput title="Title" bind:value={$titleStore} />
 <br />
-
-<label>
-  <span>Author</span>
-  <input type="text" bind:value={$authorStore} />
-</label>
+<TextInput title="Author" bind:value={$authorStore} />

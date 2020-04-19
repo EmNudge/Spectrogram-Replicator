@@ -43,7 +43,6 @@ export default {
 		}),
 		commonjs(),
 		typescript(),
-
 		alias({
       entries: [
         { find: '@', replacement: path.resolve(__dirname, "src") },

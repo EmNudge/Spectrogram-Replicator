@@ -6,12 +6,12 @@
     linesStore,
     activeNodeStore,
     canvasStore
-  } from "../../stores/canvas.js";
+  } from "stores/canvas.js";
   import {
     minFreqStore,
     maxFreqStore,
     audioLengthStore
-  } from "../../stores/audio";
+  } from "stores/audio";
   import { getActiveNode, getSegmentDimensions } from "../../canvas/exports";
   import { get } from "svelte/store";
   import { restrictInput, transformInput } from "../../actions";

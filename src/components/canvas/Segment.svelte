@@ -3,7 +3,7 @@
   export let segmentId = null;
 
   import Node from "./Node.svelte";
-  import { activeNodeStore, linesStore, activeLineStore } from "../../stores/canvas.js";
+  import { activeNodeStore, linesStore, activeLineStore } from "stores/canvas.js";
 
   $: lines = getLines(nodes);
   function getLines() {

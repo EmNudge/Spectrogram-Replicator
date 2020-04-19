@@ -4,7 +4,7 @@
   export let bg;
 
   import Line from "./Line.svelte";
-  import { activeLineStore, linesStore, activeSegmentStore, activeNodeStore, canvasStore, allowDeleteStore, showGridBG } from "../../stores/canvas.js";
+  import { activeLineStore, linesStore, activeSegmentStore, activeNodeStore, canvasStore, allowDeleteStore, showGridBG } from "stores/canvas.js";
   import { moveNode, addNode, getPos } from './utils'
   import { isNearNode, deleteNode, getActiveSegment } from '../../canvas/exports';
   import { lineBoundsCheck } from '../../canvas/boundsCheck'

@@ -1,7 +1,7 @@
 <script>
   import LineBar from './lineBar.svelte'
   import SegmentBar from './SegmentBar.svelte'
-  import { linesStore, activeLineStore, activeSegmentStore, activeNodeStore, canvasStore } from "@/stores/canvas";
+  import { linesStore, activeLineStore, activeSegmentStore, activeNodeStore, canvasStore } from "stores/canvas";
   import { getNewLine } from "@/canvas/exports";
   import NewLineIcon from '../svg/NewLine.svelte';
   import NewSegmentIcon from '../svg/NewSegment.svelte';
@@ -76,7 +76,7 @@
 
 <div class="line-menu">
   <div class="container">
-    {#each [...$linesStore.entries()] as [id, { hue, name, segments }]}
+    {#each [...$linesStore] as [id, { hue, name, segments }]}
       <LineBar 
         {id}
         {hue} 
@@ -84,7 +84,7 @@
         isActive={$activeLineStore === id} 
         on:click={() => setActiveLine(id)} />
 
-        {#each [...segments.entries()] as segment}
+        {#each [...segments] as segment}
           <SegmentBar 
             id={segment[0]}
             name={segment[1].name}

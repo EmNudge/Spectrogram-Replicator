@@ -1,6 +1,6 @@
 import { remap } from '../utils'
 import { get } from 'svelte/store';
-import { minFreqStore, maxFreqStore, audioLengthStore } from '../stores/audio';
+import { minFreqStore, maxFreqStore, audioLengthStore } from 'stores/audio';
 import { Schedule, PointTypes } from './getSchedule';
 
 const VOLUME = 0.25;

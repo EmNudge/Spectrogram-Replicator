@@ -1,4 +1,4 @@
-import { activeNodeStore, linesStore } from '../stores/canvas';
+import { activeNodeStore, linesStore } from 'stores/canvas';
 import { get } from 'svelte/store';
 import { getActiveNode } from './getActive';
 import getSegmentDimensions from './getSegmentDimensions'

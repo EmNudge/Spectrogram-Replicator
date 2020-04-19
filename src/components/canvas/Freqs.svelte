@@ -1,5 +1,5 @@
 <script>
-  import { minFreqStore, maxFreqStore } from "../../stores/audio";
+  import { minFreqStore, maxFreqStore } from "stores/audio";
 
   export let sections = 4;
 

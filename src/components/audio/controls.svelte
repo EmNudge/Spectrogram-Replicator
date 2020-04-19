@@ -8,7 +8,7 @@
   import TonePlayer from "../../audio/tonePlayer";
 
   // stores
-  import { linesStore, canvasStore } from "../../stores/canvas";
+  import { linesStore, canvasStore } from "stores/canvas";
 
   let tonePlayer = new TonePlayer(3);
 

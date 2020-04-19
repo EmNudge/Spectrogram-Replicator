@@ -3,7 +3,7 @@
 	import LineManager from './components/lineManager/Manager.svelte'
 	import Controls from './components/audio/controls.svelte'
 	import FilePicker from './components/FilePicker.svelte'
-	import { titleStore } from './stores/project'
+	import { titleStore } from 'stores/project'
 
 	let bg = '';
 	function handleFile(e) {

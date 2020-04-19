@@ -3,7 +3,7 @@ import {
   activeNodeStore,
   linesStore,
   canvasStore
-} from "../../stores/canvas";
+} from "stores/canvas";
 // separately importing types
 import {
   Node, Line, Segment

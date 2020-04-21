@@ -69,7 +69,7 @@ class TonePlayer {
     return percentage * get(audioLengthStore) + this.audioContext.currentTime;
   }
   
-  playSchedule(schedule: Schedule) {
+  playSchedule(schedule: Schedule, decay: number = .01) {
       if (!this.audioContext || !this.mainGainNode) return;
 
       if (schedule.length <= 1) return;
@@ -88,8 +88,9 @@ class TonePlayer {
     
       // can be combined with the oscillator for speed, but separating to make things simpler
       for (const event of schedule) {
-        const { volume, timePerc } = event;
-        const time = this.toTime(timePerc);
+        const { volume, timePerc, type } = event;
+        const offset = type ? decay * type : 0;
+        const time = Math.max(0, this.toTime(timePerc) + offset);
         
         gainNode.gain.linearRampToValueAtTime(volume, time);
       }    

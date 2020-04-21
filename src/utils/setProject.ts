@@ -1,6 +1,6 @@
 import { titleStore, authorStore } from "stores/project";
 import { minFreqStore, maxFreqStore, audioLengthStore } from "stores/audio";
-import { linesStore } from "stores/canvas";
+import { linesStore, showGridBG, gridDimStore } from "stores/canvas";
 import { Line } from '../canvas';
 
 // really annoying redefining a massive type just to say that every Symbol is replaced with an empty object
@@ -9,16 +9,19 @@ interface Project {
   author: string;
   freqRange: [number, number];
   audioLength: number;
+  grid: { show: boolean, dim: [number, number] }
   lines: [{}, any][]
 }
 export default function setProject(project: Project) {
-  const { title, author, freqRange, audioLength, lines } = project;
+  const { title, author, freqRange, audioLength, grid, lines } = project;
 
   titleStore.set(title);
   authorStore.set(author);
   minFreqStore.set(freqRange[0]);
   maxFreqStore.set(freqRange[1]);
   audioLengthStore.set(audioLength);
+  showGridBG.set(grid.show);
+  gridDimStore.set(grid.dim);
 
   for (const item of lines) {
     // replacing empty object with Symbol()

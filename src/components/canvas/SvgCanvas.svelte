@@ -4,14 +4,14 @@
   export let bg;
 
   import Line from "./Line.svelte";
-  import { activeLineStore, linesStore, activeSegmentStore, activeNodeStore, canvasStore, allowDeleteStore, showGridBG } from "stores/canvas.js";
+  import { activeLineStore, linesStore, activeSegmentStore, activeNodeStore, canvasStore, allowDeleteStore, showGridBG, gridDimStore } from "stores/canvas.js";
   import { moveNode, addNode, getPos } from './utils'
-  import { isNearNode, deleteNode, getActiveSegment } from '../../canvas/exports';
-  import { lineBoundsCheck } from '../../canvas/boundsCheck'
-  import click from '../../actions/click'
+  import { isNearNode, deleteNode, getActiveSegment } from '@/canvas/exports';
+  import { lineBoundsCheck } from '@/canvas/boundsCheck'
+  import click from '@/actions/click'
   import ValueChanger from './ValueChanger.svelte'
   import { tick, onMount } from 'svelte';
-  import { dashCanvas } from '../../utils'
+  import { dashCanvas } from '@/utils'
   import Freqs from './Freqs.svelte'
 
   let canvasEl;
@@ -23,12 +23,13 @@
   let showMenu = false;
 
   let canvasBG;
-  onMount(() => {
+  $: (() => {
+    if (!canvasEl || !canvasBG) return;
     const { width, height } = canvasEl.getBoundingClientRect();
     canvasBG.width = width;
     canvasBG.height = height;
-    dashCanvas(canvasBG, 3, 8);
-  })
+    dashCanvas(canvasBG, ...$gridDimStore);
+  })();
 
   let activeLine = null;
   $: lines = (() => {

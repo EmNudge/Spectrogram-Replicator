@@ -20,6 +20,7 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		typescript(),
 		svelte({
 			...svelteOptions,
 			// enable run-time checks when not in production
@@ -42,7 +43,7 @@ export default {
         importee === "svelte" || importee.startsWith("svelte/")
 		}),
 		commonjs(),
-		typescript(),
+		
 		alias({
       entries: [
         { find: '@', replacement: path.resolve(__dirname, "src") },

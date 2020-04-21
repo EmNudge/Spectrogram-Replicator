@@ -3,7 +3,7 @@
 
   export let sections = 4;
 
-  const diff = ($maxFreqStore - $minFreqStore) / sections;
+  $: diff = ($maxFreqStore - $minFreqStore) / sections;
 </script>
 
 <style>

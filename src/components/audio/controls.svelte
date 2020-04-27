@@ -4,8 +4,7 @@
   import Timeline from "./timeline.svelte";
 
   // audio API utils
-  import { getSchedule, transformSchedule } from "../../audio";
-  import TonePlayer from "../../audio/tonePlayer";
+  import { getSchedule, transformSchedule, TonePlayer } from "../../audio";
 
   // stores
   import { linesStore, canvasStore } from "stores/canvas";

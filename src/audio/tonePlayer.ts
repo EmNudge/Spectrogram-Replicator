@@ -1,7 +1,7 @@
 import { remap } from '../utils'
 import { get } from 'svelte/store';
 import { minFreqStore, maxFreqStore, audioLengthStore } from 'stores/audio';
-import { Schedule, PointTypes } from './getSchedule';
+import { Schedule } from './getSchedule';
 
 const VOLUME = 0.25;
 
@@ -86,15 +86,6 @@ class TonePlayer {
       // makes it hold at 0 until start
       gainNode.gain.setValueAtTime(0, now);
     
-      // can be combined with the oscillator for speed, but separating to make things simpler
-      for (const event of schedule) {
-        const { volume, timePerc, type } = event;
-        const offset = type ? decay * type : 0;
-        const time = Math.max(0, this.toTime(timePerc) + offset);
-        
-        gainNode.gain.linearRampToValueAtTime(volume, time);
-      }    
-    
       // main oscilltor which produces the sound
       const oscillatorNode = this.audioContext.createOscillator();
       oscillatorNode.connect(gainNode);
@@ -102,9 +93,8 @@ class TonePlayer {
     
       // we don't have to reference the previous time since, due to audio scheduling, 
       // since the next automation will only start after the previous finishes
-      for (const event of schedule) {
-        const value = Math.floor(remap(event.value, 0, 1, minFreq, maxFreq));
-        const time = this.toTime(event.timePerc);
+      for (const { value, time, volume } of schedule) {
+        gainNode.gain.linearRampToValueAtTime(volume, time);
 
         oscillatorNode.frequency.linearRampToValueAtTime(value, time);
       }    

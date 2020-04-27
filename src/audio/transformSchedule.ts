@@ -3,11 +3,11 @@ import { Schedule } from './getSchedule'
 
 // takes a schedule and a percentage.
 // Returns a schedule sliced to that percentage
-function transformSchedule(schedule: Schedule, timePerc: number) {
+function transformSchedule(schedule: Schedule, time: number) {
 	let choppingIndex;
 
 	for (const [index, node] of schedule.entries()) {
-		if (timePerc > node.timePerc) continue;
+		if (time > node.time) continue;
 		choppingIndex = index;
 		break;
 	}
@@ -23,15 +23,15 @@ function transformSchedule(schedule: Schedule, timePerc: number) {
 
   // value is a remap of percentage between 2 nodes
 	const value = remap(
-    timePerc, 
-    nodeBefore.timePerc, 
-    nodeAfter.timePerc, 
+    time, 
+    nodeBefore.time, 
+    nodeAfter.time, 
     Math.min(nodeBefore.value, nodeAfter.value), // we have no easier way of knowing which is the smaller value
     Math.max(nodeBefore.value, nodeAfter.value)  // so just take min and max
   );
 
   // node at current time which should be on the line
-  const startingNode = { timePerc, value, volume: 1 };
+  const startingNode = { time, value, volume: 1 };
 
   return [startingNode, ...schedule.slice(choppingIndex)]
 }

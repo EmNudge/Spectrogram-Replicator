@@ -11,8 +11,8 @@
   import click from '@/actions/click'
   import ValueChanger from './ValueChanger.svelte'
   import { tick, onMount } from 'svelte';
-  import { dashCanvas } from '@/utils'
-  import Freqs from './Freqs.svelte'
+  import Freqs from './Freqs.svelte';
+  import GridBG from './GridBG.svelte';
 
   let canvasEl;
   $: canvasStore.set(canvasEl);
@@ -22,13 +22,11 @@
   let infoPos = { x: 0, y: 0 };
   let showMenu = false;
 
-  let canvasBG;
+  let canvasDim = { width: 300, height: 300 };
   $: (() => {
-    if (!canvasEl || !canvasBG) return;
+    if (!canvasEl) return;
     const { width, height } = canvasEl.getBoundingClientRect();
-    canvasBG.width = width;
-    canvasBG.height = height;
-    dashCanvas(canvasBG, ...$gridDimStore);
+    canvasDim = { width, height };
   })();
 
   let activeLine = null;
@@ -137,15 +135,6 @@
     width: 100%;
     height: 100%;
   }
-
-  canvas {
-    position: absolute;
-    top: 0;
-    height: 100%;
-    left: 0;
-    width: 100%;
-    z-index: -1;
-  }
 </style>
 
 <svelte:window on:mouseup={handleMouseUp} on:keydown={handleKeyDown} />
@@ -157,10 +146,9 @@
     <img src={bg} alt="background" />
   {/if}
 
-  <canvas 
-    style="opacity: {$showGridBG ? 1 : 0}" 
-    bind:this={canvasBG} 
-  />
+  {#if showGridBG}
+    <GridBG {...canvasDim} />
+  {/if}
 
   <svg
     bind:this={canvasEl}

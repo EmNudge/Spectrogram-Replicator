@@ -15,16 +15,16 @@
   span {
     font-size: 12px;
     text-align: right;
-    /* border-top: 1px solid #000a; */
     margin-top: -8px;
-  }
-  span:nth-child(even) {
     opacity: .25;
+  }
+  span.major {
+    opacity: 1;
   }
 </style>
 
 <div>
   {#each Array(sections) as _, i}
-    <span>{($maxFreqStore - diff * i).toFixed(1)} Hz</span>
+    <span class:major={sections % 2 !== i % 2}>{($maxFreqStore - diff * i).toFixed(1)} Hz</span>
   {/each}
 </div>

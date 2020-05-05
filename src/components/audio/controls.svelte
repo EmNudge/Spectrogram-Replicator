@@ -8,12 +8,13 @@
 
   // stores
   import { linesStore, canvasStore } from "stores/canvas";
+  import { audioLengthStore } from "stores/audio";
 
   let tonePlayer = new TonePlayer(3);
 
   let timePerc = 0;
   let reqId;
-  let startTime;
+  let startSkip = 0;
 
   let isPlaying = false;
 
@@ -29,11 +30,12 @@
   }
 
   function updateTime() {
-    timePerc = tonePlayer.percentage;
+    timePerc = tonePlayer.percentage + (startSkip / $audioLengthStore);
 
     if (timePerc > 1) {
       isPlaying = false;
       timePerc = 0;
+      startSkip = 0;
       return;
     }
 
@@ -48,9 +50,10 @@
       cancelAnimationFrame(reqId);
     } else {
       const schedules = getSchedules();
-      const slicedSchedules = schedules.map(schedule => transformSchedule(schedule, timePerc));
-      console.log({ schedules, slicedSchedules })
-      tonePlayer.play(schedules);
+      startSkip = $audioLengthStore * timePerc;
+      const slicedSchedules = schedules.map(schedule => transformSchedule(schedule, startSkip));
+
+      tonePlayer.play(slicedSchedules, startSkip);
       updateTime();
     }
   }

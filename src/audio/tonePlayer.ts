@@ -48,11 +48,11 @@ class TonePlayer {
     this.mainGainNode.gain.value = VOLUME;
   }
 
-  play(schedules: Schedule[]) {
+  play(schedules: Schedule[], startSkip: number) {
     this.setupAudioContext();
 
     for (const schedule of schedules) {
-      this.playSchedule(schedule);
+      this.playSchedule(schedule, startSkip);
     }
   }
 
@@ -69,35 +69,32 @@ class TonePlayer {
     return percentage * get(audioLengthStore) + this.audioContext.currentTime;
   }
   
-  playSchedule(schedule: Schedule, decay: number = .01) {
-      if (!this.audioContext || !this.mainGainNode) return;
+  playSchedule(schedule: Schedule, startSkip: number) {
+    if (!this.audioContext || !this.mainGainNode) return;
 
-      if (schedule.length <= 1) return;
+    if (schedule.length <= 1) return;
 
-      const minFreq = get(minFreqStore);
-      const maxFreq = get(maxFreqStore);
+    const now = this.audioContext.currentTime;
+  
+    // need to make another gain node in order to "start" and "stop" without closing
+    const gainNode = this.audioContext.createGain();
+    gainNode.connect(this.mainGainNode);
+  
+    // makes it hold at 0 until start
+    gainNode.gain.setValueAtTime(0, now);
+  
+    // main oscilltor which produces the sound
+    const oscillatorNode = this.audioContext.createOscillator();
+    oscillatorNode.connect(gainNode);
+    oscillatorNode.start(0);
+  
+    // we don't have to reference the previous time since, due to audio scheduling, 
+    // since the next automation will only start after the previous finishes
+    for (const { value, time, volume } of schedule) {
+      gainNode.gain.linearRampToValueAtTime(volume, time - startSkip);
 
-      const now = this.audioContext.currentTime;
-    
-      // need to make another gain node in order to "start" and "stop" without closing
-      const gainNode = this.audioContext.createGain();
-      gainNode.connect(this.mainGainNode);
-    
-      // makes it hold at 0 until start
-      gainNode.gain.setValueAtTime(0, now);
-    
-      // main oscilltor which produces the sound
-      const oscillatorNode = this.audioContext.createOscillator();
-      oscillatorNode.connect(gainNode);
-      oscillatorNode.start(0);
-    
-      // we don't have to reference the previous time since, due to audio scheduling, 
-      // since the next automation will only start after the previous finishes
-      for (const { value, time, volume } of schedule) {
-        gainNode.gain.linearRampToValueAtTime(volume, time);
-
-        oscillatorNode.frequency.linearRampToValueAtTime(value, time);
-      }    
+      oscillatorNode.frequency.linearRampToValueAtTime(value, time - startSkip);
+    }
   }
 }
 

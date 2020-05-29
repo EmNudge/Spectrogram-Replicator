@@ -1,6 +1,6 @@
 <script>
   import { minFreqStore, maxFreqStore } from "stores/audio";
-  import { gridDimStore } from "stores/canvas";
+  import { gridDimStore, lightenOddGridStore } from "stores/canvas";
 
   $: sections = Math.ceil($gridDimStore[1]);
 
@@ -16,15 +16,17 @@
     font-size: 12px;
     text-align: right;
     margin-top: -8px;
-    opacity: .25;
   }
-  span.major {
-    opacity: 1;
+  span.minor {
+    opacity: .25;
   }
 </style>
 
 <div>
   {#each Array(sections) as _, i}
-    <span class:major={sections % 2 !== i % 2}>{($maxFreqStore - diff * i).toFixed(1)} Hz</span>
+    <span 
+      class:minor={$lightenOddGridStore && sections % 2 === i % 2}>
+      {($maxFreqStore - diff * i).toFixed(1)} Hz
+    </span>
   {/each}
 </div>

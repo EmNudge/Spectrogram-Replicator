@@ -1,5 +1,5 @@
 <script>
-  import { gridDimStore } from "stores/canvas";
+  import { gridDimStore, lightenOddGridStore } from "stores/canvas";
 
   export let width;
   export let height;
@@ -22,10 +22,10 @@
   line {
     stroke-width: 2;
     stroke-dasharray: 15;
-    stroke: #ccca;
-  }
-  line.major {
     stroke: #999;
+  }
+  line.minor {
+    stroke: #ccca;
   }
 </style>
 
@@ -42,7 +42,7 @@
   <g class="y-sections">
     {#each Array(ySections - 1) as _, i}
       <line
-        class:major={ySections % 2 !== (i + 1) % 2}
+        class:minor={$lightenOddGridStore && ySections % 2 === (i + 1) % 2}
         x1={0}
         y1={ySectionHeight * (i + 1)}
         x2={width}

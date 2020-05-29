@@ -146,7 +146,7 @@
     <img src={bg} alt="background" />
   {/if}
 
-  {#if showGridBG}
+  {#if $showGridBG}
     <GridBG {...canvasDim} />
   {/if}
 

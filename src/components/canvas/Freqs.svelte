@@ -23,10 +23,12 @@
 </style>
 
 <div>
-  {#each Array(sections) as _, i}
-    <span 
-      class:minor={$lightenOddGridStore && sections % 2 === i % 2}>
-      {($maxFreqStore - diff * i).toFixed(1)} Hz
-    </span>
-  {/each}
+  {#if sections}
+    {#each Array(sections) as _, i}
+      <span 
+        class:minor={$lightenOddGridStore && sections % 2 === i % 2}>
+        {($maxFreqStore - diff * i).toFixed(1)} Hz
+      </span>
+    {/each}
+  {/if}
 </div>

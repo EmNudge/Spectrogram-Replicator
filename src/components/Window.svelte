@@ -3,6 +3,7 @@
   import { createEventDispatcher, onMount } from "svelte";
 
   export let title = "";
+  export let padding = true;
 
   const dispatch = createEventDispatcher();
 
@@ -65,9 +66,11 @@
   }
 
   .content {
-    padding: 3px 10px;
     background: white;
     position: relative;
+  }
+  .content.padding {
+    padding: 3px 10px;
   }
 
   header {
@@ -129,7 +132,7 @@
     <span class="close" on:click={closeWindow}>X</span>
   </header>
 
-  <div class="content">
+  <div class="content" class:padding>
     <slot />
 
     <div

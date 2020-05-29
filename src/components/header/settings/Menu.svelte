@@ -12,6 +12,6 @@
   ]
 </script>
 
-<Window on:close title="Settings">
+<Window on:close title="Settings" padding={false}>
   <Binder {tabs} />
 </Window>

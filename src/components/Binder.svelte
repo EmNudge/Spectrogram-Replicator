@@ -6,19 +6,29 @@
 </script>
 
 <style>
-	.titles {
+	.binder {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-		margin-bottom: 10px;
+		grid-template-columns: 100px 1fr;	
+		height: 100%;
+	}
+	.component {
+		padding: 10px;
+	}
+	.titles {
+		display: flex;
+		flex-direction: column;
+		background: #d8d8d8;
+    	color: #464646;
 	}
 	span {
-		padding: 10px;
+		padding: 5px;
 		text-align: center;
 		cursor: pointer;
 		user-select: none;
 	}
 	span.active {
-		border-bottom: 2px solid rgb(56, 56, 185);
+		background: white;
+		color: black;
 		cursor: auto;
 	}
 </style>
@@ -32,5 +42,7 @@
 			>{name}</span>
 		{/each}
 	</div>
-	<svelte:component this={activeComponent} />
+	<div class="component">
+		<svelte:component this={activeComponent} />
+	</div>
 </div>

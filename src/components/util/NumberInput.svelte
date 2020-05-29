@@ -4,6 +4,7 @@
 
   export let value;
   export let title = "Number input:";
+  export let step = 1;
 
   let allowDelete = true;
 
@@ -36,6 +37,7 @@
   <span>{title}</span>
   <input
     type="number"
+    {step}
     bind:value
     on:focus
     on:blur

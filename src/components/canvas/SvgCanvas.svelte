@@ -4,7 +4,11 @@
   export let bg;
 
   import Line from "./Line.svelte";
-  import { activeLineStore, linesStore, activeSegmentStore, activeNodeStore, canvasStore, allowDeleteStore, showGridBG, gridDimStore } from "stores/canvas.js";
+  import { 
+    activeLineStore, linesStore, activeSegmentStore, 
+    activeNodeStore, canvasStore, allowDeleteStore, 
+    showGridBG, gridDimStore, gridBGOpacityStore 
+  } from "stores/canvas";
   import { moveNode, addNode, getPos } from './utils'
   import { isNearNode, deleteNode, getActiveSegment } from '@/canvas/exports';
   import { lineBoundsCheck } from '@/canvas/boundsCheck'
@@ -117,7 +121,6 @@
 
 <style>
   svg {
-    background: #eeea;
     width: 100%;
     height: 100%;
     min-height: 400px;
@@ -152,7 +155,7 @@
 
   <svg
     bind:this={canvasEl}
-
+    style="background: rgba(230,230,230,{1-$gridBGOpacityStore})"
     on:contextmenu|preventDefault
     use:click
     on:leftclick={handleLeftClick}

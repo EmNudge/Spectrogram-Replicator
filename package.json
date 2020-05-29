@@ -23,6 +23,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "sirv-cli": "^0.4.4"
+    "sirv-cli": "^0.4.4",
+    "svelte-toolbar": "0.0.1"
   }
 }

@@ -1,6 +1,6 @@
 <script>
   import SettingsMenu from './settings/Menu.svelte';
-  import MenuManager from './MenuManager.svelte';
+  import Toolbar from 'svelte-toolbar';
   import menu from './menu';
 
   let showSettings = false;
@@ -11,4 +11,4 @@
   <SettingsMenu on:close={() => showSettings = false} />
 {/if}
 
-<MenuManager {menu} />
+<Toolbar {menu} />

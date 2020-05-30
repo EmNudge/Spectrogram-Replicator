@@ -14,7 +14,9 @@
 		height: 100%;
 	}
 	.component {
-		padding: 10px;
+		padding: 20px;
+		height: 250px;
+		overflow-y: scroll;
 	}
 	.titles {
 		display: flex;

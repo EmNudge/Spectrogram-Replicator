@@ -7,7 +7,6 @@
   $: [xSections, ySections] = $gridDimStore;
   $: xSectionWidth = width / xSections;
   $: ySectionHeight = height / ySections;
-  $: console.log($gridDimStore)
 </script>
 
 <style>

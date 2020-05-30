@@ -1,7 +1,7 @@
 <script>
   import { debugModeStore, showGridBG, gridDimStore, lightenOddGridStore } from "stores/canvas";
-  import CheckBox from "@/components/util/CheckBox.svelte";
-  import NumberInput from "@/components/util/NumberInput.svelte";
+  import CheckBox from "@/components/Window/CheckBox.svelte";
+  import NumberInput from "@/components/Window/NumberInput.svelte";
 
   let gridBGColumns = $gridDimStore[0]
   let gridBGRows = $gridDimStore[1];

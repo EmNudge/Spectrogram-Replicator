@@ -1,5 +1,5 @@
 <script>
-  import { drag, barDrag } from "../actions";
+  import { drag, barDrag } from "../../actions";
   import { createEventDispatcher, onMount } from "svelte";
 
   export let title = "";

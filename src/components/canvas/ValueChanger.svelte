@@ -16,7 +16,7 @@
   import { get } from "svelte/store";
   import { restrictInput, transformInput } from "../../actions";
 
-  import Window from "../Window.svelte";
+  import Window from "../Window/Window.svelte";
   import { clamp, remap } from "../../utils";
 
   const { node } = getActiveNode($linesStore);

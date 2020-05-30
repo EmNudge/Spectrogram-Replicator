@@ -1,6 +1,5 @@
 <script>
-  import Window from '@/components/Window.svelte';
-  import Binder from '@/components/Binder.svelte';
+  import Binder from '@/components/Window/Binder.svelte';
 
   import AudioSettings from './AudioSettings.svelte'
   import GraphSettings from './GraphSettings.svelte'
@@ -14,6 +13,4 @@
   ]
 </script>
 
-<Window on:close title="Settings" padding={false}>
-  <Binder {tabs} />
-</Window>
+<Binder on:close title="Settings" {tabs} />

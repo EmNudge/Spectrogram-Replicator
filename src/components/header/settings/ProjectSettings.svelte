@@ -1,6 +1,6 @@
 <script>
   import { titleStore, authorStore } from 'stores/project'
-  import TextInput from "@/components/util/TextInput.svelte";
+  import TextInput from "@/components/Window/TextInput.svelte";
 </script>
 
 <TextInput title="Title" bind:value={$titleStore} />

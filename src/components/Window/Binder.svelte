@@ -1,4 +1,6 @@
 <script>
+	import Window from './Window.svelte';
+	export let title = "Binder";
 	export let tabs;
 	
 	let activeTab = 0;
@@ -33,16 +35,18 @@
 	}
 </style>
 
-<div class="binder">
-	<div class="titles">
-		{#each tabs as {name}, i}
-			<span 
-				class="{activeTab === i ? 'active' : ''}"
-				on:click={() => activeTab = i}
-			>{name}</span>
-		{/each}
+<Window {title} on:close padding={false}>
+	<div class="binder">
+		<div class="titles">
+			{#each tabs as {name}, i}
+				<span 
+					class="{activeTab === i ? 'active' : ''}"
+					on:click={() => activeTab = i}
+				>{name}</span>
+			{/each}
+		</div>
+		<div class="component">
+			<svelte:component this={activeComponent} />
+		</div>
 	</div>
-	<div class="component">
-		<svelte:component this={activeComponent} />
-	</div>
-</div>
+</Window>

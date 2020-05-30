@@ -1,6 +1,6 @@
 <script>
   import { minFreqStore, maxFreqStore, audioLengthStore } from "stores/audio";
-  import NumberInput from "@/components/util/NumberInput.svelte";
+  import NumberInput from "@/components/Window/NumberInput.svelte";
 </script>
 
 <style>

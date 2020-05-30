@@ -1,9 +1,9 @@
 <script>
   import { debugModeStore, gridBGOpacityStore, canvasWidthStore } from "stores/canvas";
-  import CheckBox from "@/components/util/CheckBox.svelte";
-  import NumberInput from "@/components/util/NumberInput.svelte";
-  $: console.log($gridBGOpacityStore)
+  import CheckBox from "@/components/Window/CheckBox.svelte";
+  import NumberInput from "@/components/Window/NumberInput.svelte";
 </script>
+
 
 <CheckBox title="Debug Mode" bind:checked={$debugModeStore} />
 <br>

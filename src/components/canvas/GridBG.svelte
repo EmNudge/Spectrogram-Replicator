@@ -16,7 +16,7 @@
     height: 100%;
     left: 0;
     width: 100%;
-    z-index: -1;
+    opacity: .6;
   }
   line {
     stroke-width: 2;

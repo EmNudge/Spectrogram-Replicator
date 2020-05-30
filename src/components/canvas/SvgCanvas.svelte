@@ -120,6 +120,10 @@
 </script>
 
 <style>
+  .canvas {
+    background: #eee;
+  }
+
   svg {
     width: 100%;
     height: 100%;
@@ -134,7 +138,6 @@
     position: absolute;
     top: 0;
     left: 0;
-    z-index: -1;
     width: 100%;
     height: 100%;
   }
@@ -146,7 +149,7 @@
 
 <div class="canvas">
   {#if bg}
-    <img src={bg} alt="background" />
+    <img src={bg} alt="background" style="opacity: {$gridBGOpacityStore}"/>
   {/if}
 
   {#if $showGridBG}
@@ -155,7 +158,6 @@
 
   <svg
     bind:this={canvasEl}
-    style="background: rgba(230,230,230,{1-$gridBGOpacityStore})"
     on:contextmenu|preventDefault
     use:click
     on:leftclick={handleLeftClick}

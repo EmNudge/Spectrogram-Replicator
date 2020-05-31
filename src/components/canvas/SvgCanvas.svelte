@@ -10,13 +10,14 @@
     showGridBG, gridDimStore, gridBGOpacityStore 
   } from "stores/canvas";
   import { moveNode, addNode, getPos } from './utils'
-  import { isNearNode, deleteNode, getActiveSegment } from '@/canvas/exports';
+  import { isNearNode, getActiveSegment } from '@/canvas/exports';
   import { lineBoundsCheck } from '@/canvas/boundsCheck'
   import click from '@/actions/click'
   import ValueChanger from './ValueChanger.svelte'
   import { tick, onMount } from 'svelte';
   import Freqs from './Freqs.svelte';
   import GridBG from './GridBG.svelte';
+  import handleKeyDown from '@/utils/handleKeyDown';
 
   let canvasEl;
   $: canvasStore.set(canvasEl);
@@ -108,14 +109,9 @@
     moveNode(e);
   }
 
-  function handleKeyDown(e) {
+  function onKeyDown(e) {
     if (showMenu) return;
-
-    if (!['Delete', 'Backspace'].includes(e.key)) return;
-
-    if (!$allowDeleteStore) return;
-
-    deleteNode();
+    handleKeyDown(e);
   }
 </script>
 
@@ -143,11 +139,18 @@
   }
 </style>
 
-<svelte:window on:mouseup={handleMouseUp} on:keydown={handleKeyDown} />
+<svelte:window on:mouseup={handleMouseUp} on:keydown={onKeyDown} />
 
 <Freqs />
 
-<div class="canvas">
+<div 
+    class="canvas"
+    use:click
+    on:leftclick={handleLeftClick}
+    on:rightclick={handleRightClick}
+
+    on:mousemove={handleHover}>
+
   {#if bg}
     <img src={bg} alt="background" style="opacity: {$gridBGOpacityStore}"/>
   {/if}
@@ -158,13 +161,7 @@
 
   <svg
     bind:this={canvasEl}
-    on:contextmenu|preventDefault
-    use:click
-    on:leftclick={handleLeftClick}
-    on:rightclick={handleRightClick}
-
-    on:mousemove={handleHover}
-    >
+    on:contextmenu|preventDefault>
 
     {#each lines as { hue, segments }}
       <Line {segments} {hue} />

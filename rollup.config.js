@@ -20,6 +20,11 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		alias({
+			entries: [
+				{ find: '@', replacement: path.resolve(__dirname, "src") },
+			]
+		}),
 		typescript(),
 		svelte({
 			...svelteOptions,
@@ -43,12 +48,7 @@ export default {
         importee === "svelte" || importee.startsWith("svelte/")
 		}),
 		commonjs(),
-		
-		alias({
-      entries: [
-        { find: '@', replacement: path.resolve(__dirname, "src") },
-      ]
-    }),
+	
 		
 		// In dev mode, call `npm run start` once
 		// the bundle has been generated

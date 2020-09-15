@@ -3,9 +3,12 @@ import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
-import typescript from '@wessberg/rollup-plugin-ts';
 import alias from '@rollup/plugin-alias';
 import path from "path";
+// ts support
+import autoPreprocess from 'svelte-preprocess';
+import typescript from '@rollup/plugin-typescript';
+
 
 const svelteOptions = require("./svelte.config");
 
@@ -25,7 +28,6 @@ export default {
 				{ find: '@', replacement: path.resolve(__dirname, "src") },
 			]
 		}),
-		typescript(),
 		svelte({
 			...svelteOptions,
 			// enable run-time checks when not in production
@@ -34,9 +36,11 @@ export default {
 			// a separate file - better for performance
 			css: css => {
 				css.write('public/build/bundle.css');
-			}
+			},
+			preprocess: autoPreprocess()
 		}),
-
+		
+		typescript({ sourceMap: !production }),
 		// If you have externaldependencies installed from
 		// npm, you'll most likely need these plugins. In
 		// some cases you'll need additional configuration -
@@ -45,7 +49,7 @@ export default {
 		resolve({
 			browser: true,
 			dedupe: importee =>
-        importee === "svelte" || importee.startsWith("svelte/")
+			importee === "svelte" || importee.startsWith("svelte/")
 		}),
 		commonjs(),
 	

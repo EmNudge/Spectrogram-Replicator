@@ -7,5 +7,12 @@
     "types": ["svelte"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
-  }
+  },
+  "include": [
+    "src/**/*",
+    "src/node_modules/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

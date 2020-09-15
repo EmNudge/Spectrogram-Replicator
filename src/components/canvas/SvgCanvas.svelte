@@ -123,6 +123,8 @@
   svg {
     width: 100%;
     height: 100%;
+    position: relative;
+    z-index: 2;
     min-height: 400px;
   }
 

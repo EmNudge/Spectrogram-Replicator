@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   // svelte components
   import PlayButton from "./playButton.svelte";
   import Timeline from "./timeline.svelte";
@@ -7,8 +7,8 @@
   import { getSchedule, transformSchedule, TonePlayer } from "../../audio";
 
   // stores
-  import { linesStore, canvasStore } from "stores/canvas";
-  import { audioLengthStore } from "stores/audio";
+  import { linesStore, canvasStore } from "../../stores/canvas";
+  import { audioLengthStore } from "../../stores/audio";
 
   let tonePlayer = new TonePlayer(3);
 

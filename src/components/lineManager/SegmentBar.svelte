@@ -3,7 +3,7 @@
   export let name;
   export let isActive;
 
-  import { linesStore, canvasStore, activeLineStore, activeSegmentStore, allowDeleteStore } from "stores/canvas";
+  import { linesStore, canvasStore, activeLineStore, activeSegmentStore, allowDeleteStore } from "../../stores/canvas";
   import { onDestroy } from 'svelte';
 
   import Segment from '../svg/Segment.svelte';

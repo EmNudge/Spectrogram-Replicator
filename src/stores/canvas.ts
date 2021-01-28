@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
-import { Line } from '../../canvas'
+import type { Line } from '../canvas/index.d';
 
-export const linesStore = writable(new Map() as Map<Symbol, Line>);
+export const linesStore = writable(new Map() as Map<Symbol | {}, Line>);
 
 // Current active line
 export const activeLineStore = writable(null as Symbol | null);

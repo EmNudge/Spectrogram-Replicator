@@ -1,5 +1,5 @@
-import { Line } from '../canvas';
-import { minFreqStore, maxFreqStore, audioLengthStore } from 'stores/audio';
+import type { Line } from '../canvas';
+import { minFreqStore, maxFreqStore, audioLengthStore } from '../stores/audio';
 import { get } from 'svelte/store';
 import { remap } from '../utils'
 

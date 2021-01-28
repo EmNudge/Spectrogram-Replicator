@@ -1,8 +1,8 @@
-import { activeNodeStore, activeLineStore, activeSegmentStore } from 'stores/canvas';
+import { activeNodeStore, activeLineStore, activeSegmentStore } from '../stores/canvas';
 import { get } from 'svelte/store';
-import { Line } from './index';
+import type { Line } from './index';
 
-export function getActiveSegment(lines: Map<Symbol, Line>) {
+export function getActiveSegment(lines: Map<Symbol | {}, Line>) {
 	const activeLineId = get(activeLineStore);
 	const line = lines.get(activeLineId);
 
@@ -25,7 +25,7 @@ export function getActiveSegment(lines: Map<Symbol, Line>) {
 	};
 }
 
-export function getActiveNode(lines: Map<Symbol, Line>) {
+export function getActiveNode(lines: Map<Symbol | {}, Line>) {
 	const data = getActiveSegment(lines);
 	const { segment } = data;
 

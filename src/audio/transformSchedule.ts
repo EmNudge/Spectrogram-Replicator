@@ -1,5 +1,5 @@
 import { remap } from '../utils';
-import { Schedule } from './getSchedule'
+import type { Schedule } from './getSchedule'
 
 // takes a schedule and a percentage.
 // Returns a schedule sliced to that percentage

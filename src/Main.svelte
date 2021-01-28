@@ -3,8 +3,8 @@
 	import LineManager from './components/lineManager/Manager.svelte'
 	import Controls from './components/audio/controls.svelte'
 	import FilePicker from './components/FilePicker.svelte'
-	import { titleStore } from 'stores/project'
-	import { canvasWidthStore } from 'stores/canvas'
+	import { titleStore } from './stores/project'
+	import { canvasWidthStore } from './stores/canvas'
 
 	let bg = '';
 	function handleFile(e) {
@@ -54,7 +54,7 @@
 	</div>
 
 	<br/>
-	<label>Coose Background Image:</label>
+	<label for="">Choose Background Image:</label>
 	<FilePicker on:file={handleFile} />
 	<button on:click={handleDefaultImage}>Use Default Image</button>
 </main>

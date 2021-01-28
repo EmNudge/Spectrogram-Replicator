@@ -3,11 +3,11 @@ import {
   activeNodeStore,
   linesStore,
   canvasStore
-} from "stores/canvas";
+} from "../../stores/canvas";
 // separately importing types
-import {
+import type {
   Node, Line, Segment
-} from "../../canvas";
+} from "../../canvas/index.d";
 import { lineBoundsCheck } from '../../canvas/boundsCheck';
 import { getSegmentDimensions } from '../../canvas/exports'
 import { getActiveNode, getActiveSegment } from '../../canvas/getActive'
@@ -25,7 +25,7 @@ export function getPos(e: MouseEvent) {
 };
 
 // adds a new line, but does not update the store (does not cause a svelte update)
-function addLine(lines: Map<Symbol, Line>, pos: { x: number, y: number }) {
+function addLine(lines: Map<Symbol | {}, Line>, pos: { x: number, y: number }) {
   const id = Symbol();
   activeLineStore.set(id);
 

@@ -1,12 +1,12 @@
-<script>
+<script lang="ts">
   export let nodes = [];
   export let segmentId = null;
 
   import Node from "./Node.svelte";
-  import { activeNodeStore, linesStore, activeLineStore } from "stores/canvas.js";
+  import { activeNodeStore, linesStore, activeLineStore } from "../../stores/canvas.js";
 
   $: lines = getLines(nodes);
-  function getLines() {
+  function getLines(_val) {
     const lines = [];
     for (let i = 0; i < nodes.length - 1; i++) {
       const node = nodes[i];

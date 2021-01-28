@@ -1,6 +1,6 @@
-<script>
-  import { minFreqStore, maxFreqStore } from "stores/audio";
-  import { gridDimStore, lightenOddGridStore } from "stores/canvas";
+<script lang="ts">
+  import { minFreqStore, maxFreqStore } from "../../stores/audio";
+  import { gridDimStore, lightenOddGridStore } from "../../stores/canvas";
 
   $: sections = Math.ceil($gridDimStore[1]);
 

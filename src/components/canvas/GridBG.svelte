@@ -1,5 +1,5 @@
-<script>
-  import { gridDimStore, lightenOddGridStore } from "stores/canvas";
+<script lang="ts">
+  import { gridDimStore, lightenOddGridStore } from "../../stores/canvas";
 
   export let width;
   export let height;

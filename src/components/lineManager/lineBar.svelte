@@ -4,7 +4,7 @@
   export let hue;
   export let isActive;
 
-  import { linesStore, canvasStore, activeLineStore, allowDeleteStore } from "stores/canvas";
+  import { linesStore, canvasStore, activeLineStore, allowDeleteStore } from "../../stores/canvas";
   import { onDestroy } from 'svelte';
 
   import Line from '../svg/Line.svelte';
@@ -100,7 +100,7 @@
   }
 </style>
 
-<div class="line" class:active={isActive} on:click class:editing>
+<div class="line" class:active={isActive} on:click class:editing on:contextmenu>
   <Line color="hsl({hue}, 50%, 50%)" />
 
   {#if !editing}

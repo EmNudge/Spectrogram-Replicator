@@ -1,8 +1,8 @@
 <script>
   import LineBar from './lineBar.svelte'
   import SegmentBar from './SegmentBar.svelte'
-  import { linesStore, activeLineStore, activeSegmentStore, activeNodeStore, canvasStore } from "stores/canvas";
-  import { getNewLine } from "@/canvas/exports";
+  import { linesStore, activeLineStore, activeSegmentStore, activeNodeStore, canvasStore } from "../../stores/canvas";
+  import { getNewLine } from "../../canvas/exports";
   import NewLineIcon from '../svg/NewLine.svelte';
   import NewSegmentIcon from '../svg/NewSegment.svelte';
 
@@ -55,6 +55,20 @@
     activeSegmentStore.set(segmentId);
     activeNodeStore.set(null);
   }
+
+  import BarContextMenu from './BarContextMenu.svelte';
+  
+	let pos = { x: 0, y: 0 };
+	let showMenu = false;
+	
+	function openContextMenu(e) {
+		pos = { x: e.clientX, y: e.clientY };
+		showMenu = true;
+	}
+	
+	function closeMenu() {
+		showMenu = false;
+	}
 </script>
 
 <style>
@@ -74,7 +88,7 @@
   }
 </style>
 
-<div class="line-menu">
+<div class="line-menu" on:contextmenu|preventDefault={openContextMenu}>
   <div class="container">
     {#each [...$linesStore] as [id, { hue, name, segments }]}
       <LineBar 
@@ -104,3 +118,7 @@
     </span>
   </div>
 </div>
+
+{#if showMenu}
+	<BarContextMenu {pos} on:close={closeMenu} />
+{/if}

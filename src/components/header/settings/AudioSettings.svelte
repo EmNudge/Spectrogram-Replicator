@@ -1,7 +1,7 @@
 <script>
-  import { minFreqStore, maxFreqStore, audioLengthStore } from "stores/audio";
-  import NumberInput from "@/components/Window/NumberInput.svelte";
-  import Title from "@/components/Window/Title.svelte";
+  import { minFreqStore, maxFreqStore, audioLengthStore } from "../../../stores/audio";
+  import NumberInput from "../../Window/NumberInput.svelte";
+  import Title from "../../Window/Title.svelte";
 </script>
 
 <Title>General</Title>

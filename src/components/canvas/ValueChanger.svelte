@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   export let pos;
 
   import {
@@ -6,12 +6,12 @@
     linesStore,
     activeNodeStore,
     canvasStore
-  } from "stores/canvas.js";
+  } from "../../stores/canvas.js";
   import {
     minFreqStore,
     maxFreqStore,
     audioLengthStore
-  } from "stores/audio";
+  } from "../../stores/audio";
   import { getActiveNode, getSegmentDimensions } from "../../canvas/exports";
   import { get } from "svelte/store";
   import { restrictInput, transformInput } from "../../actions";
@@ -116,11 +116,12 @@
 
       <input type="range" bind:value={y} step={0.001} min={0} max={1} />
     {:else}
-      <label>
+      <label for="v-c-time">
         <span>Time (seconds)</span>
         <div class="input">
           <input 
-            type="number" 
+            type="number"
+            name="v-c-time"
             use:transformInput={clampTime} 
             bind:value={time} 
             on:blur={truncateTime} />
@@ -135,11 +136,12 @@
         min={0}
         max={$audioLengthStore} />
 
-      <label>
+      <label for="v-c-freq">
         <span>Frequency (Hz)</span>
         <div class="input">
           <input
             type="number"
+            name="v-c-freq"
             use:transformInput={clampHz}
             bind:value={frequency} />
             <span>/ {$maxFreqStore} Hz</span>

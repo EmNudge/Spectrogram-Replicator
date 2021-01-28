@@ -1,5 +1,5 @@
 <script>
-  import Binder from '@/components/Window/Binder.svelte';
+  import Binder from '../../Window/Binder.svelte';
 
   import AudioSettings from './AudioSettings.svelte';
   import GraphSettings from './GraphSettings.svelte';

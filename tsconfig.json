@@ -1,18 +1,6 @@
 {
-  "compilerOptions": {
-    "target": "ESNEXT",
-    "module": "ESNEXT",
-    "strict": true,
-    "moduleResolution": "node",
-    "types": ["svelte"],
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true
-  },
-  "include": [
-    "src/**/*",
-    "src/node_modules/**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "extends": "@tsconfig/svelte/tsconfig.json",
+
+  "include": ["src/**/*"],
+  "exclude": ["node_modules/*", "__sapper__/*", "public/*"]
 }

@@ -1,7 +1,7 @@
-import { titleStore, authorStore } from "stores/project";
-import { minFreqStore, maxFreqStore, audioLengthStore } from "stores/audio";
-import { linesStore, showGridBG, gridDimStore } from "stores/canvas";
-import { Line } from '../canvas';
+import { titleStore, authorStore } from "../stores/project";
+import { minFreqStore, maxFreqStore, audioLengthStore } from "../stores/audio";
+import { linesStore, showGridBG, gridDimStore } from "../stores/canvas";
+import type { Line } from '../canvas';
 
 // really annoying redefining a massive type just to say that every Symbol is replaced with an empty object
 interface Project {

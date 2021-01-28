@@ -1,4 +1,4 @@
-import { activeLineStore, linesStore, canvasStore } from 'stores/canvas';
+import { activeLineStore, linesStore, canvasStore } from '../stores/canvas';
 import { get } from 'svelte/store';
 import { getActiveSegment } from './getActive';
 

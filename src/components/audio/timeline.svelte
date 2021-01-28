@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   export let percentage = 0;
 
   import { clamp, remap } from "../../utils";
@@ -16,8 +16,8 @@
     if (!rangeEl) { 
       xPos =  0;
     } else {
-      const width = rangeEl.offsetWidth;
-      xPos = (percentage * width).toFixed(2) - 5;
+      const width: number = rangeEl.offsetWidth;
+      xPos = percentage * width - 5;
     }
   }
 

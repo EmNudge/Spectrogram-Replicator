@@ -1,7 +1,7 @@
 import { remap } from '../utils'
 import { get } from 'svelte/store';
-import { minFreqStore, maxFreqStore, audioLengthStore } from 'stores/audio';
-import { Schedule } from './getSchedule';
+import { minFreqStore, maxFreqStore, audioLengthStore } from '../stores/audio';
+import type { Schedule } from './getSchedule';
 
 const VOLUME = 0.25;
 
@@ -22,8 +22,7 @@ class TonePlayer {
   }
 
   setupAudioContext() {
-    const AudioContex = window.AudioContext || window.webkitAudioContext;
-    this.audioContext = new AudioContex();
+    this.audioContext = new AudioContext();
 
     this.mainGainNode = this.audioContext.createGain();
     this.mainGainNode.gain.value = VOLUME;

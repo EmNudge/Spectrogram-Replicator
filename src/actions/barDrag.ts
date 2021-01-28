@@ -4,9 +4,9 @@ export default function barDrag(node, { dirs, parentLevel }) {
     mainEl = mainEl.parentElement;
   }
 
-  let { width, height } = window.getComputedStyle(mainEl);
-  width = parseFloat(width);
-  height = parseFloat(height);
+  const styles = window.getComputedStyle(mainEl);
+  const width = parseFloat(styles.width);
+  const height = parseFloat(styles.height);
 
   node.addEventListener('mousedown', handleMouseDown);
   

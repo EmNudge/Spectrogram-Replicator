@@ -1,5 +1,5 @@
-import { Line, Segment, Node } from './index';
-import { activeSegmentStore, activeNodeStore, linesStore } from 'stores/canvas';
+import type { Line, Segment, Node } from './index.d';
+import { activeSegmentStore, activeNodeStore, linesStore } from '../stores/canvas';
 import { get } from 'svelte/store';
 import { getRandColor } from './colors';
 

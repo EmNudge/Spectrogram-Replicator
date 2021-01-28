@@ -1,4 +1,4 @@
-import { Segment, Dim } from '../canvas';
+import type { Segment, Dim } from '../canvas/index.d';
 
 // gets smallest and largest x & y values to produce a box around a segment
 // i.e. a dimension object

@@ -1,5 +1,5 @@
 <script>
-  import { allowDeleteStore } from "stores/canvas";
+  import { allowDeleteStore } from "../../stores/canvas";
   import { onDestroy } from "svelte";
 
   export let value;

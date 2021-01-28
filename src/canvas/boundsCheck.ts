@@ -1,5 +1,5 @@
 import { rangeInRange, pointInRange, Range } from '../utils/collisions';
-import { Line, Segment, Node, Dim } from '../canvas';
+import type { Line, Segment, Node, Dim } from '../canvas/index.d';
 import getSegmentDimensions from './getSegmentDimensions';
 
 // one of the difficulties is knowing which bounds checker to use.

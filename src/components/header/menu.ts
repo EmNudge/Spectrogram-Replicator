@@ -1,6 +1,6 @@
-import { getOutput } from '@/audio';
-import { getProject, download } from '@/utils';
-import { titleStore } from 'stores/project'
+import { getOutput } from '../../audio';
+import { getProject, setProject, download } from '../../utils';
+import { titleStore } from '../../stores/project'
 import { get } from 'svelte/store'
 
 function genericDownload() {

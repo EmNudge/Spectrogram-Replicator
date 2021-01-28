@@ -1,7 +1,7 @@
 import getSchedule from "./getSchedule";
 import { get } from "svelte/store";
-import { linesStore } from "stores/canvas";
-import { Line } from "../canvas";
+import { linesStore } from "../stores/canvas";
+import type { Line } from "../canvas/index.d";
 
 function getOutput() {
   const lines = get(linesStore) as Map<Symbol, Line>;

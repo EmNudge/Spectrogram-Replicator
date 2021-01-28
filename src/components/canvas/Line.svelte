@@ -1,9 +1,9 @@
-<script>
+<script lang="ts">
   export let active = false;
   export let segments = new Map();
   export let hue = 0;
 
-  import { debugModeStore } from 'stores/canvas'
+  import { debugModeStore } from '../../stores/canvas'
   import Segment from "./Segment.svelte";
 </script>
 

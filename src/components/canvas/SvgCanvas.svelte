@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   // export let width;
   // export let height;
   export let bg;
@@ -8,16 +8,16 @@
     activeLineStore, linesStore, activeSegmentStore, 
     activeNodeStore, canvasStore, allowDeleteStore, 
     showGridBG, gridDimStore, gridBGOpacityStore 
-  } from "stores/canvas";
+  } from "../../stores/canvas";
   import { moveNode, addNode, getPos } from './utils'
-  import { isNearNode, getActiveSegment } from '@/canvas/exports';
-  import { lineBoundsCheck } from '@/canvas/boundsCheck'
-  import click from '@/actions/click'
+  import { isNearNode, getActiveSegment } from '../../canvas/exports';
+  import { lineBoundsCheck } from '../../canvas/boundsCheck'
+  import click from '../../actions/click'
   import ValueChanger from './ValueChanger.svelte'
   import { tick, onMount } from 'svelte';
   import Freqs from './Freqs.svelte';
   import GridBG from './GridBG.svelte';
-  import handleKeyDown from '@/utils/handleKeyDown';
+  import handleKeyDown from '../../utils/handleKeyDown';
 
   let canvasEl;
   $: canvasStore.set(canvasEl);

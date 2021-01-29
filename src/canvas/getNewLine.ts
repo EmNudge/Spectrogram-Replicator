@@ -28,7 +28,8 @@ function getNewLine(pos?: { x: number; y: number }): Line {
 	return {
 		hue: getRandColor(),
 		name: `Line ${get(linesStore).size + 1}`,
-		segments
+		segments,
+		isEditing: false,
 	};
 }
 

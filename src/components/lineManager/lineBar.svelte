@@ -1,15 +1,22 @@
-<script>
-  export let id;
-  export let name;
-  export let hue;
-  export let isActive;
+<script lang="ts">
+  export let id: Symbol | {};
+  export let isActive: boolean;
 
   import { linesStore, canvasStore, activeLineStore, allowDeleteStore } from "../../stores/canvas";
   import { onDestroy } from 'svelte';
 
-  import Line from '../svg/Line.svelte';
+  import LineSvg from '../svg/Line.svelte';
+  import type { Line } from '../../canvas/index.d';
 
-  let editing = false;
+  $: line = $linesStore.get(id);
+  $: hue = line.hue;
+  $: editing = line.isEditing;
+  $: if (editing) {
+    editName();
+  }
+
+  let name = $linesStore.get(id).name;
+
   let inputEl;
   let allowDelete;
 
@@ -18,9 +25,16 @@
     allowDeleteStore.set(true);
   })
 
-  function toggleInput() {
-    editing = true;
+  function updateLine(func: (line: Line) => void) {
+    linesStore.update(lines => {
+      const line = lines.get(id);
+      func(line);
 
+      return lines;
+    });
+  }
+
+  function editName() {
     // this is so that we can close it once it gets blurred
     setTimeout(() => {
       inputEl.focus();
@@ -28,19 +42,12 @@
     }, 0)
   }
 
-  function updateName(isBlurred) {
-    linesStore.update(l => {
-      const line = l.get(id);
-      line.name = name;
-      l.set(id, line);
-      return l;
-    });
-  }
-
   function handleBlur() {
     allowDeleteStore.set(true);
-    editing = false;
-    updateName();
+    updateLine(line => {
+      line.name = name;
+      line.isEditing = false;
+    });
   }
 
   function handleFocus() {
@@ -49,7 +56,7 @@
 
   function handleKeyDown(e) {
     if (e.key !== "Enter") return;
-    editing = false;
+    updateLine(line => line.isEditing = false);
   }
 
   function destroyLine() {
@@ -101,10 +108,12 @@
 </style>
 
 <div class="line" class:active={isActive} on:click class:editing on:contextmenu>
-  <Line color="hsl({hue}, 50%, 50%)" />
+  <LineSvg color="hsl({hue}, 50%, 50%)" />
 
   {#if !editing}
-    <div on:dblclick={toggleInput}>{name}</div>
+    <div 
+      on:dblclick={() => updateLine(line => line.isEditing = true)}
+    >{name}</div>
   {:else}
     <input
       type="text"

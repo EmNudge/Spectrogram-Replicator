@@ -15,8 +15,9 @@ export interface Segment {
   dimensions?: Dim,
 }
 export interface Line {
-  hue: Number,
-  name: String,
+  hue: number,
+  name: string,
   segments: Map<Symbol, Segment>,
   dimensions?: Dim,
+  isEditing?: boolean,
 }

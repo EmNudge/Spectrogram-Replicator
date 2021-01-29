@@ -89,16 +89,14 @@
 
 <div class="line-menu">
   <div class="container">
-    {#each [...$linesStore] as [id, {name, hue, segments}]}
+    {#each [...$linesStore] as [id, line]}
       <LineBar 
         {id}
-        {hue} 
-        {name}
         isActive={$activeLineStore === id} 
         on:click={() => setActiveLine(id)}
         on:contextmenu={openContextMenu(id)} />
 
-        {#each [...segments] as segment}
+        {#each [...line.segments] as segment}
           <SegmentBar 
             id={segment[0]}
             name={segment[1].name}

@@ -23,14 +23,21 @@
       const line = lines.get(lineId);
       line.hue = hue;
       return lines;
+    });
+  }
+
+  const rename = () => {
+    linesStore.update(lines => {
+      const line = lines.get(lineId);
+      line.isEditing = true;
+      return lines;
     })
   }
 </script>
 
 <Menu {...pos} on:click={closeMenu} on:clickoutside={closeMenu}>
   <MenuOption 
-    on:click={console.log} 
-    isDisabled={true}
+    on:click={rename}
     text="Rename" />
 
   <MenuList text="Change Color">

@@ -60,14 +60,13 @@
   
 	let pos = { x: 0, y: 0 };
 	let showMenu = false;
-	
-	function openContextMenu(e) {
+  
+  let activelineId;
+	const openContextMenu = lineId => (e) => {
+    e.preventDefault();
+    activelineId = lineId;
 		pos = { x: e.clientX, y: e.clientY };
 		showMenu = true;
-	}
-	
-	function closeMenu() {
-		showMenu = false;
 	}
 </script>
 
@@ -88,15 +87,16 @@
   }
 </style>
 
-<div class="line-menu" on:contextmenu|preventDefault={openContextMenu}>
+<div class="line-menu">
   <div class="container">
-    {#each [...$linesStore] as [id, { hue, name, segments }]}
+    {#each [...$linesStore] as [id, {name, hue, segments}]}
       <LineBar 
         {id}
         {hue} 
         {name}
         isActive={$activeLineStore === id} 
-        on:click={() => setActiveLine(id)} />
+        on:click={() => setActiveLine(id)}
+        on:contextmenu={openContextMenu(id)} />
 
         {#each [...segments] as segment}
           <SegmentBar 
@@ -120,5 +120,8 @@
 </div>
 
 {#if showMenu}
-	<BarContextMenu {pos} on:close={closeMenu} />
+  <BarContextMenu 
+    lineId={activelineId} 
+    {pos} 
+    on:close={() => showMenu = false} />
 {/if}

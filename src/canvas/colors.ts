@@ -12,10 +12,11 @@ export const GREEN = 80;
 export const PURPLE = 250;
 export const PINK = 320;
 
+export const colorValues = [RED, TEAL, BLUE, YELLOW, GREEN, PURPLE, PINK];
+export const colorMap = new Map(Object.entries({ RED, TEAL, BLUE, YELLOW, GREEN, PURPLE, PINK }));
+
 export const getRandColor = () => {
-  const colors = [RED, TEAL, BLUE, YELLOW, GREEN, PURPLE, PINK];
+  const randIndex = Math.floor(Math.random() * colorValues.length);
 
-  const randIndex = Math.floor(Math.random() * colors.length);
-
-  return colors[randIndex];
+  return colorValues[randIndex];
 };

@@ -2,7 +2,7 @@ import { activeNodeStore, activeLineStore, activeSegmentStore } from '../stores/
 import { get } from 'svelte/store';
 import type { Line } from './index';
 
-export function getActiveSegment(lines: Map<Symbol | {}, Line>) {
+export function getActiveSegment(lines: Map<Symbol, Line>) {
 	const activeLineId = get(activeLineStore);
 	const line = lines.get(activeLineId);
 
@@ -11,7 +11,7 @@ export function getActiveSegment(lines: Map<Symbol | {}, Line>) {
 	}
 
 	const activeSegmentId = get(activeSegmentStore);
-	const segment = line.segments.get(activeSegmentId);
+	const segment = line.segments.get(activeSegmentId as Symbol);
 
 	if (segment === undefined) {
 		throw new Error(`segment (${segment}) from ${activeSegmentId} was not of type Segment`);
@@ -25,7 +25,7 @@ export function getActiveSegment(lines: Map<Symbol | {}, Line>) {
 	};
 }
 
-export function getActiveNode(lines: Map<Symbol | {}, Line>) {
+export function getActiveNode(lines: Map<Symbol, Line>) {
 	const data = getActiveSegment(lines);
 	const { segment } = data;
 

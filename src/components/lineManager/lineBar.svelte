@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let id: Symbol | {};
+  export let id: Symbol;
   export let isActive: boolean;
 
   import { linesStore, canvasStore, activeLineStore, allowDeleteStore } from "../../stores/canvas";

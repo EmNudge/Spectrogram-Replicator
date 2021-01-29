@@ -1,16 +1,42 @@
-import { writable } from 'svelte/store';
+import { writable, get } from 'svelte/store';
 import type { Line } from '../canvas/index.d';
 
-export const linesStore = writable(new Map() as Map<Symbol | {}, Line>);
+export const linesStore = writable(new Map() as Map<Symbol, Line>);
+export const updateLine = (id: Symbol) => (func: (line: Line) => void) => {
+  linesStore.update(lines => {
+    const line = lines.get(id);
+    func(line);
+    return lines;
+  });
+}
 
 // Current active line
-export const activeLineStore = writable(null as Symbol | null);
+export const activeLineStore = writable(null as Symbol);
 
 // Current active segment within a line
-export const activeSegmentStore = writable(null as Symbol | null);
+export const activeSegmentStore = writable(null as Symbol);
 
 // Current active node within a segment
-export const activeNodeStore = writable(null as Symbol | null);
+export const activeNodeStore = writable(null as Symbol);
+
+let linesLength = 0;
+linesStore.subscribe(lines => {
+  const oldLen = linesLength;
+  linesLength = lines.size;
+
+  if (lines.size > oldLen || lines.size === 0) return;
+
+  const activeLineId = get(activeLineStore);
+  const activeLine = lines.get(activeLineId);
+  if (activeLine) return;
+
+  const [lineId, line] = [...lines][0];
+  activeLineStore.set(lineId);
+  const [segmentId, segment] = [...line.segments][0];
+  activeSegmentStore.set(segmentId);
+  const node = segment.nodes[0]
+  activeNodeStore.set(node.id);
+})
 
 // represents canvas svg to get coords and dimensions
 export const canvasStore = writable(null as SVGElement | null);

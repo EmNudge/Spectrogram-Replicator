@@ -3,10 +3,10 @@
   import MenuOption from './contextMenu/MenuOption.svelte';
   import MenuList from './contextMenu/MenuList.svelte';
   import { colorMap } from '../../canvas/colors';
-  import { linesStore } from '../../stores/canvas';
+  import { linesStore, updateLine } from '../../stores/canvas';
 
   export let pos = { x: 0, y: 0 };
-  export let lineId: Symbol | {};
+  export let lineId: Symbol;
 
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
@@ -18,18 +18,19 @@
     .toLowerCase()
     .replace(/^./, n => n.toUpperCase());
 
+  const update = updateLine(lineId);
+
   const changeColor = (hue: number) => () => {
-    linesStore.update(lines => {
-      const line = lines.get(lineId);
-      line.hue = hue;
-      return lines;
-    });
+    update(line => line.hue = hue);
   }
 
   const rename = () => {
+    update(line => line.isEditing = true);
+  }
+  
+  const deleteLine = () => {
     linesStore.update(lines => {
-      const line = lines.get(lineId);
-      line.isEditing = true;
+      lines.delete(lineId);
       return lines;
     })
   }
@@ -53,7 +54,6 @@
     isDisabled={true}
     text="Disable" />
   <MenuOption 
-    on:click={console.log} 
-    isDisabled={true}
+    on:click={deleteLine} 
     text="Delete" />
 </Menu>

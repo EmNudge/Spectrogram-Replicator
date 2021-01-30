@@ -2,25 +2,18 @@ import { minFreqStore, maxFreqStore, audioLengthStore } from '../stores/audio';
 import { get } from 'svelte/store';
 import { remap } from '../utils'
 
-export interface Point {
-	time: number,
-	value: number,
-	volume: number,
-}
-export type Schedule = Point[];
-
 // find the corresponding x value for which 2 
-const getInterceptAt = (yVal: number = 0) => (p1: Point, p2: Point): number => {
+const getInterceptAt = (yVal: number = 0) => (p1: Audio.ScheduleNode, p2: Audio.ScheduleNode): number => {
 	const slope = (p2.value - p1.value) / (p2.time - p1.time);
 	return (yVal - p1.value) / slope + p1.time;
 }
 
-const pointsOfCrossBound = (p1: Point, p2: Point) => (bound: number) => 
+const pointsOfCrossBound = (p1: Audio.ScheduleNode, p2: Audio.ScheduleNode) => (bound: number) => 
 	Math.sign(p1.value - bound) !== Math.sign(p2.value - bound);
 
 // although the graph allows for it, we need to clamp the wave so it doesn't hit below 0 
-function clampWave(wave: Point[], bounds: [number, number] = [0, Infinity], maxVol: number = .2) {
-	const newWave: Point[] = [];
+function clampWave(wave: Audio.ScheduleNode[], bounds: [number, number] = [0, Infinity], maxVol: number = .2) {
+	const newWave: Audio.ScheduleNode[] = [];
 
 	for (const [index, point] of wave.entries()) {
 		// if we're within bounds, just add the point
@@ -48,17 +41,17 @@ function clampWave(wave: Point[], bounds: [number, number] = [0, Infinity], maxV
 }
 
 // decay refers to how long the attack and release is for each segment 
-function getSchedule(line: Canvas.Line, maxVol: number = .2, decay: number = .01): Schedule {
+function getSchedule(line: Canvas.Line, maxVol: number = .2, decay: number = .01): Audio.Schedule {
 	const minFreq = get(minFreqStore);
 	const maxFreq = get(maxFreqStore);
 	const audioLength = get(audioLengthStore);
 
-	const schedule: Schedule = [];
+	const schedule: Audio.Schedule = [];
 	
-	const waves: Point[][] = [];
+	const waves: Audio.ScheduleNode[][] = [];
 
 	for (const [_id, segment] of line.segments) {
-		const wave: Point[] = [];
+		const wave: Audio.ScheduleNode[] = [];
 
 		// at least 2 nodes must exist for a tone to play
 		if (segment.nodes.length < 2) continue;
@@ -71,7 +64,7 @@ function getSchedule(line: Canvas.Line, maxVol: number = .2, decay: number = .01
 			const yPerc = 1 - node.y;
 			const value = Math.floor(remap(yPerc, 0, 1, minFreq, maxFreq));
 	
-			const point: Point = {
+			const point: Audio.ScheduleNode = {
 				time,
 				value,
 				volume: maxVol,

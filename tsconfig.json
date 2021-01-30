@@ -1,12 +1,6 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
 
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "types/*"],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
-  "compilerOptions": {
-    "typeRoots": [
-      "./src/canvas",
-      "./src/audio",
-    ]
-  }
 }

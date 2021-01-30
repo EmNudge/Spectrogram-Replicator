@@ -1,6 +1,6 @@
 declare module Audio {
 	interface ScheduleNode {
-		timePerc: number,
+		time: number,
 		value: number,
 		volume: number,
 	}

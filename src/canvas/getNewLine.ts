@@ -1,15 +1,14 @@
-import type { Line, Segment, Node } from './index.d';
 import { activeSegmentStore, activeNodeStore, linesStore } from '../stores/canvas';
 import { get } from 'svelte/store';
 import { getRandColor } from './colors';
 
-function getNewLine(pos?: { x: number; y: number }): Line {
+function getNewLine(pos?: { x: number; y: number }): Canvas.Line {
 	const newSegmentId = Symbol();
 	activeSegmentStore.set(newSegmentId);
 
-	const segments: Map<Symbol, Segment> = new Map();
+	const segments: Map<Symbol, Canvas.Segment> = new Map();
 
-  const nodes: Node[] = [];
+  const nodes: Canvas.Node[] = [];
 
   if (pos) {
     const activeNodeId = Symbol();

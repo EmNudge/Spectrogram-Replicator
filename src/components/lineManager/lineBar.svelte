@@ -6,7 +6,6 @@
   import { onDestroy } from 'svelte';
 
   import LineSvg from '../svg/Line.svelte';
-  import type { Line } from '../../canvas/index.d';
 
   $: line = $linesStore.get(id);
   $: hue = line.hue;
@@ -25,7 +24,7 @@
     allowDeleteStore.set(true);
   })
 
-  function updateLine(func: (line: Line) => void) {
+  function updateLine(func: (line: Canvas.Line) => void) {
     linesStore.update(lines => {
       const line = lines.get(id);
       func(line);

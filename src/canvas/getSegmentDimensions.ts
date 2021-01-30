@@ -1,8 +1,6 @@
-import type { Segment, Dim } from '../canvas/index.d';
-
 // gets smallest and largest x & y values to produce a box around a segment
 // i.e. a dimension object
-function getSegmentDimensions(segment: Segment): Dim {
+function getSegmentDimensions(segment: Canvas.Segment): Canvas.Dim {
   if (segment.nodes.length < 2) {
     throw new Error('Cannot get dimensions on segment size less than 2');
   }

@@ -1,4 +1,3 @@
-import type { Line } from '../canvas';
 import { minFreqStore, maxFreqStore, audioLengthStore } from '../stores/audio';
 import { get } from 'svelte/store';
 import { remap } from '../utils'
@@ -49,7 +48,7 @@ function clampWave(wave: Point[], bounds: [number, number] = [0, Infinity], maxV
 }
 
 // decay refers to how long the attack and release is for each segment 
-function getSchedule(line: Line, maxVol: number = .2, decay: number = .01): Schedule {
+function getSchedule(line: Canvas.Line, maxVol: number = .2, decay: number = .01): Schedule {
 	const minFreq = get(minFreqStore);
 	const maxFreq = get(maxFreqStore);
 	const audioLength = get(audioLengthStore);

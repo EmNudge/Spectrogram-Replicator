@@ -1,7 +1,6 @@
 import { titleStore, authorStore } from "../stores/project";
 import { minFreqStore, maxFreqStore, audioLengthStore } from "../stores/audio";
 import { linesStore, showGridBG, gridDimStore } from "../stores/canvas";
-import type { Line } from '../canvas';
 
 // really annoying redefining a massive type just to say that every Symbol is replaced with an empty object
 interface Project {
@@ -37,5 +36,5 @@ export default function setProject(project: Project) {
     item[1].segments = new Map(item[1].segments);
   }
 
-  linesStore.set(new Map(lines) as Map<Symbol, Line>);
+  linesStore.set(new Map(lines) as Map<Symbol, Canvas.Line>);
 }

@@ -1,7 +1,6 @@
 import { remap } from '../utils'
 import { get } from 'svelte/store';
 import { minFreqStore, maxFreqStore, audioLengthStore } from '../stores/audio';
-import type { Schedule } from './getSchedule';
 
 const VOLUME = 0.25;
 
@@ -47,7 +46,7 @@ class TonePlayer {
     this.mainGainNode.gain.value = VOLUME;
   }
 
-  play(schedules: Schedule[], startSkip: number) {
+  play(schedules: Audio.Schedule[], startSkip: number) {
     this.setupAudioContext();
 
     for (const schedule of schedules) {
@@ -68,7 +67,7 @@ class TonePlayer {
     return percentage * get(audioLengthStore) + this.audioContext.currentTime;
   }
   
-  playSchedule(schedule: Schedule, startSkip: number) {
+  playSchedule(schedule: Audio.Schedule, startSkip: number) {
     if (!this.audioContext || !this.mainGainNode) return;
 
     if (schedule.length <= 1) return;

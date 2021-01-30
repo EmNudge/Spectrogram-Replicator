@@ -4,10 +4,6 @@ import {
   linesStore,
   canvasStore
 } from "../../stores/canvas";
-// separately importing types
-import type {
-  Node, Line, Segment
-} from "../../canvas/index.d";
 import { lineBoundsCheck } from '../../canvas/boundsCheck';
 import { getSegmentDimensions } from '../../canvas/exports'
 import { getActiveNode, getActiveSegment } from '../../canvas/getActive'
@@ -25,7 +21,7 @@ export function getPos(e: MouseEvent) {
 };
 
 // adds a new line, but does not update the store (does not cause a svelte update)
-function addLine(lines: Map<Symbol, Line>, pos: { x: number, y: number }) {
+function addLine(lines: Map<Symbol, Canvas.Line>, pos: { x: number, y: number }) {
   const id = Symbol();
   activeLineStore.set(id);
 
@@ -68,7 +64,7 @@ export function moveNode(e: MouseEvent) {
   linesStore.update(lines => {
     const { line, segment, segmentId, nodeId, nodeIndex, } = getActiveNode(lines);
 
-    const newNode: Node = { ...getPos(e), id: nodeId };
+    const newNode: Canvas.Node = { ...getPos(e), id: nodeId };
 
     const isColliding = lineBoundsCheck(line, segment, newNode);
     if (isColliding) {

@@ -1,8 +1,7 @@
 import { writable, get } from 'svelte/store';
-import type { Line } from '../canvas/index.d';
 
-export const linesStore = writable(new Map() as Map<Symbol, Line>);
-export const updateLine = (id: Symbol) => (func: (line: Line) => void) => {
+export const linesStore = writable(new Map() as Map<Symbol, Canvas.Line>);
+export const updateLine = (id: Symbol) => (func: (line: Canvas.Line) => void) => {
   linesStore.update(lines => {
     const line = lines.get(id);
     func(line);

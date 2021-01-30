@@ -1,5 +1,4 @@
 import { rangeInRange, pointInRange, Range } from '../utils/collisions';
-import type { Line, Segment, Node, Dim } from '../canvas/index.d';
 import getSegmentDimensions from './getSegmentDimensions';
 
 // one of the difficulties is knowing which bounds checker to use.
@@ -8,7 +7,7 @@ import getSegmentDimensions from './getSegmentDimensions';
 // if both have dimensions - rangeInRange collision
 
 // returns whether or not a node is encrouching upon the bounds of another segment
-export function lineBoundsCheck(line: Line, segment: Segment, node: Node): boolean {
+export function lineBoundsCheck(line: Canvas.Line, segment: Canvas.Segment, node: Canvas.Node): boolean {
 	let range: Range | null = null;
 	// if we have one node, then the new node lets us make dimensions
 	if (segment.nodes.length > 1 || (segment.nodes.length === 1 && segment.nodes[0].id !== node.id)) {

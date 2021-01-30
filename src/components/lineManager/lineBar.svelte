@@ -4,6 +4,7 @@
 
   import { linesStore, canvasStore, activeLineStore, allowDeleteStore } from "../../stores/canvas";
   import { onDestroy } from 'svelte';
+  import CloseIcon from '../svg/Close.svelte';
 
   import LineSvg from '../svg/Line.svelte';
 
@@ -97,12 +98,12 @@
   .line.editing {
     grid-template-columns: auto 1fr;
   }
-  .close {
-    color: red;
+  span {
+    transition: .15s;
     cursor: pointer;
     opacity: 0;
   }
-  .line:hover .close {
+  .line:hover span {
     opacity: 1;
   }
 
@@ -131,6 +132,8 @@
   {/if}
 
   {#if !editing}
-    <div class="close" on:click={destroyLine}>x</div>
+    <span>
+      <CloseIcon size={10} on:click={destroyLine} />
+    </span>
   {/if}
 </div>

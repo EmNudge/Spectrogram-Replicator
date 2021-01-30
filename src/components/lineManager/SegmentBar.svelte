@@ -5,6 +5,7 @@
 
   import { linesStore, canvasStore, activeLineStore, activeSegmentStore, allowDeleteStore } from "../../stores/canvas";
   import { onDestroy } from 'svelte';
+  import CloseIcon from '../svg/Close.svelte';
 
   import Segment from '../svg/Segment.svelte';
 
@@ -123,12 +124,12 @@
   .segment.editing {
     grid-template-columns: auto 1fr;
   }
-  .close {
-    color: red;
+  span {
+    transition: .15s;
     cursor: pointer;
     opacity: 0;
   }
-  .segment:hover .close {
+  .segment:hover span {
     opacity: 1;
   }
 
@@ -155,6 +156,8 @@
   {/if}
 
   {#if !editing}
-    <div class="close" on:click={destroySegment}>x</div>
+    <span>
+      <CloseIcon size={7} on:click={destroySegment} />
+    </span>
   {/if}
 </div>

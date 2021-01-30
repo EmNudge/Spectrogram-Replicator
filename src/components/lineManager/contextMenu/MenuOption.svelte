@@ -32,6 +32,9 @@
 	div.disabled {
 		color: #0006;
 	}
+	div.disabled :global(*) {
+		opacity: .5;
+	}
 	div.disabled:hover {
 		background: white;
 	}

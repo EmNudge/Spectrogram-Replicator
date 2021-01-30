@@ -8,6 +8,9 @@
   export let pos = { x: 0, y: 0 };
   export let lineId: Symbol;
 
+  $: line = $linesStore.get(lineId);
+  $: hue = line.hue;
+  
   import { createEventDispatcher } from 'svelte';
   const dispatch = createEventDispatcher();
   function closeMenu() {
@@ -36,6 +39,14 @@
   }
 </script>
 
+<style>
+  .color-box {
+    height: 10px;
+    width: 10px;
+    background: hsl(var(--hue), 50%, 50%);
+  }
+</style>
+
 <Menu {...pos} on:click={closeMenu} on:clickoutside={closeMenu}>
   <MenuOption 
     on:click={rename}
@@ -45,7 +56,11 @@
     {#each Array.from(colorMap) as [name, color]}
       <MenuOption 
         on:click={changeColor(color)}
-        text={toTitleCase(name)} />
+        isDisabled={hue === color}
+      >
+        <span class="color-box" style="--hue: {color}"></span>
+        <span>{toTitleCase(name)}</span>
+      </MenuOption>
     {/each}
   </MenuList>
 

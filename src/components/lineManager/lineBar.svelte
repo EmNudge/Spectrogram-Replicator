@@ -75,7 +75,7 @@
 
 <style>
   .line {
-    padding: 5px;
+    padding: 10px;
     display: grid;
     grid-template-columns: auto 1fr auto;
     grid-gap: 10px;
@@ -84,8 +84,15 @@
     opacity: 0.7;
     outline: none;
   }
+  .line:hover {
+    background: #8080800f;
+  }
   .line.active {
     opacity: 1;
+    background: #80808024;
+  }
+  .line.active:hover {
+    background: #80808024;
   }
   .line.editing {
     grid-template-columns: auto 1fr;

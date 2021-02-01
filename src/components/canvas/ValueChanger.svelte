@@ -1,31 +1,23 @@
 <script lang="ts">
   export let pos;
 
-  import {
-    activeLineStore,
-    linesStore,
-    activeNodeStore,
-    canvasStore
-  } from "../../stores/canvas.js";
-  import {
-    minFreqStore,
-    maxFreqStore,
-    audioLengthStore
-  } from "../../stores/audio";
-  import { getActiveNode, getSegmentDimensions } from "../../canvas/exports";
-  import { get } from "svelte/store";
-  import { restrictInput, transformInput } from "../../actions";
+  import { linesStore, activeStore } from "../../stores/canvas.js";
+  import { minFreqStore, maxFreqStore, audioLengthStore } from "../../stores/audio";
+
+  import { getSegmentDimensions } from "../../canvas/exports";
+  import { transformInput } from "../../actions";
 
   import Window from "../Window/Window.svelte";
   import { clamp, remap } from "../../utils";
 
-  const { node } = getActiveNode($linesStore);
+  // get node that was right-clicked
+  const node = { x: 50, y: 50 }
   let x = node.x;
   let y = node.y;
 
   let percentageMode = false;
 
-  let time, frequency;
+  let time: any, frequency: number;
   function setTimeAndFreq() {
     time = (x * $audioLengthStore).toFixed(3);
     frequency = remap(1 - y, 0, 1, $minFreqStore, $maxFreqStore);
@@ -34,22 +26,22 @@
 
   $: {
     linesStore.update(lines => {
-      const { segment, node } = getActiveNode(lines);
+      // const { segment, node } = getActiveNode(lines);
 
-      if (percentageMode) {
-        node.x = x;
-        node.y = y;
-        setTimeAndFreq();
-      } else {
-        node.x = time / $audioLengthStore;
-        node.y = 1 - remap(frequency, $minFreqStore, $maxFreqStore, 0, 1);
-        x = node.x;
-        y = node.y;
-      }
+      // if (percentageMode) {
+      //   node.x = x;
+      //   node.y = y;
+      //   setTimeAndFreq();
+      // } else {
+      //   node.x = time / $audioLengthStore;
+      //   node.y = 1 - remap(frequency, $minFreqStore, $maxFreqStore, 0, 1);
+      //   x = node.x;
+      //   y = node.y;
+      // }
 
-      segment.nodes.sort((a, b) => a.x - b.x);
+      // segment.nodes.sort((a, b) => a.x - b.x);
 
-      segment.dimensions = getSegmentDimensions(segment);
+      // segment.dimensions = getSegmentDimensions(segment.nodes);
 
       return lines;
     });
@@ -69,7 +61,7 @@
 </script>
 
 <style>
-  .container {
+  /* .container {
     display: grid;
     grid-template-columns: auto 1fr;
     grid-column-gap: 20px;
@@ -90,11 +82,11 @@
   }
   input[type=range] {
     margin-bottom: 20px;
-  }
+  } */
 </style>
 
 <Window title="node editor" on:close {...pos}>
-  <div class="container">
+  <!-- <div class="container">
     {#if percentageMode}
       <label>
         <span>x value</span>
@@ -156,5 +148,7 @@
         max={$maxFreqStore} />
     {/if}
   </div>
-  <button on:click={changeFormat}>Change Format</button>
+  <button on:click={changeFormat}>Change Format</button> -->
+
+  <h1>Broken At The Moment</h1>
 </Window>

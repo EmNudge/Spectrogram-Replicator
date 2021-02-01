@@ -3,7 +3,7 @@
   export let name;
   export let isActive;
 
-  import { linesStore, canvasStore, activeLineStore, activeSegmentStore, allowDeleteStore } from "../../stores/canvas";
+  import { linesStore, activeStore, allowDeleteStore } from "../../stores/canvas";
   import { onDestroy } from 'svelte';
   import CloseIcon from '../svg/Close.svelte';
 
@@ -30,7 +30,7 @@
 
   function updateName(isBlurred) {
     linesStore.update(lines => {
-      const line = lines.get($activeLineStore);
+      const line = lines.get($activeStore.lineId);
       const segment = line.segments.get(id);
       segment.name = name;
 
@@ -55,7 +55,7 @@
 
   function destroySegment() {
     linesStore.update(lines => {
-      const activeLineId = $activeLineStore;
+      const activeLineId = $activeStore.lineId;
       const line = lines.get(activeLineId);
 
       if (line.segments.size) {
@@ -70,7 +70,7 @@
         }
   
         line.segments.delete(id);
-        activeSegmentStore.set(prevSegId);
+        $activeStore.segmentId = prevSegId;
         return lines;
       }
 
@@ -96,7 +96,7 @@
         firstSegId = segId;
         break;
       }
-      activeSegmentStore.set(firstSegId);
+      $activeStore.segmentId = firstSegId;
 
       // segment will get deleted along with line, so just this is fine
       lines.delete(activeLineId);

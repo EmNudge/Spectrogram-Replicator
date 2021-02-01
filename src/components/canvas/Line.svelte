@@ -15,7 +15,7 @@
 
 <g style="--line-hue: {hue}" class:active>
   {#each [...segments] as [id, { nodes, dimensions }]}
-    <Segment {nodes} segmentId={id} />
+    <Segment {nodes} segmentId={id} inActiveLine={active} />
     {#if $debugModeStore && dimensions}
       <rect 
         style="fill: none; stroke: #000a"

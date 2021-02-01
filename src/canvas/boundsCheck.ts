@@ -1,5 +1,5 @@
 import { rangeInRange, pointInRange, Range } from '../utils/collisions';
-import getSegmentDimensions from './getSegmentDimensions';
+import { getSegmentDimensions } from './getSegmentDimensions';
 
 // one of the difficulties is knowing which bounds checker to use.
 // if neither have dimensions, they are both points - no collision
@@ -13,7 +13,7 @@ export function lineBoundsCheck(line: Canvas.Line, segment: Canvas.Segment, node
 	if (segment.nodes.length > 1 || (segment.nodes.length === 1 && segment.nodes[0].id !== node.id)) {
 		const newSegment = { ...segment };
 		newSegment.nodes = [ ...newSegment.nodes, node ];
-		const { x, width } = getSegmentDimensions(newSegment);
+		const { x, width } = getSegmentDimensions(newSegment.nodes);
 		range = { min: x, max: x + width};
 	}
 

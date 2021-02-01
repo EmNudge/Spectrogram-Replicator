@@ -1,42 +1,34 @@
-import { activeLineStore, linesStore, canvasStore } from '../stores/canvas';
+import { activeStore, linesStore, canvasStore } from '../stores/canvas';
 import { get } from 'svelte/store';
-import { getActiveSegment } from './getActive';
 
-interface PosParams {
-  e: MouseEvent,
-  boundingRect: DOMRect,
-}
-const getPos = (params: PosParams) => {
-  const { x: cx, y: cy } = params.boundingRect;
-
-  const x = params.e.clientX - cx;
-  const y = params.e.clientY - cy;
-
-  return { x, y };
-}
-
+/**
+ * Tells you if mouse event is within dist 
+ * of another node on the current line
+ */
 export function isNearNode(e: MouseEvent, dist: number = 5) {
-  const canvasEl = get(canvasStore) as SVGElement;
-  const boundingRect = canvasEl.getBoundingClientRect();
-  const { width, height } = boundingRect;
-  const { x, y } = getPos({ boundingRect, e });
+  const canvas = get(canvasStore);
+  const bounds = canvas.getBoundingClientRect();
 
-  const activeLine = get(activeLineStore);
+  const x = e.clientX - bounds.x;
+  const y = e.clientY - bounds.y;
 
-  // check if clicking on a node by position checking
-  if (activeLine) {
-    const lines = get(linesStore);
-    const { segment } = getActiveSegment(lines);
+  const activeData = get(activeStore);
+  const activeLineId = activeData.lineId;
+  if (!activeLineId) return false;
 
-
+  const lines = get(linesStore);  
+  const line = lines.get(activeLineId);
+    
+  for (const [segId, segment] of line.segments) {
     for (const node of segment.nodes) {
-      const nx = node.x * width;
-      const ny = node.y * height;
-
+      const nx = node.x * bounds.width;
+      const ny = node.y * bounds.height;
+  
       const xDist = Math.abs(nx - x);
       const yDist = Math.abs(ny - y);
-      if (xDist > dist || yDist > dist) continue;
 
+      if (xDist > dist || yDist > dist) continue;
+  
       return true;
     }
   }

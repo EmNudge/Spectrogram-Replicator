@@ -1,11 +1,14 @@
-import { activeSegmentStore, activeNodeStore, linesStore } from '../stores/canvas';
+import { linesStore } from '../stores/canvas';
 import { get } from 'svelte/store';
 import { getRandColor } from './colors';
+import { getNewSegment } from './getNewSegment';
 
-function getNewLine(pos?: { x: number; y: number }): Canvas.Line {
+/**
+ * Gets new line for a given node position.
+ * This does not change any store, so setting active data must be done manually
+ */
+export function getNewLine(pos?: { x: number; y: number }): Canvas.Line {
 	const newSegmentId = Symbol();
-	activeSegmentStore.set(newSegmentId);
-
 	const segments: Map<Symbol, Canvas.Segment> = new Map();
 
   const nodes: Canvas.Node[] = [];
@@ -13,16 +16,10 @@ function getNewLine(pos?: { x: number; y: number }): Canvas.Line {
   if (pos) {
     const activeNodeId = Symbol();
     const node = { ...pos, id: activeNodeId };
-    activeNodeStore.set(activeNodeId);
     nodes.push(node);
-  } else {
-    activeNodeStore.set(null);
   }
 
-	segments.set(newSegmentId, {
-		name: 'Segment 1',
-		nodes
-	});
+	segments.set(newSegmentId, getNewSegment(nodes, 'Segment 1'));
 
 	return {
 		hue: getRandColor(),

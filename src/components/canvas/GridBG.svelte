@@ -1,8 +1,8 @@
 <script lang="ts">
   import { gridDimStore, lightenOddGridStore } from "../../stores/canvas";
 
-  export let width;
-  export let height;
+  export let width: number;
+  export let height: number;
 
   $: [xSections, ySections] = $gridDimStore;
   $: xSectionWidth = width / xSections;

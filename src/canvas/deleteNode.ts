@@ -1,41 +1,38 @@
-import { activeNodeStore, linesStore } from '../stores/canvas';
+import { activeStore, linesStore } from '../stores/canvas';
 import { get } from 'svelte/store';
-import { getActiveNode } from './getActive';
-import getSegmentDimensions from './getSegmentDimensions'
+import { getNewSegment } from './getNewSegment'
 
-function deleteNode() {
+/**
+ * Deletes all active nodes
+ */
+export function deleteActiveNodes() {
+	const activeData = get(activeStore);
+	if (!activeData.lineId) {
+		throw new Error('Tried to delete node, but no nodes are active');
+	}
+
 	linesStore.update((lines) => {
-		const activeNodeId = get(activeNodeStore);
-		if (!activeNodeId) return lines;
+		const line = lines.get(activeData.lineId);
+		
+		// TODO: refactor this into a HashMap .map function
+		for (const [segId, segment] of line.segments) {
+			if (!activeData.segments.has(segId)) continue;
 
-		const { segment, nodeIndex } = getActiveNode(lines);
+			const nodeIdsToDelete = activeData.segments.get(segId);
+			// only keep nodes that are not active
+			const nodes = segment.nodes.filter(node => !nodeIdsToDelete.has(node.id));
+			
+			//if all lines in a segment are deleted, delete the segment
+			if (nodes.length === 0) {
+				line.segments.delete(segId);
+				continue;
+			}
 
-		if (segment.nodes.length <= 1) {
-			segment.nodes = [];
-			segment.dimensions = undefined;
-			activeNodeStore.set(null);
-
-			return lines;
+			// we're using this function to also generate new dimensions
+			const newSegment = getNewSegment(nodes, segment.name);
+			line.segments.set(segId, newSegment);
 		}
-
-		segment.nodes.splice(nodeIndex, 1);
-
-		if (segment.nodes.length === 1) {
-			segment.dimensions = undefined;
-
-			const nodeId = segment.nodes[0].id;
-			activeNodeStore.set(nodeId);
-
-			return lines;
-		}
-    
-		segment.dimensions = getSegmentDimensions(segment);
-
-		const currNode = segment.nodes[nodeIndex] || segment.nodes[nodeIndex - 1];
-		activeNodeStore.set(currNode.id);
 
 		return lines;
 	});
 }
-
-export default deleteNode;

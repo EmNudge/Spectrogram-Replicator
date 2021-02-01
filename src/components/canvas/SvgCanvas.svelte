@@ -5,12 +5,11 @@
 
   import Line from "./Line.svelte";
   import { 
-    activeLineStore, linesStore, activeSegmentStore, 
-    activeNodeStore, canvasStore, allowDeleteStore, 
-    showGridBG, gridDimStore, gridBGOpacityStore 
+    activeStore, linesStore, canvasStore, 
+    showGridBG, gridBGOpacityStore
   } from "../../stores/canvas";
-  import { moveNode, addNode, getPos } from './utils'
-  import { isNearNode, getActiveSegment } from '../../canvas/exports';
+  import { moveNodes, addNode, getPos } from '../../canvas/exports';
+  import { isNearNode } from '../../canvas/exports';
   import { lineBoundsCheck } from '../../canvas/boundsCheck'
   import click from '../../actions/click'
   import ValueChanger from './ValueChanger.svelte'
@@ -19,7 +18,7 @@
   import GridBG from './GridBG.svelte';
   import handleKeyDown from '../../utils/handleKeyDown';
 
-  let canvasEl;
+  let canvasEl: SVGElement;
   $: canvasStore.set(canvasEl);
 
   let isDragging = false;
@@ -36,7 +35,7 @@
 
   let activeLine = null;
   $: lines = (() => {
-    const activeLineId = $activeLineStore;
+    const activeLineId = $activeStore.lineId;
     const nonActiveLines = [];
     
     for (const [id, line] of [...$linesStore.entries()]) {
@@ -51,24 +50,27 @@
     return nonActiveLines;
   })();
 
-  function isColliding(e) {
-    try {
-      const { line, segment } = getActiveSegment($linesStore);
+  function isColliding(e: MouseEvent) {
+    const lines = $linesStore;
+    const activeData = $activeStore;
+    const line = lines.get(activeData.lineId);
+    if (!line) return false;
+    const segment = line.segments.get(activeData.segmentId);
+    if (!segment) return false;
 
-      const segColliding = lineBoundsCheck(line, segment, getPos(e));
-      return segColliding;
-    } catch(e) {
-      return false;
-    }
+    const segColliding = lineBoundsCheck(line, segment, { ...getPos(e), id: Symbol() });
+    return segColliding;
   }
 
-  function handleLeftClick(event) {
+  let dragPosition: { x: number, y: number } = null;
+  function handleLeftClick(event: CustomEvent<MouseEvent>) {
     // when using custom events, we need to propogate stuff via event.detail
     const e = event.detail;
     
-    if (isColliding(e)) return;
+    // if (isColliding(e)) return;
 
     isDragging = true;
+    dragPosition = getPos(e);
     
     if (!$linesStore.size) {
       addNode(e)
@@ -81,7 +83,7 @@
     addNode(e);
   }
 
-  function handleRightClick(e) {
+  function handleRightClick(e: CustomEvent<MouseEvent>) {
     // when using custom events, we need to propogate stuff via event.detail
     infoPos = { x: e.detail.clientX, y: e.detail.clientY };
 
@@ -103,13 +105,14 @@
     isDragging = false;
   }
 
-  function handleHover(e) {
+  function handleHover(e: MouseEvent) {
     if (!isDragging) return;
 
-    moveNode(e);
+    moveNodes(e, dragPosition);
+    dragPosition = getPos(e);
   }
 
-  function onKeyDown(e) {
+  function onKeyDown(e: KeyboardEvent) {
     if (showMenu) return;
     handleKeyDown(e);
   }

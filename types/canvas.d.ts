@@ -25,4 +25,10 @@ declare module Canvas {
     dimensions?: Dim,
     isEditing?: boolean,
   }
+
+  interface Selection {
+    lineId: Symbol;
+    segmentId: Symbol;
+    segments: Map<Symbol, Set<Symbol>>;
+  }
 }

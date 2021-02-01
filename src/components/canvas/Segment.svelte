@@ -1,9 +1,11 @@
 <script lang="ts">
   export let nodes = [];
   export let segmentId = null;
+  export let inActiveLine = false;
 
-  import Node from "./Node.svelte";
-  import { activeNodeStore, linesStore, activeLineStore } from "../../stores/canvas.js";
+  import Node from './Node.svelte';
+  import { linesStore, activeStore } from '../../stores/canvas';
+  import { getOrSet } from '../../utils/hashmap';
 
   $: lines = getLines(nodes);
   function getLines(_val) {
@@ -21,20 +23,39 @@
     return lines;
   }
 
+  function nodeIsActive(nodeId: Symbol) {
+    if (!inActiveLine) return false;
+    
+    const { segments } = $activeStore;
+    const currSegment = segments.get(segmentId);
+    return currSegment && currSegment.has(nodeId);
+  }
 
-  function onClick(nodeId) {
-    const line = $linesStore.get($activeLineStore);
+  const onClick = (nodeId: Symbol) => (e: MouseEvent) => {
+    if (!inActiveLine) return;
 
-    let segmentInLine = false;
-    for (const [id, _segment] of line.segments) {
-      if (id !== segmentId) continue;
+    activeStore.update(activeData => {
+      const { segments } = activeData;
+      const segment = getOrSet(segments, segmentId, new Set());
       
-      segmentInLine = true;
-      break;
-    }
+      if (!e.ctrlKey) {
+        const isSelected = segment.has(nodeId);
+        // clear all segments
+        for (const [id, nodes] of segments) nodes.clear();
+        // add our node if it previously wasn't selected
+        if (!isSelected) segment.add(nodeId);
+        
+        return activeData;
+      }
 
-    if (!segmentInLine) return;
-    activeNodeStore.set(nodeId);
+      if (segment.has(nodeId)) {
+        segment.delete(nodeId);
+      } else {
+        segment.add(nodeId);
+      }
+
+      return activeData;
+    });
   }
 </script>
 
@@ -52,11 +73,11 @@
   {#each lines as line}
     <line {...line} />
   {/each}
-  {#each nodes as { x, y, id }}
+  {#each nodes as { x, y, id } (id)}
     <Node
       x="{x * 100}%"
       y="{y * 100}%"
-      on:mousedown={() => onClick(id)}
-      isActive={$activeNodeStore === id} />
+      on:mousedown={onClick(id)}
+      isActive={nodeIsActive(id)} />
   {/each}
 </g>

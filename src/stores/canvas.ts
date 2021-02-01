@@ -9,14 +9,12 @@ export const updateLine = (id: Symbol) => (func: (line: Canvas.Line) => void) =>
   });
 }
 
-// Current active line
-export const activeLineStore = writable(null as Symbol);
-
-// Current active segment within a line
-export const activeSegmentStore = writable(null as Symbol);
-
-// Current active node within a segment
-export const activeNodeStore = writable(null as Symbol);
+// data structure to contain a list of all active nodes
+export const activeStore = writable<Canvas.Selection>({
+  lineId: null,
+  segmentId: null,
+  segments: new Map(),
+});
 
 let linesLength = 0;
 linesStore.subscribe(lines => {
@@ -25,16 +23,18 @@ linesStore.subscribe(lines => {
 
   if (lines.size > oldLen || lines.size === 0) return;
 
-  const activeLineId = get(activeLineStore);
-  const activeLine = lines.get(activeLineId);
-  if (activeLine) return;
+  const { lineId } = get(activeStore);
+  if (lineId && lines.has(lineId)) return;
 
-  const [lineId, line] = [...lines][0];
-  activeLineStore.set(lineId);
+  const [id, line] = [...lines][0];
   const [segmentId, segment] = [...line.segments][0];
-  activeSegmentStore.set(segmentId);
-  const node = segment.nodes[0]
-  activeNodeStore.set(node.id);
+  const { id: nodeId } = segment.nodes[0]
+
+  activeStore.set({
+    lineId: id,
+    segmentId,
+    segments: new Map([[segmentId, new Set([nodeId])]]),
+  });
 })
 
 // represents canvas svg to get coords and dimensions

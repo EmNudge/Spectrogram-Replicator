@@ -2,7 +2,7 @@
   export let id: Symbol;
   export let isActive: boolean;
 
-  import { linesStore, canvasStore, activeLineStore, allowDeleteStore } from "../../stores/canvas";
+  import { linesStore, activeStore, allowDeleteStore } from "../../stores/canvas";
   import { onDestroy } from 'svelte';
   import CloseIcon from '../svg/Close.svelte';
 
@@ -17,8 +17,8 @@
 
   let name = $linesStore.get(id).name;
 
-  let inputEl;
-  let allowDelete;
+  let inputEl: HTMLInputElement;
+  let allowDelete: boolean;
 
   onDestroy(() => {
     if (!allowDelete) return;
@@ -54,7 +54,7 @@
     allowDeleteStore.set(false);
   }
 
-  function handleKeyDown(e) {
+  function handleKeyDown(e: KeyboardEvent) {
     if (e.key !== "Enter") return;
     updateLine(line => line.isEditing = false);
   }
@@ -70,7 +70,8 @@
       l.delete(id);
       return l;
     });
-    activeLineStore.set(prevId);
+    
+    activeStore.update(activeData => ({ ...activeData, lineId: prevId }));
   }
 </script>
 

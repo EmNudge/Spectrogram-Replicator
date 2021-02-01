@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
   import LineBar from './lineBar.svelte'
   import SegmentBar from './SegmentBar.svelte'
-  import { linesStore, activeLineStore, activeSegmentStore, activeNodeStore, canvasStore } from "../../stores/canvas";
-  import { getNewLine } from "../../canvas/exports";
+  import { linesStore, activeStore } from "../../stores/canvas";
+  import { getNewLine, getSelectionFromLine } from "../../canvas/exports";
   import NewLineIcon from '../svg/NewLine.svelte';
   import NewSegmentIcon from '../svg/NewSegment.svelte';
 
@@ -10,34 +10,34 @@
     linesStore.update(lines => {
       const newLine = getNewLine();
       const id = Symbol();
-
-      activeLineStore.set(id);
-      activeNodeStore.set(null);
-      
       lines.set(id, newLine);
 
+      activeStore.set(getSelectionFromLine(id, newLine));
+      
       return lines;
     });
   }
 
   function addSegment() {
     linesStore.update(lines => {
-      const line = lines.get($activeLineStore);
+      const line = lines.get($activeStore.lineId);
 
       const segmentId = Symbol();
       line.segments.set(segmentId, {
         name: `Segment ${line.segments.size + 1}`,
         nodes: []
-      })
-      activeSegmentStore.set(segmentId);
-      activeNodeStore.set(null);
+      });
+
+      $activeStore.segmentId = segmentId;
+      $activeStore.segments = new Map();
 
       return lines;
     });
   }
 
   function setActiveLine(id) {
-    activeLineStore.set(id);
+    $activeStore.lineId = id;
+
     // getting first segment ID in given line
     const line = $linesStore.get(id);
     let segmentId = null;
@@ -46,14 +46,16 @@
       break;
     }
 
-    activeSegmentStore.set(segmentId);
+    $activeStore.segmentId = segmentId;
   }
   function setActiveSegment(lineId, segmentId) {
-    if (segmentId === $activeSegmentStore) return;
+    if (segmentId === $activeStore.segmentId) return;
 
-    activeLineStore.set(lineId);
-    activeSegmentStore.set(segmentId);
-    activeNodeStore.set(null);
+    $activeStore = {
+      lineId,
+      segmentId,
+      segments: new Map(),
+    };
   }
 
   import BarContextMenu from './BarContextMenu.svelte';
@@ -92,7 +94,7 @@
     {#each [...$linesStore] as [id, line]}
       <LineBar 
         {id}
-        isActive={$activeLineStore === id} 
+        isActive={$activeStore.lineId === id} 
         on:click={() => setActiveLine(id)}
         on:contextmenu={openContextMenu(id)} />
 
@@ -100,7 +102,7 @@
           <SegmentBar 
             id={segment[0]}
             name={segment[1].name}
-            isActive={$activeSegmentStore === segment[0]}
+            isActive={$activeStore.segmentId === segment[0]}
             on:click={() => setActiveSegment(id, segment[0])} />
         {/each}
 

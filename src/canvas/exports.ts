@@ -1,7 +1,10 @@
 export * from './boundsCheck';
 export * from './colors';
-export * from './getActive';
 export * from './nearNode';
-export { default as getSegmentDimensions } from './getSegmentDimensions';
-export { default as getNewLine } from './getNewLine';
-export { default as deleteNode } from './deleteNode';
+export * from './getSegmentDimensions';
+export * from './getNewLine';
+export * from './deleteNode';
+export * from './getPos';
+export * from './addNode';
+export * from './moveNodes';
+export * from './getSelectionFromLine';

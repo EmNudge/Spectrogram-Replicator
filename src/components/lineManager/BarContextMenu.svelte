@@ -3,7 +3,8 @@
   import MenuOption from './contextMenu/MenuOption.svelte';
   import MenuList from './contextMenu/MenuList.svelte';
   import { colorMap } from '../../canvas/colors';
-  import { linesStore, updateLine } from '../../stores/canvas';
+  import { activeStore, linesStore, updateLine } from '../../stores/canvas';
+  import { getSelectionFromLine } from '../../canvas/exports';
 
   export let pos = { x: 0, y: 0 };
   export let lineId: Symbol;
@@ -37,6 +38,11 @@
       return lines;
     })
   }
+
+  const selectAll = () => {
+    const selection = getSelectionFromLine(lineId, line);
+    $activeStore = selection;
+  }
 </script>
 
 <style>
@@ -51,6 +57,10 @@
   <MenuOption 
     on:click={rename}
     text="Rename" />
+
+  <MenuOption 
+    on:click={selectAll}
+    text="Select All" />
 
   <MenuList text="Change Color">
     {#each Array.from(colorMap) as [name, color]}
@@ -68,6 +78,7 @@
     on:click={console.log} 
     isDisabled={true}
     text="Disable" />
+
   <MenuOption 
     on:click={deleteLine} 
     text="Delete" />

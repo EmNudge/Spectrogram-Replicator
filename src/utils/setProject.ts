@@ -11,7 +11,7 @@ interface Project {
   grid: { show: boolean, dim: [number, number] }
   lines: [{}, any][]
 }
-export default function setProject(project: Project) {
+export function setProject(project: Project) {
   const { title, author, freqRange, audioLength, grid, lines } = project;
 
   titleStore.set(title);

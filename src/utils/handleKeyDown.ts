@@ -2,7 +2,7 @@ import { get } from 'svelte/store';
 import { allowDeleteStore, activeStore, linesStore } from '../stores/canvas';
 import { deleteActiveNodes, getSelectionFromLine } from '../canvas/exports'
 
-function handleKeyDown(e: KeyboardEvent) {
+export function handleKeyDown(e: KeyboardEvent) {
     if (!['Delete', 'Backspace'].includes(e.key)) return;
 
     if (!get(allowDeleteStore)) return;
@@ -46,5 +46,3 @@ function getSegmentId(activeData: Canvas.Selection, activeLine: Canvas.Line) {
     const [[segId]] = segments;
     return segId;
 }
-
-export default handleKeyDown;

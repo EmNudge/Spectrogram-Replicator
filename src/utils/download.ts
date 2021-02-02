@@ -1,4 +1,4 @@
-function download(filename: string, text: string) {
+export function download(filename: string, text: string) {
   const element = document.createElement('a');
   const URIText = encodeURIComponent(text);
   const link = `data:text/plain;charset=utf-8,${URIText}`
@@ -12,5 +12,3 @@ function download(filename: string, text: string) {
 
   document.body.removeChild(element);
 }
-
-export default download;

@@ -3,7 +3,7 @@ import { minFreqStore, maxFreqStore, audioLengthStore } from "../stores/audio";
 import { linesStore, showGridBG, gridDimStore } from "../stores/canvas";
 import { get } from 'svelte/store'
 
-export default function getProject() {
+export function getProject() {
   const title = get(titleStore);
   const author = get(authorStore);
   const freqRange = [get(minFreqStore), get(maxFreqStore)];

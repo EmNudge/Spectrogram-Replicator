@@ -16,7 +16,7 @@
   import { tick, onMount } from 'svelte';
   import Freqs from './Freqs.svelte';
   import GridBG from './GridBG.svelte';
-  import handleKeyDown from '../../utils/handleKeyDown';
+  import { handleKeyDown } from '../../utils/handleKeyDown';
 
   let canvasEl: SVGElement;
   $: canvasStore.set(canvasEl);

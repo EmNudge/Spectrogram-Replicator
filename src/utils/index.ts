@@ -1,5 +1,5 @@
-export { default as clamp } from './clamp'
-export { default as remap } from './remap'
-export { default as download } from './download'
-export { default as getProject } from './getProject'
-export { default as setProject } from './setProject'
+export * from './clamp';
+export * from './remap';
+export * from './download';
+export * from './getProject';
+export * from './setProject';

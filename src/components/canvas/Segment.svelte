@@ -38,22 +38,16 @@
       const { segments } = activeData;
       const segment = getOrSet(segments, segmentId, new Set());
       
+      const isSelected = segment.has(nodeId);
+      if (isSelected) return activeData;
+
+      // if not multi select, clear all segments
       if (!e.ctrlKey) {
-        const isSelected = segment.has(nodeId);
-        // clear all segments
-        for (const [id, nodes] of segments) nodes.clear();
-        // add our node if it previously wasn't selected
-        if (!isSelected) segment.add(nodeId);
-        
-        return activeData;
+        for (const [_id, nodes] of segments) nodes.clear();
       }
 
-      if (segment.has(nodeId)) {
-        segment.delete(nodeId);
-      } else {
-        segment.add(nodeId);
-      }
-
+      segment.add(nodeId);
+      
       return activeData;
     });
   }

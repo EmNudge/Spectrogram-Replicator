@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { drag, barDrag } from "../../actions";
   import { createEventDispatcher, onMount } from "svelte";
 
@@ -7,8 +7,8 @@
 
   const dispatch = createEventDispatcher();
 
-  export let x = null;
-  export let y = null;
+  export let x: number = 0;
+  export let y: number = 0;
   const pos = { x, y };
 
   function handleDrag(e) {

@@ -55,7 +55,7 @@ class TonePlayer {
   }
 
   get percentage() {
-    if (!this.audioContext) return;
+    if (!this.audioContext) return 0;
 
     return this.audioContext.currentTime / get(audioLengthStore);
   }

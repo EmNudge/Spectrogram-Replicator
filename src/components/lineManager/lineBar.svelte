@@ -8,14 +8,14 @@
 
   import LineSvg from '../svg/Line.svelte';
 
-  $: line = $linesStore.get(id);
+  $: line = $linesStore.get(id)!;
   $: hue = line.hue;
   $: editing = line.isEditing;
   $: if (editing) {
     editName();
   }
 
-  let name = $linesStore.get(id).name;
+  let name = $linesStore.get(id)!.name;
 
   let inputEl: HTMLInputElement;
   let allowDelete: boolean;
@@ -27,7 +27,7 @@
 
   function updateLine(func: (line: Canvas.Line) => void) {
     linesStore.update(lines => {
-      const line = lines.get(id);
+      const line = lines.get(id)!;
       func(line);
 
       return lines;
@@ -60,7 +60,7 @@
   }
 
   function destroyLine() {
-    let prevId = null;
+    let prevId: Symbol | null = null;
     for (const [lineId, _line] of $linesStore) {
       if (lineId === id) break;
       prevId = lineId;
@@ -71,7 +71,10 @@
       return l;
     });
     
-    activeStore.update(activeData => ({ ...activeData, lineId: prevId }));
+    activeStore.update(activeData => ({ 
+      ...activeData, 
+      lineId: prevId || Symbol() 
+    }));
   }
 </script>
 

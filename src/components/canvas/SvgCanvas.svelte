@@ -4,18 +4,17 @@
   export let bg;
 
   import Line from "./Line.svelte";
+  import ValueChanger from './ValueChanger.svelte'
+  import Freqs from './Freqs.svelte';
+  import GridBG from './GridBG.svelte';
   import { 
     activeStore, linesStore, canvasStore, 
     showGridBG, gridBGOpacityStore
   } from "../../stores/canvas";
   import { moveNodes, addNode, getPos } from '../../canvas/exports';
   import { isNearNode } from '../../canvas/exports';
-  import { lineBoundsCheck } from '../../canvas/boundsCheck'
   import click from '../../actions/click'
-  import ValueChanger from './ValueChanger.svelte'
-  import { tick, onMount } from 'svelte';
-  import Freqs from './Freqs.svelte';
-  import GridBG from './GridBG.svelte';
+  import { tick} from 'svelte';
   import { handleKeyDown } from '../../utils/handleKeyDown';
 
   let canvasEl: SVGElement;
@@ -33,10 +32,10 @@
     canvasDim = { width, height };
   })();
 
-  let activeLine = null;
+  let activeLine: Canvas.Line | null = null;
   $: lines = (() => {
     const activeLineId = $activeStore.lineId;
-    const nonActiveLines = [];
+    const nonActiveLines: Canvas.Line[] = [];
     
     for (const [id, line] of [...$linesStore.entries()]) {
       if (id === activeLineId) {
@@ -50,19 +49,7 @@
     return nonActiveLines;
   })();
 
-  function isColliding(e: MouseEvent) {
-    const lines = $linesStore;
-    const activeData = $activeStore;
-    const line = lines.get(activeData.lineId);
-    if (!line) return false;
-    const segment = line.segments.get(activeData.segmentId);
-    if (!segment) return false;
-
-    const segColliding = lineBoundsCheck(line, segment, { ...getPos(e), id: Symbol() });
-    return segColliding;
-  }
-
-  let dragPosition: { x: number, y: number } = null;
+  let dragPosition: { x: number, y: number } | null = null;
   function handleLeftClick(event: CustomEvent<MouseEvent>) {
     // when using custom events, we need to propogate stuff via event.detail
     const e = event.detail;
@@ -108,7 +95,7 @@
   function handleHover(e: MouseEvent) {
     if (!isDragging) return;
 
-    moveNodes(e, dragPosition);
+    moveNodes(e, dragPosition!);
     dragPosition = getPos(e);
   }
 

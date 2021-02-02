@@ -9,7 +9,7 @@
   export let pos = { x: 0, y: 0 };
   export let lineId: Symbol;
 
-  $: line = $linesStore.get(lineId);
+  $: line = $linesStore.get(lineId)!;
   $: hue = line.hue;
   
   import { createEventDispatcher } from 'svelte';

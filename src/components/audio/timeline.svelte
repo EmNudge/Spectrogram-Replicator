@@ -1,7 +1,7 @@
 <script lang="ts">
   export let percentage = 0;
 
-  import { clamp, remap } from "../../utils";
+  import { clamp } from "../../utils";
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();

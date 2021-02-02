@@ -7,7 +7,7 @@
   import { getSchedule, transformSchedule, TonePlayer } from "../../audio";
 
   // stores
-  import { linesStore, canvasStore } from "../../stores/canvas";
+  import { linesStore } from "../../stores/canvas";
   import { audioLengthStore } from "../../stores/audio";
 
   let tonePlayer = new TonePlayer(3);
@@ -19,7 +19,7 @@
   let isPlaying = false;
 
   function getSchedules() {
-    const schedules = [];
+    const schedules: Audio.Schedule[] = [];
     for (const [_id, line] of $linesStore) {
       const schedule = getSchedule(line);
 

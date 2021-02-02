@@ -3,7 +3,7 @@ import { writable, get } from 'svelte/store';
 export const linesStore = writable(new Map() as Map<Symbol, Canvas.Line>);
 export const updateLine = (id: Symbol) => (func: (line: Canvas.Line) => void) => {
   linesStore.update(lines => {
-    const line = lines.get(id);
+    const line = lines.get(id)!;
     func(line);
     return lines;
   });
@@ -11,7 +11,7 @@ export const updateLine = (id: Symbol) => (func: (line: Canvas.Line) => void) =>
 
 // data structure to contain a list of all active nodes
 export const activeStore = writable<Canvas.Selection>({
-  lineId: null,
+  lineId: Symbol(),
   segmentId: null,
   segments: new Map(),
 });

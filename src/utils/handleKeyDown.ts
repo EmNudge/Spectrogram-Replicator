@@ -16,10 +16,10 @@ function changeActiveNodes() {
         const { lineId, segments } = activeData;
 
         const lines = get(linesStore);
-        const line = lines.get(lineId);
+        const line = lines.get(lineId)!;
 
         if (segments.size === 0 || line.segments.size === 0) {
-            return { lineId, segmentId: null, segments };
+            return { lineId, segmentId: null, segments } as Canvas.Selection;
         }
 
         const segmentId = getSegmentId(activeData, line);
@@ -33,9 +33,9 @@ function changeActiveNodes() {
         
         return {
             lineId,
-            segmentId: segmentId,
+            segmentId,
             segments: new Map([[segmentId, new Set([nodeId])]]),
-        };
+        } as Canvas.Selection;
     });
 }
 

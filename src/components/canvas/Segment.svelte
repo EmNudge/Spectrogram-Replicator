@@ -1,15 +1,17 @@
 <script lang="ts">
-  export let nodes = [];
-  export let segmentId = null;
+  export let nodes: Canvas.Node[] = [];
+  export let segmentId: Symbol | null = null;
   export let inActiveLine = false;
 
   import Node from './Node.svelte';
-  import { linesStore, activeStore } from '../../stores/canvas';
+  import { activeStore } from '../../stores/canvas';
   import { getOrSet } from '../../utils/hashmap';
 
   $: lines = getLines(nodes);
-  function getLines(_val) {
-    const lines = [];
+  function getLines(_val: Canvas.Node[]) {
+    type Line = { x1: string, y1: string, x2: string, y2: string };
+    const lines: Line[] = [];
+
     for (let i = 0; i < nodes.length - 1; i++) {
       const node = nodes[i];
       const nextNode = nodes[i + 1];
@@ -24,7 +26,7 @@
   }
 
   function nodeIsActive(nodeId: Symbol) {
-    if (!inActiveLine) return false;
+    if (!inActiveLine || !segmentId) return false;
     
     const { segments } = $activeStore;
     const currSegment = segments.get(segmentId);

@@ -28,7 +28,7 @@ declare module Canvas {
 
   interface Selection {
     lineId: Symbol;
-    segmentId: Symbol;
+    segmentId: Symbol | null;
     segments: Map<Symbol, Set<Symbol>>;
   }
 }

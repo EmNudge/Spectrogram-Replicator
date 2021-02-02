@@ -20,7 +20,7 @@
 
   function addSegment() {
     linesStore.update(lines => {
-      const line = lines.get($activeStore.lineId);
+      const line = lines.get($activeStore.lineId)!;
 
       const segmentId = Symbol();
       line.segments.set(segmentId, {
@@ -39,8 +39,8 @@
     $activeStore.lineId = id;
 
     // getting first segment ID in given line
-    const line = $linesStore.get(id);
-    let segmentId = null;
+    const line = $linesStore.get(id)!;
+    let segmentId: Symbol | null = null;
     for (const [segId, segment] of line.segments) {
       segmentId = segId;
       break;

@@ -1,7 +1,7 @@
 export function getSelectionFromLine(lineId: Symbol, line: Canvas.Line, singleNode = false): Canvas.Selection {
   const segments = new Map();
 
-  let segmentId = null;
+  let segmentId: Symbol | null = null;
   for (const [segId, segment] of line.segments) {
     if (!segmentId) segmentId = segId;
     

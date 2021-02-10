@@ -6,7 +6,7 @@ import { get } from 'svelte/store';
  * of another node on the current line
  */
 export function isNearNode(e: MouseEvent, dist: number = 5) {
-  const canvas = get(canvasStore);
+  const canvas = get(canvasStore)!;
   const bounds = canvas.getBoundingClientRect();
 
   const x = e.clientX - bounds.x;
@@ -17,7 +17,7 @@ export function isNearNode(e: MouseEvent, dist: number = 5) {
   if (!activeLineId) return false;
 
   const lines = get(linesStore);  
-  const line = lines.get(activeLineId);
+  const line = lines.get(activeLineId)!;
     
   for (const [segId, segment] of line.segments) {
     for (const node of segment.nodes) {

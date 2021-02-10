@@ -17,7 +17,7 @@ export function getPosWithBounds(e: MouseEvent, bounds: DOMRect) {
  * x and y will be between 0 and 1
  */
 export function getPos(e: MouseEvent) {
-  const canvasEl = get(canvasStore);
+  const canvasEl = get(canvasStore)!;
   const bounds = canvasEl.getBoundingClientRect();
   
   return getPosWithBounds(e, bounds);

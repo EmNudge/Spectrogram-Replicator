@@ -13,7 +13,7 @@
   let tonePlayer = new TonePlayer(3);
 
   let timePerc = 0;
-  let reqId;
+  let reqId: number;
   let startSkip = 0;
 
   let isPlaying = false;

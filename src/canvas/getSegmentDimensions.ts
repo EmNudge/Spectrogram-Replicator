@@ -2,7 +2,7 @@
  * Gets smallest and largest x & y values to produce a box around a segment
  * i.e. a dimension object
  */
-export function getSegmentDimensions(nodes: Canvas.Node[]): Canvas.Dim {
+export function getSegmentDimensions(nodes: Canvas.Node[]): Canvas.Dim | null {
   if (!nodes.length) return null;
   if (nodes.length === 1) {
     const node = nodes[0];

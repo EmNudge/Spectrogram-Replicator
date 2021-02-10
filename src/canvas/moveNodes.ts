@@ -18,10 +18,10 @@ export function moveNodes(e: MouseEvent, originalPos: { x: number, y: number }) 
   };
 
   linesStore.update(lines => {
-    const line = lines.get(lineId);
+    const line = lines.get(lineId)!;
     
     for (const [segmentId, nodeIds] of segments) {
-      const segment = line.segments.get(segmentId);
+      const segment = line.segments.get(segmentId)!;
       for (const node of segment.nodes) {
         if (!nodeIds.has(node.id)) continue;
 

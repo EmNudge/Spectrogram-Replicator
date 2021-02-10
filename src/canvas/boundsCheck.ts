@@ -13,7 +13,7 @@ export function lineBoundsCheck(line: Canvas.Line, segment: Canvas.Segment, node
 	if (segment.nodes.length > 1 || (segment.nodes.length === 1 && segment.nodes[0].id !== node.id)) {
 		const newSegment = { ...segment };
 		newSegment.nodes = [ ...newSegment.nodes, node ];
-		const { x, width } = getSegmentDimensions(newSegment.nodes);
+		const { x, width } = getSegmentDimensions(newSegment.nodes)!;
 		range = { min: x, max: x + width};
 	}
 

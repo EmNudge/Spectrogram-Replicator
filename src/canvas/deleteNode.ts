@@ -12,13 +12,13 @@ export function deleteActiveNodes() {
 	}
 
 	linesStore.update((lines) => {
-		const line = lines.get(activeData.lineId);
+		const line = lines.get(activeData.lineId)!;
 		
 		// TODO: refactor this into a HashMap .map function
 		for (const [segId, segment] of line.segments) {
 			if (!activeData.segments.has(segId)) continue;
 
-			const nodeIdsToDelete = activeData.segments.get(segId);
+			const nodeIdsToDelete = activeData.segments.get(segId)!;
 			// only keep nodes that are not active
 			const nodes = segment.nodes.filter(node => !nodeIdsToDelete.has(node.id));
 			

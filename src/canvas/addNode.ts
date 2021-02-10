@@ -25,7 +25,7 @@ export function addNode(e: MouseEvent) {
     }
 
     const { lineId, segmentId } = get(activeStore);
-    const line = lines.get(lineId);
+    const line = lines.get(lineId)!;
 
     
     const nodeId = Symbol();
@@ -40,7 +40,7 @@ export function addNode(e: MouseEvent) {
       return lines;
     }
 
-    const segment = line.segments.get(segmentId);
+    const segment = line.segments.get(segmentId)!;
     const nodes = [...segment.nodes, newNode].sort((a, b) => a.x - b.x);
     line.segments.set(segmentId, getNewSegment(nodes, segment.name));
 

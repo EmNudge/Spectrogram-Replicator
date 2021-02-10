@@ -1,7 +1,7 @@
-<script>
-  export let x;
-  export let y;
-  export let isActive;
+<script lang="ts">
+  export let x: string;
+  export let y: string;
+  export let isActive: boolean;
 
   export let size = 5;
 </script>

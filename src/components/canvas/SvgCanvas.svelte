@@ -1,7 +1,7 @@
 <script lang="ts">
   // export let width;
   // export let height;
-  export let bg;
+  export let bg: string;
 
   import Line from "./Line.svelte";
   import ValueChanger from './ValueChanger.svelte'
@@ -71,6 +71,9 @@
   }
 
   function handleRightClick(e: CustomEvent<MouseEvent>) {
+    const el = e.detail.target as SVGElement;
+    if (el.nodeName !== 'circle') return;
+
     // when using custom events, we need to propogate stuff via event.detail
     infoPos = { x: e.detail.clientX, y: e.detail.clientY };
 

@@ -1,17 +1,33 @@
 <script>
+	import { tick } from "svelte";
+
+	let title = 'Spectrogram Replicator';
+	let author = 'EmNudge';
+
 	let isEditing = false;
+	
+	const handleDoubleClick = async (e) => {
+		isEditing = true;
+		await tick();
+		e.target.focus();
+	}
 </script>
 
 <div class="title-gutter" />
 <div class="title">
 	<div class="text-container">
-		{#if isEditing}
-			<input type="text" placeholder="Project Title" value="Spectrogram Replicator" />
-			<input type="text" placeholder="Project Author" value="EmNudge" />
-		{:else}
-			<h1>Spectrogram Replicator</h1>
-			<h2>EmNudge</h2>
-		{/if}
+		<input 
+			type="text"
+			disabled={!isEditing}
+			role="heading"
+			placeholder="Project Title"
+			bind:value={title} />
+		<input 
+			type="text"
+			disabled={!isEditing}
+			role="heading"
+			placeholder="Project Author"
+			bind:value={author} />
 	</div>
 	<div class="buttons">
 		<button on:click={() => isEditing = !isEditing}>
@@ -51,22 +67,26 @@
 		opacity: 1;
 		cursor: pointer;
 	}
-	h1 {
-		font-size: 2.5em;
-	}
-	h1,
-	h2 {
+	input {
+		width: 100%;
+		border-radius: 6px;
+		font-weight: bold;
+		border: 1px solid #0003;
+		background: none;
 		margin: 0;
+		padding: 0;
 		color: #4f4f4f;
+		font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 	}
     .text-container input:first-child {
-        font-size: 2.5em;
+		font-size: 2.5em;
+		height: 2.6rem;
     }
     .text-container input:last-child {
-        font-size: 1.5em;
+		font-size: 1.5em;
+		height: 1.6rem;
     }
-    input {
-        width: 100%;
-        border: 1px solid #0003;
+    input:disabled {
+		border: 1px solid transparent;
     }
 </style>

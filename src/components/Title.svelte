@@ -1,16 +1,7 @@
 <script>
-	import { tick } from "svelte";
-
-	let title = 'Spectrogram Replicator';
-	let author = 'EmNudge';
+	import { author, title } from '../stores/project'
 
 	let isEditing = false;
-	
-	const handleDoubleClick = async (e) => {
-		isEditing = true;
-		await tick();
-		e.target.focus();
-	}
 </script>
 
 <div class="title-gutter" />
@@ -21,13 +12,13 @@
 			disabled={!isEditing}
 			role="heading"
 			placeholder="Project Title"
-			bind:value={title} />
+			bind:value={$title} />
 		<input 
 			type="text"
 			disabled={!isEditing}
 			role="heading"
 			placeholder="Project Author"
-			bind:value={author} />
+			bind:value={$author} />
 	</div>
 	<div class="buttons">
 		<button on:click={() => isEditing = !isEditing}>

@@ -1,14 +1,25 @@
 <script lang="ts">
-	let time = 0.5;
-	let totalTime = 234;
+	import { duration, currentTime } from '../stores/sound';
 
-	const displayText = (secs: number) => `${Math.floor(secs / 60)}:${Math.floor(secs) % 60}`;
+	const displayText = (secs: number) =>
+		String(Math.floor(secs / 60)).padStart(2, '0') +
+		':' +
+		String(Math.floor(secs % 60)).padStart(2, '0');
 
-    function changeTime(e) {
-        const { left, right } = e.currentTarget.getBoundingClientRect();
-        time = (e.clientX - left) / (right - left);
-        console.log((e.clientX - left), (right - e.clientX), time)
-    }
+	function changeTime(e) {
+		const { left, right } = e.currentTarget.getBoundingClientRect();
+		$currentTime = (e.clientX - left) / (right - left);
+	}
+	const getTimeFromStr = (str) => {
+		const [minute, seconds] = str.split(':');
+		return Number(minute) * 60 + Number(seconds);
+	};
+	function handleChangeTime(e) {
+		const [current, goal] = e.target.value.split('/');
+		if (!current || !goal) return;
+		$duration = getTimeFromStr(goal);
+		$currentTime = getTimeFromStr(current) / $duration;
+	}
 </script>
 
 <div class="play-container">
@@ -17,16 +28,16 @@
 
 <div class="timeline">
 	<div class="bar-container">
-		<div on:click={changeTime} class="bar" style="--time-perc: {time};" />
+		<div on:click={changeTime} class="bar" style="--time-perc: {$currentTime};" />
 		<div class="times">
 			{#each Array(10) as _, i}
-				<span>{displayText(i / 10 * totalTime)}</span>
+				<span>{displayText((i / 10) * $duration)}</span>
 			{/each}
 		</div>
 		<h3>Time (s)</h3>
 	</div>
-	<div class="time">
-		<input type="text" value="{displayText(totalTime * time)}/{displayText(totalTime)}" />
+	<div class="time" on:input={handleChangeTime}>
+		<input type="text" value="{displayText($duration * $currentTime)}/{displayText($duration)}" />
 	</div>
 </div>
 
@@ -34,13 +45,13 @@
 	.play-container {
 		display: flex;
 		align-items: flex-start;
-    }
+	}
 	button {
 		height: 32px;
-        font-size: 1.5em;
-        color: #000a;
+		font-size: 1.5em;
+		color: #000a;
 		width: 100%;
-        border-radius: 4px;
+		border-radius: 4px;
 	}
 	.timeline {
 		display: grid;
@@ -67,7 +78,7 @@
 		height: 32px;
 		width: 100%;
 		background: white;
-        border-radius: 4px;
+		border-radius: 4px;
 		position: relative;
 	}
 	.bar:before {
@@ -78,6 +89,6 @@
 		height: 100%;
 		width: calc(var(--time-perc) * 100%);
 		background: grey;
-        border-radius: 4px;
+		border-radius: 4px;
 	}
 </style>

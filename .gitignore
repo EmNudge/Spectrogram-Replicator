@@ -1,5 +1,5 @@
-/node_modules/
-/public/build/
-# we're using a Rich Harris inspired solution to avoid alias svelte compiler bugs
-!src/node_modules
 .DS_Store
+node_modules
+/build
+/.svelte-kit
+/package

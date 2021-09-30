@@ -2,9 +2,11 @@
 	import type { SvelteComponent } from 'svelte';
 	import { tabs, activeTabSt } from '../../stores/menus';
 
+	import Main from './Main.svelte';
 	import Project from './Project.svelte';
 	const componentMap = new Map<typeof tabs[number], SvelteComponent>([
-		[tabs[0], Project as unknown as SvelteComponent]
+        ['Main', Main as unknown as SvelteComponent],
+		['Project', Project as unknown as SvelteComponent],
 	]);
 
     $: activeTabName = tabs[$activeTabSt]

@@ -63,6 +63,7 @@
 		background: #0001;
 	}
 	input {
+		text-align: left;
 		width: 100%;
 		border-radius: 6px;
 		font-weight: bold;

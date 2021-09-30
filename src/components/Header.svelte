@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { tabs, activeTabSt } from '../stores/menus';
+    import { tabs, tabIcons, activeTabSt } from '../stores/menus';
 </script>
 
 <header>
@@ -8,7 +8,9 @@
             <button 
                 on:click={() => $activeTabSt = i}
                 class:selected={i === $activeTabSt}
-                >{tab.slice(0, 2)}</button>
+            >
+                <img src="/icons/{tabIcons.get(tab)}" alt={tab} />
+            </button>
         {/each}
     </div>
     <div>
@@ -46,7 +48,10 @@
     button.selected {
         background: #C4C4C4;
     }
-    img {
+    a img {
         height: 100%;
+    }
+    button img {
+        height: 16px;
     }
 </style>

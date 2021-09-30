@@ -1,13 +1,19 @@
 <script lang="ts">
-	import type { SvelteComponent } from 'svelte';
+	import { SvelteComponent } from 'svelte';
 	import { tabs, activeTabSt } from '../../stores/menus';
 
 	import Main from './Main.svelte';
 	import Project from './Project.svelte';
-	const componentMap = new Map<typeof tabs[number], SvelteComponent>([
-        ['Main', Main as unknown as SvelteComponent],
-		['Project', Project as unknown as SvelteComponent],
+	const componentMap = new Map<typeof tabs[number], typeof SvelteComponent>([
+        ['Main', Main],
+		['Project', Project],
 	]);
+
+    console.log(
+        Main instanceof SvelteComponent, 
+        Project instanceof SvelteComponent,
+        typeof SvelteComponent
+    )
 
     $: activeTabName = tabs[$activeTabSt]
     $: activeSideMenu = componentMap.get(activeTabName)

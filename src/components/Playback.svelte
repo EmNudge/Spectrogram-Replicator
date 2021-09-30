@@ -1,6 +1,4 @@
 <script lang="ts">
-import { onMount } from 'svelte';
-
 	import { durationSt, currentTimeSt } from '../stores/sound';
 
 	const displayText = (secs: number) =>

@@ -9,12 +9,6 @@
 		['Project', Project],
 	]);
 
-    console.log(
-        Main instanceof SvelteComponent, 
-        Project instanceof SvelteComponent,
-        typeof SvelteComponent
-    )
-
     $: activeTabName = tabs[$activeTabSt]
     $: activeSideMenu = componentMap.get(activeTabName)
 </script>

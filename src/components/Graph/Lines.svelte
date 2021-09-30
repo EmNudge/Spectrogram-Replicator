@@ -28,6 +28,11 @@
 {/if}
 
 <style>
+    line {
+        stroke-width: 2;
+        stroke-dasharray: 15;
+        stroke: #999;
+    }
     .lighten-odd line:nth-child(odd) {
         stroke: #9994;
     }

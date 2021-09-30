@@ -13,7 +13,9 @@
             x: x / rect.width,
             y: y / rect.height,
         }
-        $pointsSt = [...$pointsSt, point];
+
+        $pointsSt = [...$pointsSt, point]
+            .sort((p1, p2) => p1.x - p2.x);
     }
 </script>
 

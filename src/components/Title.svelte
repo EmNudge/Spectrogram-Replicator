@@ -21,7 +21,7 @@
 			bind:value={$authorSt} />
 	</div>
 	<div class="buttons">
-		<button on:click={() => isEditing = !isEditing}>
+		<button on:click={() => isEditing = !isEditing} class:active={isEditing}>
 			<span> 🖉 </span>
 		</button>
 	</div>
@@ -57,6 +57,10 @@
 	button:hover {
 		opacity: 1;
 		cursor: pointer;
+	}
+	button.active {
+		opacity: 1;
+		background: #0001;
 	}
 	input {
 		width: 100%;

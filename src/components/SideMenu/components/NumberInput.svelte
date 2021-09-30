@@ -1,11 +1,16 @@
 <script>
     export let title = 'Input Component';
+    export let min = 0;
+
     export let value = 50;
+
+    let val = value;
+    $: value = Number(val)
 </script>
 
 <label>
     <span>{title}</span>
-    <input type="Number" bind:value={value} />
+    <input type="Number" {min} bind:value={val} />
 </label>
 
 <style>

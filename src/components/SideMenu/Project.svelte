@@ -1,17 +1,27 @@
 <script>
 	import {} from '../../stores/project';
-	import { rowsSt, columnsSt, minFreqSt, maxFreqSt } from '../../stores/graph';
+	import {
+		rowsSt,
+		columnsSt,
+		minFreqSt,
+		maxFreqSt,
+		canvasWidthSt,
+		bgOpacitySt,
+		lightenOddRowsSt,
+		showGridst,
+		debugModeSt
+	} from '../../stores/graph';
 	import {} from '../../stores/sound';
 
 	import Range from './components/Range.svelte';
 	import NumberInput from './components/NumberInput.svelte';
-    import CheckBox from './components/CheckBox.svelte';
+	import CheckBox from './components/CheckBox.svelte';
 </script>
 
 <div class="row title-row">
 	<h2>Graph</h2>
-    <CheckBox title="Show Grid" />
-    <CheckBox title="Debug Mode" />
+	<CheckBox title="Show Grid" bind:checked={$showGridst} />
+	<CheckBox title="Debug Mode" bind:checked={$debugModeSt} />
 </div>
 
 <div class="row">
@@ -28,53 +38,41 @@
 
 <div class="row split">
 	<div>
-        <NumberInput 
-            title="Min Frequency (Hz)"
-            bind:value={$minFreqSt}
-        />
+		<NumberInput title="Min Frequency (Hz)" bind:value={$minFreqSt} />
 	</div>
 	<div>
-        <NumberInput 
-            title="Max Frequency (Hz)"
-            bind:value={$maxFreqSt}
-        />
+		<NumberInput title="Max Frequency (Hz)" bind:value={$maxFreqSt} />
 	</div>
 </div>
 
 <div class="row">
-	<Range title="Background Image Opacity" min={0} max={1} step={0.01} />
+	<Range title="Background Image Opacity" min={0} max={1} step={0.01} bind:value={$bgOpacitySt} />
 </div>
 
 <div class="row">
-    <Range title="Canvas Width" min={600} max={1500} />
+	<Range title="Canvas Width" min={600} max={1500} bind:value={$canvasWidthSt} />
 </div>
 
 <div class="row split">
 	<div>
-        <NumberInput 
-            title="Columns"
-            bind:value={$columnsSt}
-        />
+		<NumberInput title="Columns" min={2} bind:value={$columnsSt} />
 	</div>
 	<div>
-        <NumberInput 
-            title="Rows"
-            bind:value={$rowsSt}
-        />
+		<NumberInput title="Rows" min={2} bind:value={$rowsSt} />
 	</div>
 </div>
 
 <div class="row">
-    <CheckBox title="Lighten Odd Rows" />
+	<CheckBox title="Lighten Odd Rows" bind:checked={$lightenOddRowsSt} />
 </div>
 
 <style>
-    .title-row {
-        display: grid;
-        grid-template-columns: 1fr auto auto;
-        grid-gap: 15px;
-        align-items: center;
-    }
+	.title-row {
+		display: grid;
+		grid-template-columns: 1fr auto auto;
+		grid-gap: 15px;
+		align-items: center;
+	}
 	h2 {
 		margin: 0;
 	}

@@ -1,4 +1,4 @@
 import { writable } from "svelte/store";
 
-export const duration = writable(123);
-export const currentTime = writable(.4);
+export const durationSt = writable(123);
+export const currentTimeSt = writable(.4);

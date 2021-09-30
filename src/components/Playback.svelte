@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { duration, currentTime } from '../stores/sound';
+	import { durationSt, currentTimeSt } from '../stores/sound';
 
 	const displayText = (secs: number) =>
 		String(Math.floor(secs / 60)).padStart(2, '0') +
@@ -8,7 +8,7 @@
 
 	function changeTime(e) {
 		const { left, right } = e.currentTarget.getBoundingClientRect();
-		$currentTime = (e.clientX - left) / (right - left);
+		$currentTimeSt = (e.clientX - left) / (right - left);
 	}
 	const getTimeFromStr = (str) => {
 		const [minute, seconds] = str.split(':');
@@ -17,8 +17,8 @@
 	function handleChangeTime(e) {
 		const [current, goal] = e.target.value.split('/');
 		if (!current || !goal) return;
-		$duration = getTimeFromStr(goal);
-		$currentTime = getTimeFromStr(current) / $duration;
+		$durationSt = getTimeFromStr(goal);
+		$currentTimeSt = getTimeFromStr(current) / $durationSt;
 	}
 </script>
 
@@ -28,16 +28,16 @@
 
 <div class="timeline">
 	<div class="bar-container">
-		<div on:click={changeTime} class="bar" style="--time-perc: {$currentTime};" />
+		<div on:click={changeTime} class="bar" style="--time-perc: {$currentTimeSt};" />
 		<div class="times">
 			{#each Array(10) as _, i}
-				<span>{displayText((i / 10) * $duration)}</span>
+				<span>{displayText((i / 10) * $durationSt)}</span>
 			{/each}
 		</div>
 		<h3>Time (s)</h3>
 	</div>
 	<div class="time" on:input={handleChangeTime}>
-		<input type="text" value="{displayText($duration * $currentTime)}/{displayText($duration)}" />
+		<input type="text" value="{displayText($durationSt * $currentTimeSt)}/{displayText($durationSt)}" />
 	</div>
 </div>
 

@@ -1,6 +1,6 @@
 <script>
 	import {} from '../../stores/project';
-	import { rows, columns, minFreq, maxFreq } from '../../stores/graph';
+	import { rowsSt, columnsSt, minFreqSt, maxFreqSt } from '../../stores/graph';
 	import {} from '../../stores/sound';
 
 	import Range from './components/Range.svelte';
@@ -30,13 +30,13 @@
 	<div>
         <NumberInput 
             title="Min Frequency (Hz)"
-            bind:value={$minFreq}
+            bind:value={$minFreqSt}
         />
 	</div>
 	<div>
         <NumberInput 
             title="Max Frequency (Hz)"
-            bind:value={$maxFreq}
+            bind:value={$maxFreqSt}
         />
 	</div>
 </div>
@@ -53,13 +53,13 @@
 	<div>
         <NumberInput 
             title="Columns"
-            bind:value={$columns}
+            bind:value={$columnsSt}
         />
 	</div>
 	<div>
         <NumberInput 
             title="Rows"
-            bind:value={$rows}
+            bind:value={$rowsSt}
         />
 	</div>
 </div>

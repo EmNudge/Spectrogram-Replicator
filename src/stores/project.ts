@@ -1,4 +1,4 @@
 import { writable } from "svelte/store";
 
-export const title = writable('Spectrogram Replicator');
-export const author = writable('Author');
+export const titleSt = writable('Spectrogram Replicator');
+export const authorSt = writable('Author');

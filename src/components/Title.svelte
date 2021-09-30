@@ -1,5 +1,5 @@
 <script>
-	import { author, title } from '../stores/project'
+	import { authorSt, titleSt } from '../stores/project'
 
 	let isEditing = false;
 </script>
@@ -12,13 +12,13 @@
 			disabled={!isEditing}
 			role="heading"
 			placeholder="Project Title"
-			bind:value={$title} />
+			bind:value={$titleSt} />
 		<input 
 			type="text"
 			disabled={!isEditing}
 			role="heading"
 			placeholder="Project Author"
-			bind:value={$author} />
+			bind:value={$authorSt} />
 	</div>
 	<div class="buttons">
 		<button on:click={() => isEditing = !isEditing}>

@@ -1,6 +1,9 @@
-<script>
-    import { pointsSt } from '../../stores/canvas';
+<script lang="ts">
+    import type { Segment } from '../../../stores/canvas';
 
+    export let segment: Segment;
+
+    $: pointsSt = segment.pointsSt;
     $: points = $pointsSt;
 </script>
 

@@ -1,22 +1,9 @@
 <script lang="ts">
     import { canvasWidthSt } from '../../stores/graph';
-    import { pointsSt } from '../../stores/canvas';
+    import { handleClick } from './utils';
     import Grid from './Grid.svelte';
     import Hertz from './Hertz.svelte';
-    import Canvas from './Canvas.svelte';
-
-    function handleClick(e) {
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - rect.x;
-        const y = e.clientY - rect.y;
-        const point = {
-            x: x / rect.width,
-            y: y / rect.height,
-        }
-
-        $pointsSt = [...$pointsSt, point]
-            .sort((p1, p2) => p1.x - p2.x);
-    }
+    import Canvas from './Canvas/Index.svelte';
 </script>
 
 <Hertz />

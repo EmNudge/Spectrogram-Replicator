@@ -1,4 +1,5 @@
 import { get } from 'svelte/store';
+import type { Bounds } from '../../stores/canvas';
 import { linesSt, nodeToPointSt, activePointsSt, draggerSt } from '../../stores/canvas';
 import { createNewLine, addPointToSegment } from '../../utils/canvas';
 
@@ -98,3 +99,9 @@ const handleSelect = (e: MouseEventHandler<SVGElement>) => {
         return nodeToPoint;
     });
 }
+
+export const getPercBounds = (bounds: Bounds) => 
+    Object.fromEntries(
+        Object.entries(bounds)
+            .map(([key, val]) => [key, `${val * 100}%`])
+    );

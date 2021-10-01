@@ -1,5 +1,7 @@
 <script lang="ts">
     import type { Segment } from '../../../stores/canvas';
+    import { debugModeSt } from '../../../stores/graph';
+    import { getPercBounds } from '../utils';
     import Point from './Point.svelte';
 
     export let segment: Segment;
@@ -22,6 +24,9 @@
     <Point {point} />
 {/each}
 
+{#if $debugModeSt}
+    <rect {...getPercBounds(segment.bounds)} />
+{/if}
 
 <style>
     line {
@@ -29,5 +34,10 @@
         --lightness: 50%;
         stroke: hsl(200, 50%, var(--lightness));
         fill: white;
+    }
+    rect {
+        fill: none;
+        stroke-width: 2px;
+        stroke: orange;
     }
 </style>

@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { Segment } from '../../../stores/canvas';
+    import Point from './Point.svelte';
 
     export let segment: Segment;
 
@@ -17,17 +18,16 @@
     ></line>
 {/each}
 
-{#each points as { x, y }, i}
-    <circle
-        cx="{x * 100}%"
-        cy="{y * 100}%"></circle>
+{#each $pointsSt as point (`${point.x}-${point.y}`)}
+    <Point {point} />
 {/each}
 
+
 <style>
-    circle, line {
-        r: 5;
+    line {
         stroke-width: 3px;
-        stroke: blue;
+        --lightness: 50%;
+        stroke: hsl(200, 50%, var(--lightness));
         fill: white;
     }
 </style>

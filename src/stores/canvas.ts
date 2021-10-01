@@ -26,4 +26,5 @@ export interface Line {
 
 export const linesSt = writable<Line[]>([]);
 
-export const activePointsSt = writable<Point[]>([]);
+export const activePointsSt = writable<WeakSet<Point>>(new WeakSet);
+export const nodeToPointSt = writable<WeakMap<HTMLElement | SVGElement, Point>>(new WeakMap)

@@ -1,5 +1,5 @@
 <script>
-
+    import { linesSt } from "../../stores/canvas";
 </script>
 
 <div class="row title-row">
@@ -9,5 +9,21 @@
 <div>Nothing here yet!</div>
 
 <div>
-    <button>Do Nothing</button>
+    <h3>Lines</h3>
+    <div class="lines">
+        {#each $linesSt as line, i}
+            <span>Line {i}</span>
+        {/each}
+    </div>
 </div>
+
+<style>
+    .lines {
+        display: grid;
+        padding: 5px;
+    }
+    .lines span {
+        padding: 10px;
+        background: #0002;
+    }
+</style>

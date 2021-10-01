@@ -1,11 +1,13 @@
 import { writable } from "svelte/store";
 
-export const tabs = ['Main', 'Project', 'Download', 'Upload'];
-export const tabIcons = new Map<typeof tabs[number], string>([
+export type TabName = 'Main' | 'Project' | 'Export' | 'Import';
+
+export const tabs: TabName[] = ['Main', 'Project', 'Export', 'Import'];
+export const tabIcons = new Map<TabName, string>([
     ['Main', 'line_icon.svg'],
     ['Project', 'graph.svg'],
-    ['Download', 'download.svg'],
-    ['Upload', 'upload.svg'],
+    ['Export', 'download.svg'],
+    ['Import', 'upload.svg'],
 ]);
 
 export const activeTabSt = writable(0);

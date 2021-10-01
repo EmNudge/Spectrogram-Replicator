@@ -4,9 +4,13 @@
 
 	import Main from './Main.svelte';
 	import Project from './Project.svelte';
+	import Export from './Export.svelte';
+	import Import from './Import.svelte';
 	const componentMap = new Map<typeof tabs[number], typeof SvelteComponent>([
         ['Main', Main],
 		['Project', Project],
+		['Export', Export],
+		['Import', Import],
 	]);
 
     $: activeTabName = tabs[$activeTabSt]

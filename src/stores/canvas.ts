@@ -24,7 +24,6 @@ export interface Line {
     segmentsSt: Writable<Segment[]>;
 }
 
-
 export const linesSt = writable<Line[]>([]);
 
 export const activePointsSt = writable<Set<Point>>(new Set);

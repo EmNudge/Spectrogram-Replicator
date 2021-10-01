@@ -11,6 +11,7 @@ export interface Bounds {
 export interface Point {
     x: number;
     y: number;
+    id: Symbol;
     parent: Segment;
 };
 export interface Segment {
@@ -26,5 +27,11 @@ export interface Line {
 
 export const linesSt = writable<Line[]>([]);
 
-export const activePointsSt = writable<WeakSet<Point>>(new WeakSet);
+export const activePointsSt = writable<Set<Point>>(new Set);
 export const nodeToPointSt = writable<WeakMap<HTMLElement | SVGElement, Point>>(new WeakMap)
+
+export interface Dragger {
+    dragOrigin: [number, number];
+    lastDragPos: [number, number]
+};
+export const draggerSt = writable<Dragger | undefined>(undefined);

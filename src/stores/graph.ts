@@ -11,4 +11,3 @@ export const canvasWidthSt = writable(800);
 export const showGridst = writable(true);
 export const debugModeSt = writable(false);
 export const lightenOddRowsSt = writable(true);
-

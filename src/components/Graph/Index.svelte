@@ -1,6 +1,6 @@
 <script lang="ts">
     import { canvasWidthSt } from '../../stores/graph';
-    import { handleClick } from './utils';
+    import { handleMouseDown, handleMouseMove, handleMouseUp } from './utils';
     import Grid from './Grid.svelte';
     import Hertz from './Hertz.svelte';
     import Canvas from './Canvas/Index.svelte';
@@ -11,7 +11,7 @@
 <svg
     class="graph"
     style="--graph-width: {$canvasWidthSt}px;"
-    on:click={handleClick}>
+    on:mousedown={handleMouseDown} on:mousemove={handleMouseMove} on:mouseup={handleMouseUp}>
     <Grid />
     <Canvas />
 </svg>

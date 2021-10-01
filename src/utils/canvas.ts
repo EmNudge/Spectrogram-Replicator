@@ -17,7 +17,7 @@ export const createNewSegment = (line: Line, x: number, y: number): Segment => {
         pointsSt: writable([]),
         parent: line,
     }
-    segment.pointsSt.set([{ x, y, parent: segment }]);
+    segment.pointsSt.set([{ x, y, id: Symbol(), parent: segment }]);
 
     return segment;
 }
@@ -43,9 +43,11 @@ const fixBoundsWithPoint = (bounds: Bounds, points: Point[], x: number, y: numbe
 })
 
 // add point, sort them in order of x, change segment bounds, change line bounds
-export const addPointToSegment = (segment: Segment, x: number, y: number): void => {
+export const addPointToSegment = (segment: Segment, x: number, y: number): Point => {
+    const point = { x, y, id: Symbol(), parent: segment };
+
     segment.pointsSt.update(points => {
-        const newPoints = [...points, { x, y, parent: segment }];
+        const newPoints = [...points, point];
         return newPoints.sort((p1, p2) => p1.x - p2.x);
     });
 
@@ -61,4 +63,6 @@ export const addPointToSegment = (segment: Segment, x: number, y: number): void 
         get(segment.parent.segmentsSt),
         segment.bounds
     );
+
+    return point;
 }

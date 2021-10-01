@@ -15,9 +15,18 @@
 
     $: activeTabName = tabs[$activeTabSt]
     $: activeSideMenu = componentMap.get(activeTabName)
+
+    let isCollapsed = false;
+    function collapse() {
+        isCollapsed = !isCollapsed;
+    }
 </script>
 
-<div class="menu">
+<div class="menu" class:collapsed={isCollapsed}>
+    <button class="collapse-icon" on:click={collapse}>
+        <img class:flipped={isCollapsed} src="/icons/collapse.svg" alt="collapse">
+    </button>
+
     <div class="content">
         <svelte:component this={activeSideMenu} />
     </div>
@@ -32,7 +41,38 @@
         font-size: 14px;
         display: grid;
         grid-template-rows: auto 1fr;
+
+        position: relative;
+        left: 0px;
+        margin-left: 0px;
+        transition: .5s;
     }
+    .menu.collapsed {
+        margin-left: -400px;
+        left: 400px;
+    }
+    .collapse-icon {
+        border: none;
+        background: none;
+        padding: 0;
+
+        position: absolute;
+        --pad: 20px;
+        top: var(--pad);
+        left: calc(-24px - var(--pad));
+    }
+    .collapse-icon img {
+        opacity: .8;
+        width: 24px;
+        transition: .5s;
+    }
+    .collapse-icon img:hover {
+        opacity: 1;
+    }
+    .collapse-icon img.flipped {
+        transform: scaleX(-1);
+    }
+
     .content > :global(*) {
         background: white;
         margin-bottom: var(--gap);

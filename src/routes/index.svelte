@@ -25,6 +25,7 @@
         display: grid;
         grid-template-columns: 1fr auto;
         height: 100%;
+        overflow: hidden;
     }
     section {
         min-width: 700px;

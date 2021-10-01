@@ -67,7 +67,7 @@ export const handleMouseMove = (e: MouseEventHandler<SVGSVGElement>) => {
                     x: point.x + deltaX,
                     y: point.y + deltaY,
                 };
-            }))
+            }).sort((p1, p2) => p1.x - p2.x))
         }
 
         return { dragOrigin, lastDragPos: [x, y] };
@@ -86,9 +86,13 @@ const handleSelect = (e: MouseEventHandler<SVGElement>) => {
 
         activePointsSt.update(activePoints => {
             if (!e.shiftKey) return new Set([point]);
-
             activePoints.add(point);
             return activePoints;
+        });
+
+        draggerSt.set({
+            dragOrigin: [point.x, point.y],
+            lastDragPos: [point.x, point.y]
         });
 
         return nodeToPoint;

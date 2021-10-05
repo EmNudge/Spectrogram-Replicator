@@ -12,14 +12,14 @@ const getPointForEvent = (e: MouseEventHandler<Element>): [number, number] => {
 
 type MouseEventHandler<T> = MouseEvent & { target: Element, currentTarget: EventTarget & T };
 export const handleMouseDown = (e: MouseEventHandler<SVGSVGElement>) => {
+    const [x, y] = getPointForEvent(e);
+
+    draggerSt.set({ lastDragPos: [x, y], dragOrigin: [x, y] });
+
     if (e.target.nodeName === 'circle') {
         handleSelect(e);
         return;
     }
-
-    const [x, y] = getPointForEvent(e);
-
-    draggerSt.set({ lastDragPos: [x, y], dragOrigin: [x, y] });
 
     linesSt.update(lines => {
         if (lines.length) {
@@ -91,13 +91,9 @@ const handleSelect = (e: MouseEventHandler<SVGElement>) => {
 
         activePointsSt.update(activePoints => {
             if (!e.shiftKey) return new Set([point.id]);
+
             activePoints.add(point.id);
             return activePoints;
-        });
-
-        draggerSt.set({
-            dragOrigin: [point.x, point.y],
-            lastDragPos: [point.x, point.y]
         });
 
         return nodeToPoint;

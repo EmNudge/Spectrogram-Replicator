@@ -1,5 +1,6 @@
 <script lang="ts">
     import { canvasWidthSt } from '../../stores/graph';
+    import { draggerSt } from '../../stores/canvas';
     import { handleMouseDown, handleMouseMove, handleMouseUp } from './utils';
     import Grid from './Grid.svelte';
     import Hertz from './Hertz.svelte';
@@ -11,14 +12,18 @@
 <svg
     class="graph"
     style="--graph-width: {$canvasWidthSt}px;"
+    class:dragging={$draggerSt}
     on:mousedown={handleMouseDown} on:mousemove={handleMouseMove} on:mouseup={handleMouseUp}>
     <Grid />
     <Canvas />
 </svg>
 
 <style>
-     .graph {
+    .graph {
         height: 500px;
+    }
+    .dragging :global(circle) {
+        cursor: move;
     }
     svg {
         background: white;

@@ -20,7 +20,7 @@
     ></line>
 {/each}
 
-{#each $pointsSt as point (`${point.x}-${point.y}`)}
+{#each $pointsSt as point (point.id)}
     <Point {point} />
 {/each}
 

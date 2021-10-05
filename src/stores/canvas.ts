@@ -26,8 +26,9 @@ export interface Line {
 
 export const linesSt = writable<Line[]>([]);
 
-export const activePointsSt = writable<Set<Point>>(new Set);
-export const nodeToPointSt = writable<WeakMap<HTMLElement | SVGElement, Point>>(new WeakMap)
+export const activePointsSt = writable<Set<Symbol>>(new Set);
+export const nodeToPointSt = writable<WeakMap<HTMLElement | SVGElement, Point>>(new WeakMap);
+export const symbolPointLookupSt = writable<Map<Symbol, Point>>(new Map);
 
 export interface Dragger {
     dragOrigin: [number, number];

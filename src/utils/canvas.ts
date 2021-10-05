@@ -1,5 +1,6 @@
 import { writable, get } from 'svelte/store';
 import type { Point, Segment, Line, Bounds } from '../stores/canvas';
+import { symbolPointLookupSt } from '../stores/canvas';
 
 export const createNewLine = (x: number, y: number): Line => {
     const line: Line = {
@@ -17,9 +18,21 @@ export const createNewSegment = (line: Line, x: number, y: number): Segment => {
         pointsSt: writable([]),
         parent: line,
     }
-    segment.pointsSt.set([{ x, y, id: Symbol(), parent: segment }]);
+    segment.pointsSt.set([createNewPoint(x, y, segment)]);
 
     return segment;
+}
+
+export const createNewPoint = (x: number, y: number, segment: Segment) => {
+    const id = Symbol();
+    const point = { x, y, id, parent: segment };
+
+    symbolPointLookupSt.update(symbolPointLookup => {
+        symbolPointLookup.set(id, point);
+        return symbolPointLookup;
+    });
+
+    return point;
 }
 
 // just going off of ordering, we can get the right and left bounds based on the segments ordering. 
@@ -44,7 +57,7 @@ const fixBoundsWithPoint = (bounds: Bounds, points: Point[], x: number, y: numbe
 
 // add point, sort them in order of x, change segment bounds, change line bounds
 export const addPointToSegment = (segment: Segment, x: number, y: number): Point => {
-    const point = { x, y, id: Symbol(), parent: segment };
+    const point = createNewPoint(x, y, segment);
 
     segment.pointsSt.update(points => {
         const newPoints = [...points, point];

@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 import type { Bounds } from '../../stores/canvas';
-import { linesSt, nodeToPointSt, activePointsSt, draggerSt } from '../../stores/canvas';
+import { linesSt, nodeToPointSt, activePointsSt, draggerSt, symbolPointLookupSt } from '../../stores/canvas';
 import { createNewLine, addPointToSegment } from '../../utils/canvas';
 
 const getPointForEvent = (e: MouseEventHandler<Element>): [number, number] => {
@@ -28,7 +28,7 @@ export const handleMouseDown = (e: MouseEventHandler<SVGSVGElement>) => {
                 const segment = segments[segments.length - 1];
 
                 const point = addPointToSegment(segment, x, y);
-                activePointsSt.set(new Set([point]));
+                activePointsSt.set(new Set([point.id]));
 
                 return segments;
             })
@@ -36,7 +36,7 @@ export const handleMouseDown = (e: MouseEventHandler<SVGSVGElement>) => {
         } else {
             const line = createNewLine(x, y);
             const point = get(get(line.segmentsSt)[0].pointsSt)[0];
-            activePointsSt.set(new Set([point]));
+            activePointsSt.set(new Set([point.id]));
 
             return [line];
         }
@@ -49,6 +49,8 @@ export const handleMouseMove = (e: MouseEventHandler<SVGSVGElement>) => {
 
     const [x, y] = getPointForEvent(e);
 
+    const symbolPointLookup = get(symbolPointLookupSt);
+
     draggerSt.update((dragger) => {
         // impossible path since already handled, but to satisfy TS
         if (!dragger) return dragger;
@@ -59,7 +61,9 @@ export const handleMouseMove = (e: MouseEventHandler<SVGSVGElement>) => {
         const deltaX = x - lastX;
         const deltaY = y - lastY;
 
-        for (const activePoint of get(activePointsSt)) {
+        for (const pointId of get(activePointsSt)) {
+            const activePoint = symbolPointLookup.get(pointId)!;
+
             activePoint.parent.pointsSt.update(points => points.map((point) => {
                 if (point.id !== activePoint.id) return point;
                 
@@ -86,8 +90,8 @@ const handleSelect = (e: MouseEventHandler<SVGElement>) => {
         }
 
         activePointsSt.update(activePoints => {
-            if (!e.shiftKey) return new Set([point]);
-            activePoints.add(point);
+            if (!e.shiftKey) return new Set([point.id]);
+            activePoints.add(point.id);
             return activePoints;
         });
 

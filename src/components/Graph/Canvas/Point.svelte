@@ -13,7 +13,7 @@
 
 <circle
     bind:this={node}
-    class:active={$activePointsSt.has(point)}
+    class:active={$activePointsSt.has(point.id)}
     cx="{point.x * 100}%"
     cy="{point.y * 100}%"></circle>
 

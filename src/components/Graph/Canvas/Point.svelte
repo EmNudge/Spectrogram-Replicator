@@ -27,9 +27,9 @@
     }
     circle:hover {
         cursor: pointer;
-        --lightness: 70%;
+        --lightness: 60%;
     }
     .active {
-        --lightness: 90%;
+        --lightness: 75%;
     }
 </style>

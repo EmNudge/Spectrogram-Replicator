@@ -4,8 +4,9 @@ import { symbolPointLookupSt } from '../stores/canvas';
 
 export const createNewLine = (x: number, y: number): Line => {
     const line: Line = {
+        id: Symbol(),
         bounds: { x, y, width: 0, height: 0 },
-        segmentsSt: writable([])
+        segmentsSt: writable([]),
     };
     line.segmentsSt.set([createNewSegment(line, x, y)]);
 
@@ -16,6 +17,7 @@ export const createNewSegment = (line: Line, x: number, y: number): Segment => {
     const segment: Segment = {
         bounds: { x, y, width: 0, height: 0 },
         pointsSt: writable([]),
+        id: Symbol(),
         parent: line,
     }
     segment.pointsSt.set([createNewPoint(x, y, segment)]);

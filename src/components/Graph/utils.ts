@@ -1,5 +1,6 @@
 import { get } from 'svelte/store';
 import type { Bounds } from '../../stores/canvas';
+import { activeLineSt, symbolLineLookupSt } from '../../stores/canvas';
 import { linesSt, nodeToPointSt, activePointsSt, draggerSt, symbolPointLookupSt } from '../../stores/canvas';
 import { createNewLine, addPointToSegment } from '../../utils/canvas';
 
@@ -35,6 +36,12 @@ export const handleMouseDown = (e: MouseEventHandler<SVGSVGElement>) => {
             return lines;
         } else {
             const line = createNewLine(x, y);
+            activeLineSt.set(line.id);
+            symbolLineLookupSt.update(symbolLineLookup => {
+                symbolLineLookup.set(line.id, line);
+                return symbolLineLookup;
+            });
+
             const point = get(get(line.segmentsSt)[0].pointsSt)[0];
             activePointsSt.set(new Set([point.id]));
 

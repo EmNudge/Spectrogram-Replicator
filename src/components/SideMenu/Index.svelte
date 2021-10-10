@@ -89,8 +89,9 @@
         width: 100px;
     }
     .menu :global(button) {
-        padding: 20px 30px;
+        padding: 5px 30px;
         width: max-content;
+        border: 1px solid #0003;
     }
     .spacer {
         height: 100%;

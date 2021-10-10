@@ -1,6 +1,6 @@
 <script lang="ts">
-    import { canvasWidthSt } from '../../stores/graph';
-    import { draggerSt } from '../../stores/canvas';
+    import { canvasWidthSt } from '$stores/graph';
+    import { draggerSt } from '$stores/canvas';
     import { handleMouseDown, handleMouseMove, handleMouseUp } from './utils';
     import Grid from './Grid.svelte';
     import Hertz from './Hertz.svelte';

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { tabs, tabIcons, activeTabSt } from '../stores/menus';
+    import { tabs, tabIcons, activeTabSt } from '$stores/menus';
 </script>
 
 <header>

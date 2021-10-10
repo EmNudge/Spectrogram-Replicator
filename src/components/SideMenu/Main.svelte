@@ -1,6 +1,6 @@
 <script lang="ts">
     import { createTempLine } from "../../utils/canvas";
-    import { activeLineSt, Color, linesSt, symbolLineLookupSt } from "../../stores/canvas";
+    import { activeLineSt, Color, linesSt, symbolLineLookupSt } from "$stores/canvas";
     import Line from './components/Line.svelte';
 
     function addLine() {

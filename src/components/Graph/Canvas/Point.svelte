@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type { Point } from '../../../stores/canvas';
+    import type { Point } from '$stores/canvas';
     import { onMount } from 'svelte';
-    import { activePointsSt, nodeToPointSt } from '../../../stores/canvas';
+    import { activePointsSt, nodeToPointSt } from '$stores/canvas';
     
     export let point: Point;
 

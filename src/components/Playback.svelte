@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { durationSt, currentTimeSt } from '../stores/sound';
+	import { durationSt, currentTimeSt } from '$stores/sound';
 
 	const displayText = (secs: number) =>
 		String(Math.floor(secs / 60)).padStart(2, '0') +

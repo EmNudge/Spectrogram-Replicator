@@ -1,5 +1,4 @@
 <script>
-	import {} from '../../stores/project';
 	import {
 		rowsSt,
 		columnsSt,
@@ -10,8 +9,8 @@
 		lightenOddRowsSt,
 		showGridst,
 		debugModeSt
-	} from '../../stores/graph';
-	import {} from '../../stores/sound';
+	} from '$stores/graph';
+	import {} from '$stores/sound';
 
 	import Range from './components/Range.svelte';
 	import NumberInput from './components/NumberInput.svelte';

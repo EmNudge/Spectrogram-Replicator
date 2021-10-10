@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { rowsSt, maxFreqSt, lightenOddRowsSt, minFreqSt } from '../../stores/graph';
+    import { rowsSt, maxFreqSt, lightenOddRowsSt, minFreqSt } from '$stores/graph';
 
     $: delta = $maxFreqSt - $minFreqSt;
     $: maxSize = Math.floor(Math.log10($maxFreqSt) + 1);

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { rowsSt, columnsSt, showGridst, lightenOddRowsSt } from '../../stores/graph';
+    import { rowsSt, columnsSt, showGridst, lightenOddRowsSt } from '$stores/graph';
 </script>
 
 {#if $showGridst}

@@ -1,5 +1,5 @@
 <script>
-	import { authorSt, titleSt } from '../stores/project'
+	import { authorSt, titleSt } from '$stores/project'
 
 	let isEditing = false;
 </script>

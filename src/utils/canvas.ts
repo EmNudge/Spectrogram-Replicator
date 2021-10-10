@@ -1,6 +1,6 @@
 import { writable, get } from 'svelte/store';
-import type { Point, Segment, Line, Bounds, TempLine } from '../stores/canvas';
-import { symbolPointLookupSt, Color } from '../stores/canvas';
+import type { Point, Segment, Line, Bounds, TempLine } from '$stores/canvas';
+import { symbolPointLookupSt, Color } from '$stores/canvas';
 
 export const createNewLine = (x: number, y: number): Line => {
     const line: Line = {

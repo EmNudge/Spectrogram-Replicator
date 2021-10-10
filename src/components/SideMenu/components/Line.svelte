@@ -1,5 +1,5 @@
 <script>
-    import { activeLineSt } from "../../../stores/canvas";
+    import { activeLineSt } from "$stores/canvas";
 
     export let line;
 

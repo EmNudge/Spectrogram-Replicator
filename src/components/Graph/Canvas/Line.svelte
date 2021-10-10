@@ -1,6 +1,6 @@
 <script lang="ts">
-    import type { Line } from '../../../stores/canvas';
-    import { debugModeSt } from '../../../stores/graph';
+    import type { Line } from '$stores/canvas';
+    import { debugModeSt } from '$stores/graph';
     import Segment from './Segment.svelte';
     import { getPercBounds } from '../utils';
 

@@ -1,7 +1,7 @@
 import { get } from 'svelte/store';
-import type { Bounds } from '../../stores/canvas';
-import { activeLineSt, symbolLineLookupSt } from '../../stores/canvas';
-import { linesSt, nodeToPointSt, activePointsSt, draggerSt, symbolPointLookupSt } from '../../stores/canvas';
+import type { Bounds } from '$stores/canvas';
+import { activeLineSt, symbolLineLookupSt } from '$stores/canvas';
+import { linesSt, nodeToPointSt, activePointsSt, draggerSt, symbolPointLookupSt } from '$stores/canvas';
 import { createNewLine, addPointToSegment, getLineFromTempLine } from '../../utils/canvas';
 
 const getPointForEvent = (e: MouseEventHandler<Element>): [number, number] => {

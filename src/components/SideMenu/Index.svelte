@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { SvelteComponent } from 'svelte';
-	import { tabs, activeTabSt } from '../../stores/menus';
+	import { tabs, activeTabSt } from '$stores/menus';
 
 	import Main from './Main.svelte';
 	import Project from './Project.svelte';

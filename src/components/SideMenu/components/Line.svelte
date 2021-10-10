@@ -5,8 +5,6 @@
 
     $: colorSt = line.colorSt;
     $: nameSt = line.nameSt;
-
-    $: console.log($activeLineSt)
 </script>
 
 <div 

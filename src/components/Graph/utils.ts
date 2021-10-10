@@ -2,7 +2,7 @@ import { get } from 'svelte/store';
 import type { Bounds } from '../../stores/canvas';
 import { activeLineSt, symbolLineLookupSt } from '../../stores/canvas';
 import { linesSt, nodeToPointSt, activePointsSt, draggerSt, symbolPointLookupSt } from '../../stores/canvas';
-import { createNewLine, addPointToSegment } from '../../utils/canvas';
+import { createNewLine, addPointToSegment, getLineFromTempLine } from '../../utils/canvas';
 
 const getPointForEvent = (e: MouseEventHandler<Element>): [number, number] => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -25,7 +25,19 @@ export const handleMouseDown = (e: MouseEventHandler<SVGSVGElement>) => {
     linesSt.update(lines => {
         if (lines.length) {
             const line = get(symbolLineLookupSt).get(get(activeLineSt))!;
-            if (!('segmentsSt' in line)) return lines;
+            if (!('segmentsSt' in line)) {
+                console.log('make new line!')
+                const newLine = getLineFromTempLine(line, x, y);
+                symbolLineLookupSt.update(symbolLineLookup => {
+                    symbolLineLookup.set(line.id, newLine);
+                    return symbolLineLookup;
+                });
+
+                const point = get(get(newLine.segmentsSt)[0].pointsSt)[0];
+                activePointsSt.set(new Set([point.id]));
+
+                return lines.map(line => line.id === newLine.id ? newLine : line);
+            }
 
             line.segmentsSt.update(segments => {
                 const segment = segments[segments.length - 1];

@@ -28,8 +28,6 @@
 	<h2>Line Manager</h2>
 </div>
 
-<div>Nothing here yet!</div>
-
 <div>
     <h3>Lines</h3>
     <div class="lines">
@@ -46,9 +44,7 @@
 
 {#if $activeLineSt}
     <div>
-        <h3>
-            Line Color
-        </h3>
+        <h3>Line Color</h3>
 
         <div class="colors" on:click={handleColorClick}>
             {#each Object.values(Color) as color}

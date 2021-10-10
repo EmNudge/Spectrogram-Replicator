@@ -25,6 +25,19 @@ export const createTempLine = (): TempLine => {
     return line;
 }
 
+export const isTempLine = (line: TempLine | Line) => 'segmentsSt' in line;
+export const getLineFromTempLine = (line: TempLine, x: number, y: number) => {
+    const newLine: Line = {
+        ...line,
+        bounds: { x, y, width: 0, height: 0 },
+        segmentsSt: writable([]),
+    };
+
+    newLine.segmentsSt.set([createNewSegment(newLine, x, y)]);
+ 
+    return newLine;
+}
+
 export const createNewSegment = (line: Line, x: number, y: number): Segment => {
     const segment: Segment = {
         bounds: { x, y, width: 0, height: 0 },

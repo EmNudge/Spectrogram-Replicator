@@ -33,8 +33,8 @@ export interface Segment extends TempSegment {
     parent: Line;
 };
 export interface TempLine {
-    name: string;
-    color: Color;
+    nameSt: Writable<string>;
+    colorSt: Writable<Color>;
     id: Symbol;
 }
 export interface Line extends TempLine {

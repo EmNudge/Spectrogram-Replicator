@@ -1,6 +1,7 @@
 <script lang="ts">
     import { createTempLine } from "../../utils/canvas";
-    import { activeLineSt, linesSt, symbolLineLookupSt } from "../../stores/canvas";
+    import { activeLineSt, Color, linesSt, symbolLineLookupSt } from "../../stores/canvas";
+    import Line from './components/Line.svelte';
 
     function addLine() {
         const line = createTempLine();
@@ -10,6 +11,16 @@
             return symbolLineLookup;
         });
         $linesSt = [...$linesSt, line];
+    }
+
+    $: activeLine = $symbolLineLookupSt.get($activeLineSt)!;
+    $: activeColorSt = activeLine?.colorSt;
+
+    function handleColorClick(e) {
+        if (e.target.localName !== 'button') return;
+
+        const color = Number(e.target.dataset.color);
+        $activeColorSt = color;
     }
 </script>
 
@@ -23,16 +34,7 @@
     <h3>Lines</h3>
     <div class="lines">
         {#each $linesSt as line (line.id)}
-            <div 
-                class="line" 
-                class:active={$activeLineSt == line.id}
-                on:click={() => $activeLineSt = line.id}
-            >
-                <span class="box" style="--col: {line.color}"></span>    
-                <span>
-                    {line.name}
-                </span>
-            </div>
+            <Line {line} />
         {/each}
     </div>
 </div>
@@ -45,11 +47,21 @@
 {#if $activeLineSt}
     <div>
         <h3>
-            Active Line
+            Line Color
         </h3>
 
-        <button>Change Color</button>
-        <button>Select All points</button>
+        <div class="colors" on:click={handleColorClick}>
+            {#each Object.values(Color) as color}
+                {#if !isNaN(Number(color))}
+                    <button 
+                        class="color"
+                        class:active={color === $activeColorSt}
+                        style="--col: {color}"
+                        data-color={color}
+                    ></button>
+                {/if}
+            {/each}
+        </div>
     </div>
 {/if}
 
@@ -58,21 +70,20 @@
         display: grid;
         padding: 5px;
     }
-    .line {
+    .colors {
         display: flex;
-        background: #0001;
-        padding: 5px 10px;
-        align-items: center;
-        cursor: pointer;
     }
-    .active {
-        background: #0002;
-        cursor: inherit;
-    }
-    .box {
-        height: 15px;
-        width: 15px;
+    .colors .color {
+        height: 25px;
+        width: 25px;
+        padding: 0;
+        border-radius: 0;
+        margin: 10px;
+        border: none;
         background: hsl(var(--col), 50%, 50%);
-        margin-right: 10px;
+    }
+    .colors .color.active {
+        outline: 2px solid black;
+        opacity: .5;
     }
 </style>

@@ -4,8 +4,8 @@ import { symbolPointLookupSt, Color } from '../stores/canvas';
 
 export const createNewLine = (x: number, y: number): Line => {
     const line: Line = {
-        name: 'Line',
-        color: Color.RED,
+        nameSt: writable('Line'),
+        colorSt: writable(Color.RED),
         id: Symbol(),
         bounds: { x, y, width: 0, height: 0 },
         segmentsSt: writable([]),
@@ -17,8 +17,8 @@ export const createNewLine = (x: number, y: number): Line => {
 
 export const createTempLine = (): TempLine => {
     const line = {
-        name: 'Line',
-        color: Color.RED,
+        nameSt: writable('Line'),
+        colorSt: writable(Color.RED),
         id: Symbol(),
     };
 

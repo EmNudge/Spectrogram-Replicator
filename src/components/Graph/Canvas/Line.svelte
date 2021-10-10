@@ -5,11 +5,12 @@
     import { getPercBounds } from '../utils';
 
     export let line: Line;
+    $: colorSt = line.colorSt;
     $: segmentsSt = line.segmentsSt;
 </script>
 
 {#each $segmentsSt as segment}
-    <Segment {segment} color={line.color} />
+    <Segment {segment} color={$colorSt} />
 {/each}
 
 {#if $debugModeSt}

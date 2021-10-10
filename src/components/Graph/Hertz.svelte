@@ -20,7 +20,7 @@
 
 <style>
     .frequencies {
-        height: 500px;
+        height: 450px;
     }
     .frequencies {
         display: grid;

@@ -103,6 +103,7 @@
 	.times {
 		display: grid;
 		grid-auto-flow: column;
+		font-size: 12px;
 	}
 	input {
 		width: 80px;

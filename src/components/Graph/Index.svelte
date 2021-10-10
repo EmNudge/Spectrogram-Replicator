@@ -20,7 +20,7 @@
 
 <style>
     .graph {
-        height: 500px;
+        height: 450px;
     }
     .dragging :global(circle) {
         cursor: move;

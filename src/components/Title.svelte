@@ -30,7 +30,7 @@
 <style>
 	.text-container {
 		display: grid;
-        grid-template-rows: 60px 1fr;
+        grid-template-rows: 45px 1fr;
 		grid-gap: 10px;
 	}
 	.title {
@@ -72,15 +72,16 @@
 		margin: 0;
 		padding: 0;
 		color: #4f4f4f;
-		font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+		font-family: 'Open Sans', sans-serif;
 	}
     .text-container input:first-child {
-		font-size: 2.5em;
-		height: 2.6rem;
+		font-size: 2.15em;
+		height: 3.5rem;
     }
     .text-container input:last-child {
 		font-size: 1.5em;
 		height: 1.6rem;
+		font-weight: 400;
     }
     input:disabled {
 		border: 1px solid transparent;

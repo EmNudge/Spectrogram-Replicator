@@ -34,7 +34,7 @@
     }
     section.main {
         display: grid;
-        grid-template-columns: 60px 1fr;
+        grid-template-columns: 70px 1fr;
         grid-template-rows: auto auto auto 1fr;
         grid-gap: 20px 10px;
     }

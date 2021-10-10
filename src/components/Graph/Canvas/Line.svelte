@@ -9,7 +9,7 @@
 </script>
 
 {#each $segmentsSt as segment}
-    <Segment {segment} />
+    <Segment {segment} color={line.color} />
 {/each}
 
 {#if $debugModeSt}

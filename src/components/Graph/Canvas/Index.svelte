@@ -4,5 +4,7 @@
 </script>
 
 {#each $linesSt as line}
-    <Line {line} />
+    {#if 'segmentsSt' in line}
+        <Line {line} />
+    {/if}
 {/each}

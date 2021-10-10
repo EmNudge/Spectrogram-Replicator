@@ -22,7 +22,7 @@
         r: 5;
         stroke-width: 3px;
         --lightness: 50%;
-        stroke: hsl(200, 50%, var(--lightness));
+        stroke: hsl(var(--col), 50%, var(--lightness));
         fill: white;
     }
     circle:hover {

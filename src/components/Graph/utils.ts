@@ -24,7 +24,9 @@ export const handleMouseDown = (e: MouseEventHandler<SVGSVGElement>) => {
 
     linesSt.update(lines => {
         if (lines.length) {
-            const line = lines[lines.length - 1];
+            const line = get(symbolLineLookupSt).get(get(activeLineSt))!;
+            if (!('segmentsSt' in line)) return lines;
+
             line.segmentsSt.update(segments => {
                 const segment = segments[segments.length - 1];
 

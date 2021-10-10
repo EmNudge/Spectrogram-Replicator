@@ -1,9 +1,11 @@
 import { writable, get } from 'svelte/store';
-import type { Point, Segment, Line, Bounds } from '../stores/canvas';
-import { symbolPointLookupSt } from '../stores/canvas';
+import type { Point, Segment, Line, Bounds, TempLine } from '../stores/canvas';
+import { symbolPointLookupSt, Color } from '../stores/canvas';
 
 export const createNewLine = (x: number, y: number): Line => {
     const line: Line = {
+        name: 'Line',
+        color: Color.RED,
         id: Symbol(),
         bounds: { x, y, width: 0, height: 0 },
         segmentsSt: writable([]),
@@ -12,6 +14,16 @@ export const createNewLine = (x: number, y: number): Line => {
 
     return line;
 };
+
+export const createTempLine = (): TempLine => {
+    const line = {
+        name: 'Line',
+        color: Color.RED,
+        id: Symbol(),
+    };
+
+    return line;
+}
 
 export const createNewSegment = (line: Line, x: number, y: number): Segment => {
     const segment: Segment = {

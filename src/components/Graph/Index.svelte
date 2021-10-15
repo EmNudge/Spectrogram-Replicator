@@ -5,6 +5,7 @@
     import Grid from './Grid.svelte';
     import Hertz from './Hertz.svelte';
     import Canvas from './Canvas/Index.svelte';
+import { currentTimePercSt } from '$stores/sound';
 </script>
 
 <Hertz />
@@ -15,6 +16,7 @@
     class:dragging={$draggerSt}
     on:mousedown={handleMouseDown} on:mousemove={handleMouseMove} on:mouseup={handleMouseUp}>
     <Grid />
+    <rect x="{$currentTimePercSt * 100}%" y="0%"></rect>
     <Canvas />
 </svg>
 
@@ -29,6 +31,12 @@
         background: white;
         width: 100%;
         border-radius: 4px;
+    }
+    rect {
+        fill: #0003;
+        width: 2px;
+        height: 100%;
+        transition: .05s;
     }
     .graph {
         min-width: var(--graph-width);

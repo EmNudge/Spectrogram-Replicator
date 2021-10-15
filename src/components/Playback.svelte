@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { durationSt, currentTimeSt } from '$stores/sound';
+	import { durationSt, currentTimePercSt } from '$stores/sound';
 
 	const displayText = (secs: number) =>
 		String(Math.floor(secs / 60)).padStart(2, '0') +
@@ -16,7 +16,7 @@
 		const [current, goal] = e.target.value.split('/');
 		if (!current || !goal) return;
 		$durationSt = getTimeFromStr(goal);
-		$currentTimeSt = getTimeFromStr(current) / $durationSt;
+		$currentTimePercSt = getTimeFromStr(current) / $durationSt;
 	}
 
 	let isPlaying = false;
@@ -25,22 +25,22 @@
 	
 	function handleRangeTime(e) {
 		const { left, right } = e.currentTarget.getBoundingClientRect();
-		$currentTimeSt = (e.clientX - left) / (right - left);
+		$currentTimePercSt = (e.clientX - left) / (right - left);
 		
 		startTime = performance.now();
-		lastPausedTime = $currentTimeSt;
+		lastPausedTime = $currentTimePercSt;
 	}
 
 	function playLoop() {
 		if (!isPlaying) return;
 
 		const delta = performance.now() - startTime;
-		$currentTimeSt = lastPausedTime + (delta / 1000) / $durationSt;
+		$currentTimePercSt = lastPausedTime + (delta / 1000) / $durationSt;
 
-		if ($currentTimeSt >= 1) {
-			$currentTimeSt = 1;
+		if ($currentTimePercSt >= 1) {
+			$currentTimePercSt = 1;
 			isPlaying = false;
-			$currentTimeSt = 0;
+			$currentTimePercSt = 0;
 			return;
 		}
 		requestAnimationFrame(playLoop);
@@ -48,7 +48,7 @@
 	function toggleAudio() {
 		isPlaying = !isPlaying;
 		if (isPlaying) {
-			lastPausedTime = $currentTimeSt;
+			lastPausedTime = $currentTimePercSt;
 			startTime = performance.now()
 			playLoop();
 		}
@@ -61,7 +61,7 @@
 
 <div class="timeline">
 	<div class="bar-container">
-		<div on:click={handleRangeTime} class="bar" style="--time-perc: {$currentTimeSt};" />
+		<div on:click={handleRangeTime} class="bar" style="--time-perc: {$currentTimePercSt};" />
 		<div class="times">
 			{#each Array(10) as _, i}
 				<span>{displayText((i / 10) * $durationSt)}</span>
@@ -70,7 +70,7 @@
 		<h3>Time (s)</h3>
 	</div>
 	<div class="time" on:input={handleChangeTime}>
-		<input type="text" value="{displayText($durationSt * $currentTimeSt)}/{displayText($durationSt)}" />
+		<input type="text" value="{displayText($durationSt * $currentTimePercSt)}/{displayText($durationSt)}" />
 	</div>
 </div>
 

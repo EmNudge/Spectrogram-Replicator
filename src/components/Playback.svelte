@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { durationSt, currentTimePercSt } from '$stores/sound';
+	import { durationSt, currentTimePercSt, currentTimeSt } from '$stores/sound';
 
 	const displayText = (secs: number) =>
 		String(Math.floor(secs / 60)).padStart(2, '0') +
@@ -70,7 +70,7 @@
 		<h3>Time (s)</h3>
 	</div>
 	<div class="time" on:input={handleChangeTime}>
-		<input type="text" value="{displayText($durationSt * $currentTimePercSt)}/{displayText($durationSt)}" />
+		<input type="text" value="{displayText($currentTimeSt)}/{displayText($durationSt)}" />
 	</div>
 </div>
 

@@ -1,5 +1,7 @@
 <script lang="ts">
+	import { linesSt } from '$stores/canvas';
 	import { durationSt, currentTimePercSt, currentTimeSt } from '$stores/sound';
+	import { playLine } from '../audio';
 
 	const displayText = (secs: number) =>
 		String(Math.floor(secs / 60)).padStart(2, '0') +
@@ -48,6 +50,11 @@
 	function toggleAudio() {
 		isPlaying = !isPlaying;
 		if (isPlaying) {
+			for (const line of $linesSt) {
+				if ('segmentsSt' in line) playLine(line);
+			}
+			$currentTimePercSt = 0;
+
 			lastPausedTime = $currentTimePercSt;
 			startTime = performance.now()
 			playLoop();

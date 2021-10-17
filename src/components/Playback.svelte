@@ -51,9 +51,9 @@
 		isPlaying = !isPlaying;
 		if (isPlaying) {
 			for (const line of $linesSt) {
-				if ('segmentsSt' in line) playLine(line);
+				if (!('segmentsSt' in line)) continue;
+				playLine(line, $currentTimePercSt);
 			}
-			$currentTimePercSt = 0;
 
 			lastPausedTime = $currentTimePercSt;
 			startTime = performance.now()

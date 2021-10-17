@@ -32,8 +32,10 @@
 		
 		startTime = performance.now();
 		lastPausedTime = $currentTimePercSt;
-		linePlayer?.stop();
-		linePlayer = playLines();
+		if (isPlaying) {
+			linePlayer?.stop();
+			linePlayer = playLines();
+		}
 	}
 
 	function playLoop() {

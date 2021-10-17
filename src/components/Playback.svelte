@@ -68,7 +68,7 @@
 <div class="play-container">
 	<button on:click={toggleAudio}>
 		<svg width="55" height="68" viewBox="0 0 55 68" fill="none" xmlns="http://www.w3.org/2000/svg">
-			{#if isPlaying}
+			{#if !isPlaying}
 				<path d="M55 34L2.38419e-07 68L2.38419e-07 0L55 34Z" fill="grey"/>
 			{:else}
 				<rect width="15" height="68" fill="grey"/>

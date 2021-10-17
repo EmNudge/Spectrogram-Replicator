@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { linesSt } from '$stores/canvas';
 	import { durationSt, currentTimePercSt, currentTimeSt } from '$stores/sound';
 	import { playLines } from '../audio';
 
@@ -67,7 +66,16 @@
 </script>
 
 <div class="play-container">
-	<button on:click={toggleAudio}>{isPlaying ? '⏸' : '▶'}</button>
+	<button on:click={toggleAudio}>
+		<svg width="55" height="68" viewBox="0 0 55 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+			{#if isPlaying}
+				<path d="M55 34L2.38419e-07 68L2.38419e-07 0L55 34Z" fill="grey"/>
+			{:else}
+				<rect width="15" height="68" fill="grey"/>
+				<rect x="40" width="15" height="68" fill="grey"/>
+			{/if}
+		</svg>
+	</button>
 </div>
 
 <div class="timeline">
@@ -89,6 +97,9 @@
 	.play-container {
 		display: flex;
 		align-items: flex-start;
+	}
+	.play-container svg {
+		height: 16px;
 	}
 	button {
 		height: 32px;

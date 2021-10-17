@@ -22,7 +22,7 @@
 	</div>
 	<div class="buttons">
 		<button on:click={() => isEditing = !isEditing} class:active={isEditing}>
-			<span> 🖉 </span>
+			<img src="/icons/pencil.svg" alt="pencil">
 		</button>
 	</div>
 </div>
@@ -53,6 +53,10 @@
 		opacity: 0.5;
 		display: flex;
 		align-items: center;
+	}
+	button img {
+		height: 12px;
+		margin-left: 1px;
 	}
 	button:hover {
 		opacity: 1;

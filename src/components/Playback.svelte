@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { linesSt } from '$stores/canvas';
 	import { durationSt, currentTimePercSt, currentTimeSt } from '$stores/sound';
-	import { playLine } from '../audio';
+	import { playLines } from '../audio';
 
 	const displayText = (secs: number) =>
 		String(Math.floor(secs / 60)).padStart(2, '0') +
@@ -23,7 +23,8 @@
 
 	let isPlaying = false;
 	let lastPausedTime = 0;
-	let startTime;
+	let startTime: number;
+	let linePlayer: { stop(): void };
 	
 	function handleRangeTime(e) {
 		const { left, right } = e.currentTarget.getBoundingClientRect();
@@ -31,6 +32,8 @@
 		
 		startTime = performance.now();
 		lastPausedTime = $currentTimePercSt;
+		linePlayer?.stop();
+		linePlayer = playLines();
 	}
 
 	function playLoop() {
@@ -50,14 +53,13 @@
 	function toggleAudio() {
 		isPlaying = !isPlaying;
 		if (isPlaying) {
-			for (const line of $linesSt) {
-				if (!('segmentsSt' in line)) continue;
-				playLine(line, $currentTimePercSt);
-			}
+			linePlayer = playLines();
 
 			lastPausedTime = $currentTimePercSt;
 			startTime = performance.now()
 			playLoop();
+		} else {
+			linePlayer?.stop();
 		}
 	}
 </script>

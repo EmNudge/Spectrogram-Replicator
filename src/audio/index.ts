@@ -1,20 +1,11 @@
-import type { Line } from "$stores/canvas";
-import { getSchedule, ScheduleType } from "./getSchedule";
+import { linesSt } from "$stores/canvas";
+import { currentTimePercSt } from "$stores/sound";
+import { get } from "svelte/store";
+import { playLine } from "./playLine";
 
 const GLOBAL_VOLUME = .2;
 
-const ramper = (param: AudioParam) => (value: number, time: number) => 
-    param.linearRampToValueAtTime(value, time);
-
-export function playLine(line: Line, startPerc = 0) {
-    const audioContext = new AudioContext();
-
-    const gainNode = audioContext.createGain();
-    gainNode.gain.value = GLOBAL_VOLUME;
-    gainNode.connect(audioContext.destination);
-
-    const now = audioContext.currentTime;
-
+const nodeGetter = (audioContext: AudioContext, gainNode: GainNode) => () => {
     const segmentGainNode = audioContext.createGain();
     segmentGainNode.connect(gainNode);
     segmentGainNode.gain.value = 0;
@@ -23,15 +14,30 @@ export function playLine(line: Line, startPerc = 0) {
     oscillatorNode.connect(segmentGainNode);
     oscillatorNode.start(0);
 
-    const rampGain = ramper(segmentGainNode.gain);
-    const rampFreq = ramper(oscillatorNode.frequency);
+    return [segmentGainNode, oscillatorNode] as [GainNode, OscillatorNode];
+}
 
-    for (const { type, time, value } of getSchedule(line, startPerc)) {
-        const ramp = type === ScheduleType.GAIN_NODE
-            ? rampGain 
-            : rampFreq;
-        ramp(value, now + time);
+export function playLines() {
+    const audioContext = new AudioContext();
+
+    const gainNode = audioContext.createGain();
+    gainNode.gain.value = GLOBAL_VOLUME;
+    gainNode.connect(audioContext.destination);
+
+    const lines = get(linesSt);
+    const currentTime = get(currentTimePercSt);
+
+    const getNodes = nodeGetter(audioContext, gainNode);
+    const now = audioContext.currentTime;
+
+    for (const line of lines) {
+        if (!('segmentsSt' in line)) continue;
+        playLine(line, currentTime, now, getNodes);
     }
 
-    return audioContext;
+    return {
+        stop() {
+            audioContext.close();
+        },
+    }
 }

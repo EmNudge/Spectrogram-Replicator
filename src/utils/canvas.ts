@@ -1,11 +1,25 @@
 import { writable, get } from 'svelte/store';
 import type { Point, Segment, Line, Bounds, TempLine } from '$stores/canvas';
-import { symbolPointLookupSt, Color } from '$stores/canvas';
+import { symbolPointLookupSt, Color, linesSt } from '$stores/canvas';
+
+const getNewColor = () => {
+    const usedColors = new Set(get(linesSt).map(line => get(line.colorSt)));
+    const colors = Object.values(Color).filter(color => typeof color !== 'string') as number[];
+
+    const leftOverColors = colors.filter(color => !usedColors.has(color));
+    if (leftOverColors.length) {
+        const index = Math.floor(leftOverColors.length * Math.random());
+        return leftOverColors[index];
+    }
+
+    const index = Math.floor(colors.length * Math.random());
+    return colors[index];
+}
 
 export const createNewLine = (x: number, y: number): Line => {
     const line: Line = {
         nameSt: writable('Line'),
-        colorSt: writable(Color.RED),
+        colorSt: writable(getNewColor()),
         id: Symbol(),
         bounds: { x, y, width: 0, height: 0 },
         segmentsSt: writable([]),
@@ -18,7 +32,7 @@ export const createNewLine = (x: number, y: number): Line => {
 export const createTempLine = (): TempLine => {
     const line = {
         nameSt: writable('Line'),
-        colorSt: writable(Color.RED),
+        colorSt: writable(getNewColor()),
         id: Symbol(),
     };
 

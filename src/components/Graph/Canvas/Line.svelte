@@ -7,15 +7,16 @@
     export let line: Line;
     $: colorSt = line.colorSt;
     $: segmentsSt = line.segmentsSt;
+    $: boundsSt = line.boundsSt;
 </script>
+
+{#if $debugModeSt}
+    <rect {...getPercBounds($boundsSt)} />
+{/if}
 
 {#each $segmentsSt as segment}
     <Segment {segment} color={$colorSt} />
 {/each}
-
-{#if $debugModeSt}
-    <rect {...getPercBounds(line.bounds)} />
-{/if}
 
 <style>
     rect {

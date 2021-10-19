@@ -28,7 +28,7 @@ export interface TempSegment {
     id: Symbol;
 }
 export interface Segment extends TempSegment {
-    bounds: Bounds;
+    boundsSt: Writable<Bounds>;
     pointsSt: Writable<Point[]>;
     parent: Line;
 };
@@ -38,7 +38,7 @@ export interface TempLine {
     id: Symbol;
 }
 export interface Line extends TempLine {
-    bounds: Bounds;
+    boundsSt: Writable<Bounds>;
     segmentsSt: Writable<Segment[]>;
 }
 

@@ -9,7 +9,12 @@
 
     $: pointsSt = segment.pointsSt;
     $: points = $pointsSt;
+    $: boundsSt = segment.boundsSt;
 </script>
+
+{#if $debugModeSt}
+    <rect {...getPercBounds($boundsSt)} />
+{/if}
 
 <g style="--col: {color}">
     {#each Array(points.length - 1) as _, i}
@@ -26,10 +31,6 @@
         <Point {point} />
     {/each}
 </g>
-
-{#if $debugModeSt}
-    <rect {...getPercBounds(segment.bounds)} />
-{/if}
 
 <style>
     line {

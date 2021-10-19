@@ -21,7 +21,7 @@ export const createNewLine = (x: number, y: number): Line => {
         nameSt: writable('Line'),
         colorSt: writable(getNewColor()),
         id: Symbol(),
-        bounds: { x, y, width: 0, height: 0 },
+        boundsSt: writable({ x, y, width: 0, height: 0 }),
         segmentsSt: writable([]),
     };
     line.segmentsSt.set([createNewSegment(line, x, y)]);
@@ -43,7 +43,7 @@ export const isTempLine = (line: TempLine | Line) => 'segmentsSt' in line;
 export const getLineFromTempLine = (line: TempLine, x: number, y: number) => {
     const newLine: Line = {
         ...line,
-        bounds: { x, y, width: 0, height: 0 },
+        boundsSt: writable({ x, y, width: 0, height: 0 }),
         segmentsSt: writable([]),
     };
 
@@ -54,7 +54,7 @@ export const getLineFromTempLine = (line: TempLine, x: number, y: number) => {
 
 export const createNewSegment = (line: Line, x: number, y: number): Segment => {
     const segment: Segment = {
-        bounds: { x, y, width: 0, height: 0 },
+        boundsSt: writable({ x, y, width: 0, height: 0 }),
         pointsSt: writable([]),
         id: Symbol(),
         parent: line,
@@ -79,11 +79,11 @@ export const createNewPoint = (x: number, y: number, segment: Segment) => {
 // just going off of ordering, we can get the right and left bounds based on the segments ordering. 
 // The highest and lowest node might be in middle of something, though. We therefore use the newest added segment to check for this.
 const fixBoundsWithBounds = (bounds1: Bounds, segments: Segment[], bounds2: Bounds): Bounds => {
-    const lastSegment = segments[segments.length - 1];
-    const { x } = segments[0].bounds;
+    const lastSegmentBounds = get(segments[segments.length - 1].boundsSt);
+    const { x } = get(segments[0].boundsSt);
     const y = Math.min(bounds1.y, bounds2.y);
     
-    const segWidth = lastSegment.bounds.width + lastSegment.bounds.x - bounds1.width;
+    const segWidth = lastSegmentBounds.width + lastSegmentBounds.x - bounds1.width;
     const width = Math.max(bounds1.width, segWidth);
     const height = Math.max(bounds1.height, bounds2.height)
 
@@ -105,18 +105,18 @@ export const addPointToSegment = (segment: Segment, x: number, y: number): Point
         return newPoints.sort((p1, p2) => p1.x - p2.x);
     });
 
-    segment.bounds = fixBoundsWithPoint(
-        segment.bounds,
+    segment.boundsSt.update(bounds => fixBoundsWithPoint(
+        bounds,
         get(segment.pointsSt),
         x,
         y,
-    );
+    ));
 
-    segment.parent.bounds = fixBoundsWithBounds(
-        segment.parent.bounds,
+    segment.parent.boundsSt.update(bounds => fixBoundsWithBounds(
+        bounds,
         get(segment.parent.segmentsSt),
-        segment.bounds
-    );
+        get(segment.boundsSt)
+    ));
 
     return point;
 }

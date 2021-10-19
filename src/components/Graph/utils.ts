@@ -1,5 +1,5 @@
 import { get } from 'svelte/store';
-import type { Bounds } from '$stores/canvas';
+import type { Bounds, Segment, Line } from '$stores/canvas';
 import { activeLineSt, symbolLineLookupSt } from '$stores/canvas';
 import { linesSt, nodeToPointSt, activePointsSt, draggerSt, symbolPointLookupSt } from '$stores/canvas';
 import { createNewLine, addPointToSegment, getLineFromTempLine } from '../../utils/canvas';
@@ -82,18 +82,70 @@ export const handleMouseMove = (e: MouseEventHandler<SVGSVGElement>) => {
         const deltaX = x - lastX;
         const deltaY = y - lastY;
 
+        // move active points and get their parent segments
+        // note that while we're mutating, this is not inside of an update, so this is UNTRACKED
+        // We update in a few lines, so this is fine, but we must realize this.
+        const segmentsChanged = new Set<Segment>();
         for (const pointId of get(activePointsSt)) {
             const activePoint = symbolPointLookup.get(pointId)!;
+            activePoint.x += deltaX;
+            activePoint.y += deltaY;
 
-            activePoint.parent.pointsSt.update(points => points.map((point) => {
-                if (point.id !== activePoint.id) return point;
+            segmentsChanged.add(activePoint.parent);
+        }
+
+        // sort segments that had points change and fix bounds
+        const linesChanged = new Set<Line>();
+        for (const segment of segmentsChanged) {
+            linesChanged.add(segment.parent);
+
+            segment.pointsSt.update(points => points.sort((p1, p2) => p1.x - p2.x));
+            segment.boundsSt.update(() => {
+                const points = get(segment.pointsSt);
+
+                let x = points[0].x;
+                let y = points[0].y;
+                let bottom = points[0].y;
+                let right = points[0].x;
+                for (let i = 1; i < points.length; i++) {
+                    const point = points[i];
+
+                    if (point.x < x) x = point.x;
+                    if (point.y < y) y = point.y;
+                    if (point.x > right) right = point.x;
+                    if (point.y > bottom) bottom = point.y;
+                }
                 
-                return {
-                    ...point,
-                    x: point.x + deltaX,
-                    y: point.y + deltaY,
-                };
-            }).sort((p1, p2) => p1.x - p2.x))
+                const width = right - x;
+                const height = bottom - y;
+                return { x, y, width, height };
+            });
+        }
+
+        for (const line of linesChanged) {
+            line.boundsSt.update(() => {
+                const segments = get(line.segmentsSt);
+
+                const oldBounds = get(segments[0].boundsSt);
+                let { x, y } = oldBounds;
+                let right = oldBounds.x + oldBounds.width;
+                let bottom = oldBounds.y + oldBounds.height;
+                
+                for (const segment of segments) {
+                    const segBounds = get(segment.boundsSt);
+                    if (segBounds.x < x) x = segBounds.x;
+                    if (segBounds.y < y) y = segBounds.y;
+
+                    const segRight = segBounds.x + segBounds.width;
+                    if (segRight > right) right = segRight;
+                    const segBottom = segBounds.y + segBounds.height;
+                    if (segBottom > bottom) bottom = segBottom;
+                }
+
+                const width = right - x;
+                const height = bottom - y;
+                return { x, y, width, height };
+            });
         }
 
         return { dragOrigin, lastDragPos: [x, y] };

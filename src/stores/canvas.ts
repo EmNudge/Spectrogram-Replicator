@@ -26,11 +26,11 @@ export interface Point {
 };
 export interface TempSegment {
     id: Symbol;
+    parent: Line;
 }
 export interface Segment extends TempSegment {
     boundsSt: Writable<Bounds>;
     pointsSt: Writable<Point[]>;
-    parent: Line;
 };
 export interface TempLine {
     nameSt: Writable<string>;
@@ -39,13 +39,16 @@ export interface TempLine {
 }
 export interface Line extends TempLine {
     boundsSt: Writable<Bounds>;
-    segmentsSt: Writable<Segment[]>;
+    segmentsSt: Writable<(Segment | TempSegment)[]>;
 }
 
 export const linesSt = writable<(Line | TempLine)[]>([]);
 
 export const activeLineSt = writable<Symbol>(undefined);
 export const symbolLineLookupSt = writable<Map<Symbol, TempLine | Line>>(new Map);
+
+export const activeSegmentSt = writable<Symbol>(undefined);
+export const symbolSegmentLookupSt = writable<Map<Symbol, TempSegment | Segment>>(new Map);
 
 export const activePointsSt = writable<Set<Symbol>>(new Set);
 export const nodeToPointSt = writable<WeakMap<HTMLElement | SVGElement, Point>>(new WeakMap);

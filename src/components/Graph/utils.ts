@@ -1,8 +1,8 @@
-import { get } from 'svelte/store';
 import type { Bounds, Segment, Line } from '$stores/canvas';
-import { activeLineSt, symbolLineLookupSt } from '$stores/canvas';
+import { get } from 'svelte/store';
+import { activeLineSt, symbolLineLookupSt, activeSegmentSt } from '$stores/canvas';
 import { linesSt, nodeToPointSt, activePointsSt, draggerSt, symbolPointLookupSt } from '$stores/canvas';
-import { createNewLine, addPointToSegment, getLineFromTempLine } from '../../utils/canvas';
+import { createNewLine, addPointToSegment, getLineFromTempLine, isTempLine, isTempSegment, getSegmentFromTempSegment } from '../../utils/canvas';
 
 const getPointForEvent = (e: MouseEventHandler<Element>): [number, number] => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -25,27 +25,33 @@ export const handleMouseDown = (e: MouseEventHandler<SVGSVGElement>) => {
     linesSt.update(lines => {
         if (lines.length) {
             const line = get(symbolLineLookupSt).get(get(activeLineSt))!;
-            if (!('segmentsSt' in line)) {
-                console.log('make new line!')
+            if (isTempLine(line)) {
                 const newLine = getLineFromTempLine(line, x, y);
                 symbolLineLookupSt.update(symbolLineLookup => {
                     symbolLineLookup.set(line.id, newLine);
                     return symbolLineLookup;
                 });
 
-                const point = get(get(newLine.segmentsSt)[0].pointsSt)[0];
+                const segments = get(newLine.segmentsSt);
+                const point = get((segments[0] as Segment).pointsSt)[0];
                 activePointsSt.set(new Set([point.id]));
 
                 return lines.map(line => line.id === newLine.id ? newLine : line);
             }
 
-            line.segmentsSt.update(segments => {
-                const segment = segments[segments.length - 1];
+            (line as Line).segmentsSt.update(segments => {
+                const segId = get(activeSegmentSt);
+                return segments.map(segment => {
+                    if (segment.id !== segId) return segment;
+                    if (isTempSegment(segment)) {
+                        const newSeg = getSegmentFromTempSegment(segment, x, y);
+                        return newSeg;
+                    }
 
-                const point = addPointToSegment(segment, x, y);
-                activePointsSt.set(new Set([point.id]));
-
-                return segments;
+                    const point = addPointToSegment(segment as Segment, x, y);
+                    activePointsSt.set(new Set([point.id]));
+                    return segment;
+                });
             })
             return lines;
         } else {
@@ -56,7 +62,8 @@ export const handleMouseDown = (e: MouseEventHandler<SVGSVGElement>) => {
                 return symbolLineLookup;
             });
 
-            const point = get(get(line.segmentsSt)[0].pointsSt)[0];
+            const segments = get(line.segmentsSt);
+            const point = get((segments[0] as Segment).pointsSt)[0];
             activePointsSt.set(new Set([point.id]));
 
             return [line];
@@ -126,13 +133,14 @@ export const handleMouseMove = (e: MouseEventHandler<SVGSVGElement>) => {
             line.boundsSt.update(() => {
                 const segments = get(line.segmentsSt);
 
-                const oldBounds = get(segments[0].boundsSt);
+                const oldBounds = get((segments.find(seg => !isTempSegment(seg)) as Segment).boundsSt);
                 let { x, y } = oldBounds;
                 let right = oldBounds.x + oldBounds.width;
                 let bottom = oldBounds.y + oldBounds.height;
                 
                 for (const segment of segments) {
-                    const segBounds = get(segment.boundsSt);
+                    if (isTempSegment(segment)) continue;
+                    const segBounds = get((segment as Segment).boundsSt);
                     if (segBounds.x < x) x = segBounds.x;
                     if (segBounds.y < y) y = segBounds.y;
 

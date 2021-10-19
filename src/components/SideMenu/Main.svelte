@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { createTempLine } from "../../utils/canvas";
+    import { activeSegmentSt, Line as LineType } from '$stores/canvas'
+    import { createTempLine, createTempSegment, isTempLine } from "../../utils/canvas";
     import { activeLineSt, Color, linesSt, symbolLineLookupSt } from "$stores/canvas";
     import Line from './components/Line.svelte';
 
@@ -11,6 +12,14 @@
             return symbolLineLookup;
         });
         $linesSt = [...$linesSt, line];
+    }
+    function addSegment() {
+        if (isTempLine(activeLine)) return;
+        const line = activeLine as LineType;
+        const segment = createTempSegment(line);
+        activeSegmentSt.set(segment.id);
+
+        line.segmentsSt.update(segments => [...segments, segment]);
     }
 
     $: activeLine = $symbolLineLookupSt.get($activeLineSt)!;
@@ -39,7 +48,7 @@
 
 <div>
     <button on:click={addLine}>Add Line</button>
-    <button disabled>Add Segment</button>
+    <button disabled={!Boolean($linesSt.length)} on:click={addSegment}>Add Segment</button>
 </div>
 
 {#if $activeLineSt}

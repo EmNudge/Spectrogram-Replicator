@@ -15,7 +15,9 @@
 {/if}
 
 {#each $segmentsSt as segment}
-    <Segment {segment} color={$colorSt} />
+    {#if 'pointsSt' in segment}
+        <Segment {segment} color={$colorSt} />
+    {/if}
 {/each}
 
 <style>

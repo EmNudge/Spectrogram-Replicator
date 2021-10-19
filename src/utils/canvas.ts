@@ -1,6 +1,6 @@
 import { writable, get } from 'svelte/store';
-import type { Point, Segment, Line, Bounds, TempLine } from '$stores/canvas';
-import { symbolPointLookupSt, Color, linesSt } from '$stores/canvas';
+import type { Point, Segment, Line, Bounds, TempLine, TempSegment } from '$stores/canvas';
+import { symbolPointLookupSt, Color, linesSt, activeSegmentSt } from '$stores/canvas';
 
 const getNewColor = () => {
     const usedColors = new Set(get(linesSt).map(line => get(line.colorSt)));
@@ -39,7 +39,7 @@ export const createTempLine = (): TempLine => {
     return line;
 }
 
-export const isTempLine = (line: TempLine | Line) => 'segmentsSt' in line;
+export const isTempLine = (line: TempLine | Line) => !('segmentsSt' in line);
 export const getLineFromTempLine = (line: TempLine, x: number, y: number) => {
     const newLine: Line = {
         ...line,
@@ -60,8 +60,23 @@ export const createNewSegment = (line: Line, x: number, y: number): Segment => {
         parent: line,
     }
     segment.pointsSt.set([createNewPoint(x, y, segment)]);
+    activeSegmentSt.set(segment.id);
 
     return segment;
+}
+
+export const createTempSegment = (line: Line): TempSegment => ({ id: Symbol(), parent: line });
+export const isTempSegment = (segment: TempSegment | Segment) => !('pointsSt' in segment);
+
+export const getSegmentFromTempSegment = (segment: TempSegment, x: number, y: number) => {
+    const newSegment: Segment = {
+        ...segment,
+        boundsSt: writable({ x, y, width: 0, height: 0 }),
+        pointsSt: writable<Point[]>([]),
+    };
+    newSegment.pointsSt.set([createNewPoint(x, y, newSegment)]);
+ 
+    return newSegment;
 }
 
 export const createNewPoint = (x: number, y: number, segment: Segment) => {
@@ -112,9 +127,12 @@ export const addPointToSegment = (segment: Segment, x: number, y: number): Point
         y,
     ));
 
+    const segments = get(segment.parent.segmentsSt).filter(seg => !isTempSegment(seg)) as Segment[];
+    console.log(segments)
+
     segment.parent.boundsSt.update(bounds => fixBoundsWithBounds(
         bounds,
-        get(segment.parent.segmentsSt),
+        segments,
         get(segment.boundsSt)
     ));
 

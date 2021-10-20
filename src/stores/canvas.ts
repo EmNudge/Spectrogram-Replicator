@@ -2,10 +2,10 @@ import { writable } from 'svelte/store';
 import type { Writable } from 'svelte/store';
 
 export interface Bounds {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
 }
 
 export enum Color {

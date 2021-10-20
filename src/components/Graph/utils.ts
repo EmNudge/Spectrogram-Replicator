@@ -110,22 +110,20 @@ export const handleMouseMove = (e: MouseEventHandler<SVGSVGElement>) => {
             segment.boundsSt.update(() => {
                 const points = get(segment.pointsSt);
 
-                let x = points[0].x;
-                let y = points[0].y;
+                let left = points[0].x;
+                let top = points[0].y;
                 let bottom = points[0].y;
                 let right = points[0].x;
                 for (let i = 1; i < points.length; i++) {
                     const point = points[i];
 
-                    if (point.x < x) x = point.x;
-                    if (point.y < y) y = point.y;
+                    if (point.x < left) left = point.x;
+                    if (point.y < top) top = point.y;
                     if (point.x > right) right = point.x;
                     if (point.y > bottom) bottom = point.y;
                 }
                 
-                const width = right - x;
-                const height = bottom - y;
-                return { x, y, width, height };
+                return { left, top, bottom, right };
             });
         }
 
@@ -134,25 +132,19 @@ export const handleMouseMove = (e: MouseEventHandler<SVGSVGElement>) => {
                 const segments = get(line.segmentsSt);
 
                 const oldBounds = get((segments.find(seg => !isTempSegment(seg)) as Segment).boundsSt);
-                let { x, y } = oldBounds;
-                let right = oldBounds.x + oldBounds.width;
-                let bottom = oldBounds.y + oldBounds.height;
+                let { left, top, right, bottom } = oldBounds;
                 
                 for (const segment of segments) {
                     if (isTempSegment(segment)) continue;
                     const segBounds = get((segment as Segment).boundsSt);
-                    if (segBounds.x < x) x = segBounds.x;
-                    if (segBounds.y < y) y = segBounds.y;
 
-                    const segRight = segBounds.x + segBounds.width;
-                    if (segRight > right) right = segRight;
-                    const segBottom = segBounds.y + segBounds.height;
-                    if (segBottom > bottom) bottom = segBottom;
+                    if (segBounds.left < left) left = segBounds.left;
+                    if (segBounds.top < top) top = segBounds.top;
+                    if (segBounds.right > right) right = segBounds.right;
+                    if (segBounds.bottom > bottom) bottom = segBounds.bottom;
                 }
 
-                const width = right - x;
-                const height = bottom - y;
-                return { x, y, width, height };
+                return { left, top, right, bottom };
             });
         }
 
@@ -181,8 +173,9 @@ const handleSelect = (e: MouseEventHandler<SVGElement>) => {
     });
 }
 
-export const getPercBounds = (bounds: Bounds) => 
-    Object.fromEntries(
-        Object.entries(bounds)
-            .map(([key, val]) => [key, `${val * 100}%`])
-    );
+export const getPercBounds = ({ left, top, right, bottom }: Bounds) =>  ({
+    x: `${left * 100}%`,
+    y: `${top * 100}%`,
+    width: `${(right - left) * 100}%`,
+    height: `${(bottom - top) * 100}%`,
+})

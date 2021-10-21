@@ -7,6 +7,8 @@
     function addLine() {
         const line = createTempLine();
         $activeLineSt = line.id;
+        $activeSegmentSt = Symbol();
+
         symbolLineLookupSt.update(symbolLineLookup => {
             symbolLineLookup.set(line.id, line);
             return symbolLineLookup;

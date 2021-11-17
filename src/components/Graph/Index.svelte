@@ -1,34 +1,33 @@
 <script lang="ts">
-    import { canvasWidthSt } from '$stores/graph';
     import { draggerSt } from '$stores/canvas';
+    import { currentTimePercSt } from '$stores/sound';
+
     import { handleMouseDown, handleMouseMove, handleMouseUp } from './utils';
+
     import Grid from './Grid.svelte';
     import Hertz from './Hertz.svelte';
     import Canvas from './Canvas/Index.svelte';
-import { currentTimePercSt } from '$stores/sound';
+    import Container from './Container.svelte';
 </script>
 
 <Hertz />
 
-<svg
-    class="graph"
-    style="--graph-width: {$canvasWidthSt}px;"
-    class:dragging={$draggerSt}
-    on:mousedown={handleMouseDown} on:mousemove={handleMouseMove} on:mouseup={handleMouseUp}>
-    <Grid />
-    <rect x="{$currentTimePercSt * 100}%" y="0%"></rect>
-    <Canvas />
-</svg>
+<Container>
+    <svg
+        class:dragging={$draggerSt}
+        on:mousedown={handleMouseDown} on:mousemove={handleMouseMove} on:mouseup={handleMouseUp}>
+        <Grid />
+        <rect x="{$currentTimePercSt * 100}%" y="0%"></rect>
+        <Canvas />
+    </svg>
+</Container>
 
 <style>
-    .graph {
-        height: 450px;
-    }
     .dragging :global(circle) {
         cursor: move;
     }
     svg {
-        background: white;
+        height: 100%;
         width: 100%;
         border-radius: 4px;
     }
@@ -37,8 +36,5 @@ import { currentTimePercSt } from '$stores/sound';
         width: 2px;
         height: 100%;
         transition: .05s;
-    }
-    .graph {
-        min-width: var(--graph-width);
     }
 </style>

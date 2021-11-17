@@ -2,6 +2,7 @@ export const ColorMap = {
     hueGreen: (strength: number) => `hsla(${strength * 200 + 160}, 50%, 50%, ${strength})`,
     grayScale: (strength: number) => `hsla(0, 0%, ${100-strength*100}%, ${strength})`,
 }
+export const colorMaps = Object.entries(ColorMap);
 
 export function drawAudio(canvas: HTMLCanvasElement, data: Uint8Array[], colorMap = ColorMap.hueGreen) {
     const width = canvas.width;
@@ -33,6 +34,6 @@ export function getCanvasFromData(data: Uint8Array[], colorMap = ColorMap.hueGre
     canvas.width = 600;
     canvas.height = 400;
     drawAudio(canvas, data, colorMap);
-    
+
     return canvas;
 }

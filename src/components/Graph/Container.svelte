@@ -1,6 +1,6 @@
 <script lang="ts">
     import { canvasWidthSt } from '$stores/graph';
-    import { colorMapSt, specDataSt } from "$stores/spectrogram";
+    import { colorMapSt, specDataSt, specOpacitySt } from "$stores/spectrogram";
     import { getCanvasFromData } from "../../spectrogram/generateImage";
 
     $: hasSpectorgram = $specDataSt.length > 0;
@@ -15,7 +15,7 @@
     style="--graph-width: {$canvasWidthSt}px;"
 >
     {#if hasSpectorgram}
-        <img src={imgSrc} alt="spectrogram">
+        <img src={imgSrc} alt="spectrogram" style="--opacity: {$specOpacitySt}">
     {/if}
     <slot />
 </div>
@@ -36,5 +36,7 @@
         width: 100%;
         height: 100%;
         user-select: none;
+        z-index: -1;
+        opacity: var(--opacity);
     }
 </style>

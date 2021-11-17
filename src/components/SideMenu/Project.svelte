@@ -5,13 +5,12 @@
 		minFreqSt,
 		maxFreqSt,
 		canvasWidthSt,
-		bgOpacitySt,
 		lightenOddRowsSt,
 		showGridst,
 		debugModeSt
 	} from '$stores/graph';
 	import { durationSt } from '$stores/sound';
-	import { specDataSt } from '$stores/spectrogram';
+	import { colorMapSt, specDataSt, specOpacitySt } from '$stores/spectrogram';
 
 	import Range from './components/Range.svelte';
 	import NumberInput from './components/NumberInput.svelte';
@@ -19,6 +18,7 @@
 
 	import { getAudioBufferFromFile } from '../../spectrogram/getAudioBuffer';
 	import { generateData } from '../../spectrogram/generateData';
+	import { colorMaps, ColorMap } from '../../spectrogram/generateImage';
 	
 	async function getAudioData(e) {
 		const file = e.currentTarget.files[0] as File;
@@ -27,7 +27,13 @@
 
 		const data = await generateData(buffer);
 		specDataSt.set(data);
+	}
+	const nameFromKey = (key: string) => key.replace(/^[a-z]|[A-Z]/g, c => ' ' + c.toUpperCase());
+	$: defaultKey = colorMaps.find(([k,v]) => v === $colorMapSt)![0];
 
+	function handleChangeColorMap(e) {
+		const colorMap = ColorMap[e.currentTarget.value];
+		$colorMapSt = colorMap;
 	}
 </script>
 
@@ -37,26 +43,27 @@
 	<CheckBox title="Debug Mode" bind:checked={$debugModeSt} />
 </div>
 
+<h3 class="title">Spectrogram</h3>
 <div class="row">
-	<h3>Generate From Audio</h3>
-	<div class="row">
-		<label>
-			<div class="btn-like">Upload Audio</div>
-			<input type="file" on:input={getAudioData}>
-		</label>
+	<div class="row split">
+		<div>
+			<label>
+				<div class="btn-like">Upload Audio</div>
+				<input type="file" on:input={getAudioData}>
+			</label>
+		</div>
+		<div>
+			<select value={defaultKey} on:input={handleChangeColorMap}>
+				{#each colorMaps as [key]}
+					<option value={key}>{nameFromKey(key)}</option>
+				{/each}
+			</select>
+		</div>
 	</div>
 </div>
 
 <div class="row">
-	<h3>Choose Background Image</h3>
-	<div class="row split">
-		<div>
-			<button>Pick File</button>
-		</div>
-		<div>
-			<button>Use Default Image</button>
-		</div>
-	</div>
+	<Range title="Spectrogram Opacity" min={0} max={1} step={0.01} bind:value={$specOpacitySt} />
 </div>
 
 <div class="row split">
@@ -68,14 +75,12 @@
 	</div>
 </div>
 
-<div class="row">
-	<Range title="Background Image Opacity" min={0} max={1} step={0.01} bind:value={$bgOpacitySt} />
-</div>
 
 <div class="row">
 	<Range title="Canvas Width" min={600} max={1500} bind:value={$canvasWidthSt} />
 </div>
 
+<h3 class="title">Graph</h3>
 <div class="row split">
 	<div>
 		<NumberInput title="Columns" min={2} bind:value={$columnsSt} />
@@ -110,5 +115,8 @@
 		padding: var(--padding);
 		background: white;
 		text-align: center;
+	}
+	h3.title {
+		margin-bottom: 0;
 	}
 </style>

@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import {
 		rowsSt,
 		columnsSt,
@@ -10,17 +10,41 @@
 		showGridst,
 		debugModeSt
 	} from '$stores/graph';
-	import {} from '$stores/sound';
+	import { durationSt } from '$stores/sound';
+	import { specDataSt } from '$stores/spectrogram';
 
 	import Range from './components/Range.svelte';
 	import NumberInput from './components/NumberInput.svelte';
 	import CheckBox from './components/CheckBox.svelte';
+
+	import { getAudioBufferFromFile } from '../../spectrogram/getAudioBuffer';
+	import { generateData } from '../../spectrogram/generateData';
+	
+	async function getAudioData(e) {
+		const file = e.currentTarget.files[0] as File;
+		const buffer = await getAudioBufferFromFile(file);
+		durationSt.set(buffer.duration);
+
+		const data = await generateData(buffer);
+		specDataSt.set(data);
+
+	}
 </script>
 
 <div class="row title-row">
 	<h2>Graph</h2>
 	<CheckBox title="Show Grid" bind:checked={$showGridst} />
 	<CheckBox title="Debug Mode" bind:checked={$debugModeSt} />
+</div>
+
+<div class="row">
+	<h3>Generate From Audio</h3>
+	<div class="row">
+		<label>
+			<div class="btn-like">Upload Audio</div>
+			<input type="file" on:input={getAudioData}>
+		</label>
+	</div>
 </div>
 
 <div class="row">

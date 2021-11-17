@@ -23,3 +23,18 @@ button, input {
     padding: 0px 4px;
     text-align: center;
 }
+
+label .btn-like + input[type=file] {
+    width: 0;
+    padding: 0;
+}
+label .btn-like {
+    border: 1px solid grey;
+    background: #F9F9F9;
+    border-radius: 4px;
+    padding: 4px 8px;
+    text-align: center;
+    width: max-content;
+    cursor: pointer;
+    font-family: sans-serif;
+}

@@ -4,11 +4,14 @@
 
 	import Main from './Main.svelte';
 	import Project from './Project.svelte';
+	import Audio from './Audio.svelte';
 	import Export from './Export.svelte';
 	import Import from './Import.svelte';
+
 	const componentMap = new Map<typeof tabs[number], typeof SvelteComponent>([
         ['Main', Main],
 		['Project', Project],
+		['Audio', Audio],
 		['Export', Export],
 		['Import', Import],
 	]);

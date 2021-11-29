@@ -1,8 +1,6 @@
 import FFT from 'fft.js';
-import { writable, get } from 'svelte/store';
-import { mapHot } from '../utils/colormap';
-
-export const cappedDBSt = writable(-20);
+import { get } from 'svelte/store';
+import { cappedDBSt, colorMapSt } from '../stores/spectrogram';
 
 export const hannWindow = (n: number, length: number) =>
     0.5 * (1.0 - Math.cos((2.0 * Math.PI * n) / (length - 1.0)));
@@ -21,6 +19,7 @@ export function getSpectrogram({ width, height, bins, signal }: SpecSettings) {
 
     const fft = new FFT(bins);
     const complexArr = fft.createComplexArray() as unknown as Float32Array;
+    const colorMap = get(colorMapSt);
 
     for (let x = 0; x < width; x++) {
         const chunk = getChunk(signal, x/width, bins, windowArr);
@@ -30,7 +29,7 @@ export function getSpectrogram({ width, height, bins, signal }: SpecSettings) {
             const strength = frequencies[index];
             if (Number.isNaN(strength)) continue;
 
-            plotter.point(x, height - y, mapHot(strength));
+            plotter.point(x, height - y, colorMap(strength));
         }
     }
 

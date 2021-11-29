@@ -16,6 +16,8 @@ const interMult = (percentage: number, ...colors: Color[]): Color => {
     return interpolate(mappedPerc, colors[prevIndex], colors[nextIndex]);
 }
 
+export type ColorMap = (percentage: number, transparent?: boolean) => Color;
+
 export const mapHot = (percentage: number, transparent?: boolean) => {
     const black = [0, 0, 0, transparent ? 0 : 255] as Color;
     const purple = [100, 19, 200, 255] as Color;
@@ -28,7 +30,7 @@ export const mapHot = (percentage: number, transparent?: boolean) => {
 
 export const mapGrayscale = (percentage: number, transparent?: boolean) => {
     const white = [255, 255, 255, transparent ? 0 : 255] as Color;
-    const black = Array(4).fill(255) as Color;
+    const black = Array(4).fill(0) as Color;
 
     return interpolate(percentage, white, black);
 }

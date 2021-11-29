@@ -1,6 +1,6 @@
-<script>
-    export let checked = false;
-    export let title = 'CheckBox Component'
+<script lang="ts">
+    export let checked: boolean;
+    export let title: string;
 </script>
 
 <label>

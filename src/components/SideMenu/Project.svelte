@@ -9,45 +9,17 @@
 		showGridst,
 		debugModeSt
 	} from '$stores/graph';
-	import { durationSt } from '$stores/sound';
-	import { specDataSt, specOpacitySt } from '$stores/spectrogram';
+	import { specOpacitySt } from '$stores/spectrogram';
 
 	import Range from './components/Range.svelte';
 	import NumberInput from './components/NumberInput.svelte';
 	import CheckBox from './components/CheckBox.svelte';
-
-	import { getImageForAudio } from '../../spectrogram';
-	import { getAudioBufferFromFile } from '../../spectrogram/getAudioBuffer';
-	
-	async function getAudioData(e: any) {
-		const file = e.currentTarget.files[0] as File;
-		const buffer = await getAudioBufferFromFile(file);
-		durationSt.set(buffer.length);
-
-		const image = await getImageForAudio(buffer);
-		specDataSt.set(image);
-	}
 </script>
 
 <div class="row title-row">
-	<h2>Graph</h2>
+	<h2>Project</h2>
 	<CheckBox title="Show Grid" bind:checked={$showGridst} />
 	<CheckBox title="Debug Mode" bind:checked={$debugModeSt} />
-</div>
-
-<h3 class="title">Spectrogram</h3>
-<div class="row">
-	<div class="row split">
-		<div>
-			<label>
-				<div class="btn-like">Upload Audio</div>
-				<input type="file" on:input={getAudioData}>
-			</label>
-		</div>
-		<div>
-			
-		</div>
-	</div>
 </div>
 
 <div class="row">

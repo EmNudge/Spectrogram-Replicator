@@ -15,12 +15,14 @@
 	import { getImageForAudio } from '../../spectrogram';
 	import { getAudioBufferFromFile } from '../../spectrogram/getAudioBuffer';
 	import { mapHot, mapGrayscale, ColorMap } from '$utils/colormap';
+	import { maxFreqSt, minFreqSt } from '$stores/graph';
 
 	const colorMaps = [
 		{ name: 'hot', func: mapHot },
 		{ name: 'grayscale', func: mapGrayscale }
 	];
 	let setTimeFromAudio = true;
+	let setFreqFromAudio = true;
 
 	$: if ($bufferSt) getSpec($bufferSt, $cappedDBSt, $binsSt, $colorMapSt);
 
@@ -30,6 +32,10 @@
 
 		const buffer = await getAudioBufferFromFile(file);
 		if (setTimeFromAudio) durationSt.set(buffer.duration);
+		if (setFreqFromAudio) {
+			minFreqSt.set(0);
+			maxFreqSt.set(buffer.sampleRate/2);
+		}
 
 		const image = await getImageForAudio(buffer);
 		bufferSt.set(buffer);
@@ -60,7 +66,10 @@
 			<div class="btn-like">Upload Audio</div>
 			<input type="file" on:input={getAudioData} />
 		</label>
-		<CheckBox bind:checked={setTimeFromAudio} title="Set duration from audio" />
+		<div>
+			<CheckBox bind:checked={setTimeFromAudio} title="Set duration from audio" />
+			<CheckBox bind:checked={setFreqFromAudio} title="Set frequencies from audio" />
+		</div>
 	</div>
 </div>
 <div class="row">

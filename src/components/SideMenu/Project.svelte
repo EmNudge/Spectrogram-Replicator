@@ -10,30 +10,22 @@
 		debugModeSt
 	} from '$stores/graph';
 	import { durationSt } from '$stores/sound';
-	import { colorMapSt, specDataSt, specOpacitySt } from '$stores/spectrogram';
+	import { specDataSt, specOpacitySt } from '$stores/spectrogram';
 
 	import Range from './components/Range.svelte';
 	import NumberInput from './components/NumberInput.svelte';
 	import CheckBox from './components/CheckBox.svelte';
 
+	import { getImageForAudio } from '../../spectrogram';
 	import { getAudioBufferFromFile } from '../../spectrogram/getAudioBuffer';
-	import { generateData } from '../../spectrogram/generateData';
-	import { colorMaps, ColorMap } from '../../spectrogram/generateImage';
 	
-	async function getAudioData(e) {
+	async function getAudioData(e: any) {
 		const file = e.currentTarget.files[0] as File;
 		const buffer = await getAudioBufferFromFile(file);
-		durationSt.set(buffer.duration);
+		durationSt.set(buffer.length);
 
-		const data = await generateData(buffer);
-		specDataSt.set(data);
-	}
-	const nameFromKey = (key: string) => key.replace(/^[a-z]|[A-Z]/g, c => ' ' + c.toUpperCase());
-	$: defaultKey = colorMaps.find(([k,v]) => v === $colorMapSt)![0];
-
-	function handleChangeColorMap(e) {
-		const colorMap = ColorMap[e.currentTarget.value];
-		$colorMapSt = colorMap;
+		const image = await getImageForAudio(buffer);
+		specDataSt.set(image);
 	}
 </script>
 
@@ -53,11 +45,7 @@
 			</label>
 		</div>
 		<div>
-			<select value={defaultKey} on:input={handleChangeColorMap}>
-				{#each colorMaps as [key]}
-					<option value={key}>{nameFromKey(key)}</option>
-				{/each}
-			</select>
+			
 		</div>
 	</div>
 </div>

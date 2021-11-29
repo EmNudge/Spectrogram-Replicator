@@ -2,16 +2,23 @@
 	import { durationSt, currentTimePercSt, currentTimeSt } from '$stores/sound';
 	import { playLines } from '../audio';
 
-	const displayText = (secs: number) =>
-		String(Math.floor(secs / 60)).padStart(2, '0') +
-		':' +
-		String(Math.floor(secs % 60)).padStart(2, '0');
+	const displayText = (secs: number) => {
+		const pad = (num: number) => String(Math.floor(num)).padStart(2, '0');
+		const minute = pad(secs / 60);
+		const second = pad(secs % 60);
+		if ($durationSt > 10) return `${minute}:${second}`;
 
-	const getTimeFromStr = (str) => {
-		const [minute, seconds] = str.split(':');
-		return Number(minute) * 60 + Number(seconds);
+		const ms = pad(secs * 100);
+		return `${minute}:${second}.${ms}`;
 	};
 
+	const TIME_REGEX = /([0-9]+):([0-9]+)(\.[0-9]+)?/;
+	const getTimeFromStr = (str) => {
+		const regRes = str.match(TIME_REGEX);
+		if (!regRes) return 0;
+		const [, minute, seconds, ms] = str.split(':');
+		return Number(minute) * 60 + Number(seconds) + Number(ms || '0');
+	};
 
 	function handleChangeTime(e) {
 		const [current, goal] = e.target.value.split('/');
@@ -24,11 +31,11 @@
 	let lastPausedTime = 0;
 	let startTime: number;
 	let linePlayer: { stop(): void };
-	
+
 	function handleRangeTime(e) {
 		const { left, right } = e.currentTarget.getBoundingClientRect();
 		$currentTimePercSt = (e.clientX - left) / (right - left);
-		
+
 		startTime = performance.now();
 		lastPausedTime = $currentTimePercSt;
 		if (isPlaying) {
@@ -41,7 +48,7 @@
 		if (!isPlaying) return;
 
 		const delta = performance.now() - startTime;
-		$currentTimePercSt = lastPausedTime + (delta / 1000) / $durationSt;
+		$currentTimePercSt = lastPausedTime + delta / 1000 / $durationSt;
 
 		if ($currentTimePercSt >= 1) {
 			$currentTimePercSt = 1;
@@ -57,7 +64,7 @@
 			linePlayer = playLines();
 
 			lastPausedTime = $currentTimePercSt;
-			startTime = performance.now()
+			startTime = performance.now();
 			playLoop();
 		} else {
 			linePlayer?.stop();
@@ -69,10 +76,10 @@
 	<button on:click={toggleAudio}>
 		<svg width="55" height="68" viewBox="0 0 55 68" fill="none" xmlns="http://www.w3.org/2000/svg">
 			{#if !isPlaying}
-				<path d="M55 34L2.38419e-07 68L2.38419e-07 0L55 34Z" fill="grey"/>
+				<path d="M55 34L2.38419e-07 68L2.38419e-07 0L55 34Z" fill="grey" />
 			{:else}
-				<rect width="15" height="68" fill="grey"/>
-				<rect x="40" width="15" height="68" fill="grey"/>
+				<rect width="15" height="68" fill="grey" />
+				<rect x="40" width="15" height="68" fill="grey" />
 			{/if}
 		</svg>
 	</button>
@@ -147,6 +154,6 @@
 		width: calc(var(--time-perc) * 100%);
 		background: grey;
 		border-radius: 4px;
-		transition: .05s;
+		transition: 0.05s;
 	}
 </style>

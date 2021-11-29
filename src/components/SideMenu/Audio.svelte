@@ -6,7 +6,8 @@
 		acceptableBinNums,
 		cappedDBSt,
 		bufferSt,
-		colorMapSt
+		colorMapSt,
+		specOpacitySt
 	} from '$stores/spectrogram';
 
 	import Range from './components/Range.svelte';
@@ -34,7 +35,7 @@
 		if (setTimeFromAudio) durationSt.set(buffer.duration);
 		if (setFreqFromAudio) {
 			minFreqSt.set(0);
-			maxFreqSt.set(buffer.sampleRate/2);
+			maxFreqSt.set(buffer.sampleRate / 2);
 		}
 
 		const image = await getImageForAudio(buffer);
@@ -100,6 +101,10 @@
 	</div>
 </div>
 
+<div class="row">
+	<Range title="Spectrogram Opacity" min={0} max={1} step={0.01} bind:value={$specOpacitySt} />
+</div>
+
 <style>
 	.title-row {
 		display: grid;
@@ -117,5 +122,10 @@
 		display: flex;
 		grid-gap: 10px;
 		align-items: center;
+	}
+	label {
+		display: flex;
+		align-items: center;
+		grid-gap: 10px;
 	}
 </style>

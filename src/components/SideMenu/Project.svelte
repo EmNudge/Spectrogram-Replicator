@@ -9,7 +9,6 @@
 		showGridst,
 		debugModeSt
 	} from '$stores/graph';
-	import { specOpacitySt } from '$stores/spectrogram';
 
 	import Range from './components/Range.svelte';
 	import NumberInput from './components/NumberInput.svelte';
@@ -22,9 +21,6 @@
 	<CheckBox title="Debug Mode" bind:checked={$debugModeSt} />
 </div>
 
-<div class="row">
-	<Range title="Spectrogram Opacity" min={0} max={1} step={0.01} bind:value={$specOpacitySt} />
-</div>
 
 <div class="row split">
 	<div>

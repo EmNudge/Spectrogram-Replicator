@@ -13,6 +13,7 @@
         display: grid;
         grid-template-columns: auto 1fr;
         grid-gap: 5px;
+        align-items: center;
     }
     input {
         width: inherit;

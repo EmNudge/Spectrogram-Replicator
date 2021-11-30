@@ -33,14 +33,46 @@ async function getCanvasForUrl(url: string) {
     return canvas;
 }
 
+function copySvg(svgEl: SVGElement) {
+    const str = new XMLSerializer().serializeToString(svgEl);
+    const doc = new DOMParser().parseFromString(str, 'image/svg+xml');
+    return doc.querySelector('svg');
+}
+
+export function inlineSvgStyles(svgEl: SVGElement) {
+    const svgCopy = copySvg(svgEl)!;
+    svgCopy.removeAttribute('class');
+
+    document.body.appendChild(svgCopy);
+    
+    for (const node of svgCopy.querySelectorAll('*')) {
+        if (!('style' in node)) continue;
+        const el = node as HTMLElement;
+        
+        const styles = window.getComputedStyle(el);
+        const names = ['strokeDasharray', 'stroke', 'strokeWidth', 'fill', 'r'];
+        for (const styleName of names) {
+            el.style[styleName] = styles[styleName];
+        }
+        el.removeAttribute('class');
+    }
+
+    document.body.removeChild(svgCopy);
+
+    return svgCopy;
+}
 export async function downloadPNG(svgEl: SVGElement, name = 'chart.png') {
-    const url = getSvgUrl(svgEl);
+    const { width, height } = svgEl.getBoundingClientRect()
+    const svgCopy = inlineSvgStyles(svgEl);
+    Object.assign(svgCopy.style, { width, height });
+    const url = getSvgUrl(svgCopy);
 
     const canvas = await getCanvasForUrl(url)
     
-    downloadItem(canvas.toDataURL('image/png'), 'syntax-tree.png');
+    downloadItem(canvas.toDataURL('image/png'), name);
 }
 
 export function downloadSVG(svgEl: SVGElement, name = 'chart.svg') {
-    downloadItem(getSvgUrl(svgEl), name);
+    const url = getSvgUrl(inlineSvgStyles(svgEl));
+    downloadItem(url, name);
 }

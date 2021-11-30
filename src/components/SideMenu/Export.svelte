@@ -26,8 +26,8 @@
 		{/each}
 	</select>
 
-	<br>
-	<br>
+	<br />
+	<br />
 	<div>
 		<button disabled={!$specUrlSt} on:click={() => downloadItem($specUrlSt, 'spectrogram.png')}
 			>Download PNG Spectrogram</button
@@ -36,6 +36,10 @@
 </div>
 
 <div class="row">
-	<button disabled>Download Graph</button>
+	<h3 class="title">JSON Data</h3>
+	<br />
+	<button disabled>Download General Graph Data</button>
+	<br />
+	<br />
 	<button disabled>Download Project</button>
 </div>

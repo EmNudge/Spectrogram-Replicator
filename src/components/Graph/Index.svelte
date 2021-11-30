@@ -1,6 +1,7 @@
 <script lang="ts">
     import { draggerSt } from '$stores/canvas';
     import { currentTimePercSt } from '$stores/sound';
+    import { graphElSt } from '$stores/project';
 
     import { handleMouseDown, handleMouseMove, handleMouseUp } from './utils';
 
@@ -14,6 +15,7 @@
 
 <Container>
     <svg
+        bind:this={$graphElSt}
         class:dragging={$draggerSt}
         on:mousedown={handleMouseDown} on:mousemove={handleMouseMove} on:mouseup={handleMouseUp}>
         <Grid />

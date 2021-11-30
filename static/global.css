@@ -17,6 +17,9 @@ body {
 button {
     cursor: pointer;
 }
+button[disabled] {
+    cursor: auto;
+}
 button, input {
     border: none;
     border-radius: 4px;

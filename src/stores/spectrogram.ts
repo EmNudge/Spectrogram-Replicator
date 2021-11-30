@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 import { mapHot } from '../utils/colormap';
 import type { ColorMap } from '../utils/colormap';
 
-export const specDataSt = writable<string>('');
+export const specUrlSt = writable<string>('');
 export const colorMapSt = writable<ColorMap>(mapHot);
 
 export const acceptableBinNums = [16, 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192] as const;

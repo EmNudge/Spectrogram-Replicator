@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { durationSt } from '$stores/sound';
 	import {
-		specDataSt,
+		specUrlSt,
 		binsSt,
 		acceptableBinNums,
 		cappedDBSt,
@@ -40,7 +40,7 @@
 
 		const image = await getImageForAudio(buffer);
 		bufferSt.set(buffer);
-		specDataSt.set(image);
+		specUrlSt.set(image);
 	}
 
 	async function getSpec(
@@ -52,7 +52,7 @@
 		if (!buffer) return;
 
 		const image = await getImageForAudio(buffer);
-		specDataSt.set(image);
+		specUrlSt.set(image);
 	}
 </script>
 

@@ -50,7 +50,7 @@ export function inlineSvgStyles(svgEl: SVGElement) {
         const el = node as HTMLElement;
         
         const styles = window.getComputedStyle(el);
-        const names = ['strokeDasharray', 'stroke', 'strokeWidth', 'fill', 'r'];
+        const names = ['strokeDasharray', 'stroke', 'strokeWidth', 'fill'];
         for (const styleName of names) {
             el.style[styleName] = styles[styleName];
         }

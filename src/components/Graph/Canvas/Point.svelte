@@ -14,12 +14,12 @@
 <circle
     bind:this={node}
     class:active={$activePointsSt.has(point.id)}
+    r="5"
     cx="{point.x * 100}%"
     cy="{point.y * 100}%"></circle>
 
 <style>
     circle {
-        r: 5;
         stroke-width: 3px;
         --lightness: 50%;
         stroke: hsl(var(--col), 50%, var(--lightness));

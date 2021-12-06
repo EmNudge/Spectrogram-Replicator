@@ -3,6 +3,7 @@
     import { createTempLine, createTempSegment, isTempLine } from "../../utils/canvas";
     import { activeLineSt, Color, linesSt, symbolLineLookupSt } from "$stores/canvas";
     import Line from './components/Line.svelte';
+    import { get } from 'svelte/store';
 
     function addLine() {
         const line = createTempLine();
@@ -32,6 +33,30 @@
 
         const color = Number(e.target.dataset.color);
         $activeColorSt = color;
+    }
+
+    function deleteLine() {
+        const activeId = activeLine.id;
+        linesSt.update(lines => lines.filter(({ id }) => id !== activeId));
+    }
+    function deleteSegment() {
+        if (!('segmentsSt' in activeLine)) return;
+        const activeSegmentId = $activeSegmentSt;
+        const newSegments = get(activeLine.segmentsSt).filter(({ id }) => id != activeSegmentId);
+        
+        if (newSegments.length === 0) {
+            // downgrade to TempLine
+            const downgradeId = activeLine.id;
+            linesSt.update(lines => lines.map(line => {
+                if (line.id !== downgradeId) return line;
+
+                const { nameSt, colorSt, id } = line;
+                return { nameSt, colorSt, id };
+            }))
+        } else {
+            activeLine.segmentsSt.set(newSegments);
+        }
+        $activeSegmentSt = Symbol();
     }
 </script>
 
@@ -69,6 +94,15 @@
                 {/if}
             {/each}
         </div>
+    </div>
+    
+    <div>
+        <h3>Line Edit</h3>
+
+        <button on:click={deleteLine}>Delete Line</button>
+        {#if $activeSegmentSt}
+            <button on:click={deleteSegment}>Delete Active Segment</button>
+        {/if}
     </div>
 {/if}
 

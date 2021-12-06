@@ -30,6 +30,7 @@
         --lightness: 60%;
     }
     .active {
-        --lightness: 75%;
+        stroke-width: 4;
+        fill: black;
     }
 </style>

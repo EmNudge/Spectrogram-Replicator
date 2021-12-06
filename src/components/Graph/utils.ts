@@ -2,7 +2,14 @@ import type { Bounds, Segment, Line } from '$stores/canvas';
 import { get } from 'svelte/store';
 import { activeLineSt, symbolLineLookupSt, activeSegmentSt } from '$stores/canvas';
 import { linesSt, nodeToPointSt, activePointsSt, draggerSt, symbolPointLookupSt } from '$stores/canvas';
-import { createNewLine, addPointToSegment, getLineFromTempLine, isTempLine, isTempSegment, getSegmentFromTempSegment } from '../../utils/canvas';
+import {
+    createNewLine,
+    addPointToSegment,
+    getLineFromTempLine,
+    isTempLine,
+    isTempSegment,
+    getSegmentFromTempSegment
+} from '../../utils/canvas';
 
 const getPointForEvent = (e: MouseEventHandler<Element>): [number, number] => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -122,7 +129,7 @@ export const handleMouseMove = (e: MouseEventHandler<SVGSVGElement>) => {
                     if (point.x > right) right = point.x;
                     if (point.y > bottom) bottom = point.y;
                 }
-                
+
                 return { left, top, bottom, right };
             });
         }
@@ -133,7 +140,7 @@ export const handleMouseMove = (e: MouseEventHandler<SVGSVGElement>) => {
 
                 const oldBounds = get((segments.find(seg => !isTempSegment(seg)) as Segment).boundsSt);
                 let { left, top, right, bottom } = oldBounds;
-                
+
                 for (const segment of segments) {
                     if (isTempSegment(segment)) continue;
                     const segBounds = get((segment as Segment).boundsSt);
@@ -173,9 +180,30 @@ const handleSelect = (e: MouseEventHandler<SVGElement>) => {
     });
 }
 
-export const getPercBounds = ({ left, top, right, bottom }: Bounds) =>  ({
+export const getPercBounds = ({ left, top, right, bottom }: Bounds) => ({
     x: `${left * 100}%`,
     y: `${top * 100}%`,
     width: `${(right - left) * 100}%`,
     height: `${(bottom - top) * 100}%`,
 })
+
+export const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key !== 'Backspace' && e.key !== 'Delete') return;
+
+    const activePoints = get(activePointsSt);
+    if (activePoints.size === 0) return;
+
+    const pointMap = get(symbolPointLookupSt);
+
+    const changedSegments = new Set<Segment>();
+    for (const pointId of activePoints) {
+        const point = pointMap.get(pointId)!;
+        changedSegments.add(point.parent);
+    }
+    for (const segment of changedSegments) {
+        segment.pointsSt.update(points => {
+            const newPoints = points.filter(p => !activePoints.has(p.id));
+            return newPoints;
+        })
+    }
+}

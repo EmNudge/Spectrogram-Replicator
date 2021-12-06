@@ -8,7 +8,8 @@ import {
     getLineFromTempLine,
     isTempLine,
     isTempSegment,
-    getSegmentFromTempSegment
+    getSegmentFromTempSegment,
+    deleteActivePoints
 } from '../../utils/canvas';
 
 const getPointForEvent = (e: MouseEventHandler<Element>): [number, number] => {
@@ -190,20 +191,5 @@ export const getPercBounds = ({ left, top, right, bottom }: Bounds) => ({
 export const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key !== 'Backspace' && e.key !== 'Delete') return;
 
-    const activePoints = get(activePointsSt);
-    if (activePoints.size === 0) return;
-
-    const pointMap = get(symbolPointLookupSt);
-
-    const changedSegments = new Set<Segment>();
-    for (const pointId of activePoints) {
-        const point = pointMap.get(pointId)!;
-        changedSegments.add(point.parent);
-    }
-    for (const segment of changedSegments) {
-        segment.pointsSt.update(points => {
-            const newPoints = points.filter(p => !activePoints.has(p.id));
-            return newPoints;
-        })
-    }
+    deleteActivePoints();
 }

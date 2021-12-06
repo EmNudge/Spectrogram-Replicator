@@ -1,7 +1,10 @@
 <script lang="ts">
-    import { activeSegmentSt, Line as LineType } from '$stores/canvas'
-    import { createTempLine, createTempSegment, isTempLine } from "../../utils/canvas";
-    import { activeLineSt, Color, linesSt, symbolLineLookupSt } from "$stores/canvas";
+    import type { Line as LineType } from '$stores/canvas'
+    import { 
+        createTempLine, createTempSegment, isTempLine,
+        selectAllPointsOnSegment, selectAllSegmentsOnLine
+    } from "../../utils/canvas";
+    import { activeSegmentSt, activeLineSt, Color, linesSt, symbolLineLookupSt } from "$stores/canvas";
     import Line from './components/Line.svelte';
     import { get } from 'svelte/store';
 
@@ -58,6 +61,18 @@
         }
         $activeSegmentSt = Symbol();
     }
+    function selectSegments() {
+        if (!('segmentsSt' in activeLine)) return;
+        selectAllSegmentsOnLine(activeLine);
+    }
+    function selectPointsInSegment() {
+        if (!('segmentsSt' in activeLine)) return;
+        const activeSegmentId = get(activeSegmentSt);
+        const segment = get(activeLine.segmentsSt).find(s => s.id === activeSegmentId)!;
+        
+        if (!('pointsSt' in segment)) return;
+        selectAllPointsOnSegment(segment);
+    }
 </script>
 
 <div class="row title-row">
@@ -96,13 +111,19 @@
         </div>
     </div>
     
+    <h3>Actions</h3>
     <div>
-        <h3>Line Edit</h3>
-
+        <h4>Line</h4>
+        <br>
         <button on:click={deleteLine}>Delete Line</button>
+        <button on:click={selectSegments}>Select All Points</button>
         {#if $activeSegmentSt}
+            <h4>Segment</h4>
+            <br>
             <button on:click={deleteSegment}>Delete Active Segment</button>
+            <button on:click={selectPointsInSegment}>Select All Points</button>
         {/if}
+
     </div>
 {/if}
 

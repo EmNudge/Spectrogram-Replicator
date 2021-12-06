@@ -1,7 +1,7 @@
 import type { Writable } from 'svelte/store';
 import type { Point, Segment, Line, Bounds, TempLine, TempSegment } from '$stores/canvas';
 import { writable, get } from 'svelte/store';
-import { symbolPointLookupSt, Color, linesSt, activeSegmentSt } from '$stores/canvas';
+import { symbolPointLookupSt, Color, linesSt, activeSegmentSt, activePointsSt } from '$stores/canvas';
 
 const getNewColor = () => {
     const usedColors = new Set(get(linesSt).map(line => get(line.colorSt)));
@@ -143,4 +143,55 @@ export const addPointToSegment = (segment: Segment, x: number, y: number): Point
     segment.parent.boundsSt.set(newLineBounds);
 
     return point;
+}
+
+export const downgradeLine = (line: Line): TempLine => {
+    const { nameSt, colorSt, id } = line;
+    return { nameSt, colorSt, id };
+}
+export const downgradeSegment = (segment: Segment): TempSegment => {
+    const { parent, id } = segment;
+    return { parent, id };
+}
+
+export const selectAllSegmentsOnLine = (line: Line) => {
+    const activePoints = new Set<Symbol>();
+    const segments = get(line.segmentsSt)
+    for (const segment of segments) {
+        if (!('pointsSt' in segment)) continue;
+        const pointIds = get(segment.pointsSt).map(p => p.id);
+        for (const id of pointIds) activePoints.add(id);
+    }
+
+    activePointsSt.set(activePoints);
+}
+export const selectAllPointsOnSegment = (segment: Segment) => {
+    const pointIds = get(segment.pointsSt).map(p => p.id);
+    activePointsSt.set(new Set(pointIds));
+}
+export const deleteActivePoints = () => {
+    const activePoints = get(activePointsSt);
+    const pointLookup = get(symbolPointLookupSt);
+    const changedSegments = new Set<Segment>();
+    for (const pointId of activePoints) {
+        const point = pointLookup.get(pointId)!;
+        changedSegments.add(point.parent);
+    }
+
+    for (const segment of changedSegments) {
+        const newPoints = get(segment.pointsSt).filter(p => !activePoints.has(p.id));
+        if (newPoints.length !== 0) {
+            segment.pointsSt.set(newPoints);
+            continue;
+        }
+        
+        // downgrade segment
+        const { id, parent } = segment;
+        parent.segmentsSt.update(segments => {
+            return segments.map(segment => {
+                if (segment.id !== id) return segment;
+                return downgradeSegment(segment as Segment);
+            })
+        });
+    }
 }

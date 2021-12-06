@@ -70,7 +70,14 @@
 			linePlayer?.stop();
 		}
 	}
+
+	function handleKeyDown(e) {
+		if (e.key !== ' ') return;
+		toggleAudio();
+	}
 </script>
+
+<svelte:window on:keydown={handleKeyDown} />
 
 <div class="play-container">
 	<button on:click={toggleAudio}>

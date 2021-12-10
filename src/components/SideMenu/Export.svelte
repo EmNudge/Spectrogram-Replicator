@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { specUrlSt } from '$stores/spectrogram';
 	import { downloadItem } from '$utils/download';
-	import { downloadChart, downloadProjectSettings } from './utils';
+	import { downloadChart, downloadProjectSettings, downloadGraphData } from './utils';
 
 	const chartTypes = ['SVG', 'PNG'];
 	let chartType = chartTypes[0];
@@ -33,7 +33,7 @@
 <div class="row">
 	<h3 class="title">JSON Data</h3>
 	<br />
-	<button disabled>Download General Graph Data</button>
+	<button on:click={downloadGraphData}>Download General Graph Data</button>
 	<br />
 	<br />
 	<button on:click={downloadProjectSettings}>Download Project</button>

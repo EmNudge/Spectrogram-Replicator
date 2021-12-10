@@ -111,12 +111,15 @@
         </div>
     </div>
     
-    <h3>Actions</h3>
     <div>
+        <h3>Actions</h3>
+        <br>
         <h4>Line</h4>
         <br>
         <button on:click={deleteLine}>Delete Line</button>
         <button on:click={selectSegments}>Select All Points</button>
+        <br>
+        <br>
         {#if $activeSegmentSt}
             <h4>Segment</h4>
             <br>

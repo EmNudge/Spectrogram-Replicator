@@ -76,3 +76,9 @@ export function downloadSVG(svgEl: SVGElement, name = 'chart.svg') {
     const url = getSvgUrl(inlineSvgStyles(svgEl));
     downloadItem(url, name);
 }
+
+export function downloadJson(object: object, name = 'file.json') {
+    const blob = new Blob([JSON.stringify(object)], { type: 'text/json' });
+    const url = URL.createObjectURL(blob);
+    downloadItem(url, name);
+}

@@ -40,6 +40,8 @@ function* getPointArrsFromSlice(line: Line, startPerc = 0): Generator<SlicePoint
 
     const segments = get(line.segmentsSt);
     for (const segment of segments) {
+        if (!('pointsSt' in segment)) continue;
+        
         const points = get(segment.pointsSt);
 
         const yieldedPoints: SlicePoint[] = []

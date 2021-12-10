@@ -3,7 +3,7 @@ import { linesSt } from "$stores/canvas";
 import { authorSt, graphElSt, titleSt } from "$stores/project";
 import { durationSt } from "$stores/sound";
 import { specOpacitySt } from "$stores/spectrogram";
-import { downloadItem, downloadPNG, downloadSVG } from "$utils/download";
+import { downloadItem, downloadPNG, downloadSVG, downloadJson } from "$utils/download";
 import { canvasWidthSt, columnsSt, lightenOddRowsSt, maxFreqSt, minFreqSt, rowsSt, showGridst } from "$stores/graph";
 
 import type { Line, Segment } from "$stores/canvas";
@@ -59,8 +59,15 @@ export function downloadChart(chartType: string) {
 
 export function downloadProjectSettings() {
     const settings = getProjectSettings();
-    const blob = new Blob([JSON.stringify(settings)], { type: 'text/json' });
-    const url = URL.createObjectURL(blob);
 
-    downloadItem(url, 'project.json');
+    downloadJson(settings, 'project.json');
+}
+
+export function downloadGraphData() {
+    const lines = getLines()
+        .map(({ segments }) => 
+            segments.map(({ points }) => 
+                points.map(({ x, y }) => [x, y])));
+
+    downloadJson(lines, 'graph-data.json');
 }
